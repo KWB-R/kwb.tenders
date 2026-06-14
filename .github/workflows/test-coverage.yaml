@@ -39,8 +39,12 @@ jobs:
         shell: Rscript {0}
 
       - uses: codecov/codecov-action@v5
+        # Coverage upload is best-effort: do not fail CI if it errors (e.g. no
+        # CODECOV_TOKEN configured). Add the CODECOV_TOKEN repo secret to enable
+        # the coverage badge/upload.
+        continue-on-error: true
         with:
-          fail_ci_if_error: ${{ github.event_name != 'pull_request' && true || false }}
+          fail_ci_if_error: false
           file: ./cobertura.xml
           plugin: noop
           disable_search: true
