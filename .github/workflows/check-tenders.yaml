@@ -1,0 +1,68 @@
+name: check-tenders
+
+on:
+  schedule:
+    # Weekdays at 05:00 UTC (~07:00 Europe/Berlin). Adjust as needed.
+    - cron: "0 5 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-tenders:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      VMP_BB_USERNAME: ${{ secrets.VMP_BB_USERNAME }}
+      VMP_BB_PASSWORD: ${{ secrets.VMP_BB_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Setup Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Install package + dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sessioninfo
+            local::.
+
+      - name: Check tenders
+        env:
+          CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
+        # --no-sandbox is required on the Linux runner (Chrome runs as root);
+        # it must NOT be set on Windows. Hence it is applied only here, not in
+        # vmp_bb_session()'s defaults.
+        run: >
+          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::check_tenders()'
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports || true
+          if git diff --staged --quiet; then
+            echo "No report changes to commit."
+          else
+            git commit -m "data: tender report $(date -u +%F) [skip ci]"
+            git push
+          fi
+
+      - name: Upload Excel artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tender-report
+          path: reports/*.xlsx
+          if-no-files-found: ignore

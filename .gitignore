@@ -5,3 +5,8 @@
 .positai
 docs
 inst/doc
+.Renviron
+dev/*.log
+dev/*.png
+reports
+dev

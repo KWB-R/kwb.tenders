@@ -1,0 +1,32 @@
+# KWB research group: Grundwasser. One file per group (keywords_<slug>.yml).
+# Matching is case-insensitive and folds umlauts (ae/oe/ue/ss). A tender matches
+# this group if it contains >= 1 "strong" keyword OR >= 2 "supporting" keywords.
+name: "Grundwasser"
+strong:
+  - Grundwasser
+  - Uferfiltration
+  - Grundwasseranreicherung
+  - Brunnen
+  - Trinkwassergewinnung
+  - Wasserwerk
+  - Aquifer
+  - Hydrogeologie
+  - Verockerung
+  - Salzwasseraufstieg
+  - Grundwassermessstelle
+supporting:
+  - Datenauswertung
+  - Datenanalyse
+  - Monitoring
+  - Modellierung
+  - Messnetz
+  - Spurenstoffe
+  - Mikroschadstoffe
+  - Wasserwirtschaft
+  - Wasserversorgung
+  - Wassergewinnung
+  - Probenahme
+  - Hydrochemie
+  - Klimaanpassung
+  - QMRA
+  - Pegel

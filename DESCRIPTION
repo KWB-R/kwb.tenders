@@ -3,7 +3,7 @@ Title: R Package for Automated Monitoring of German Public Procurement
     Portals (Vergabeportale) for KWB-Relevant Tenders
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Michael", "Rustler", , "michaelrustler.@kompetenz-wasser.de", role = c("aut", "cre"),
+    person("Michael", "Rustler", , "michael.rustler@kompetenz-wasser.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0647-7726")),
     person("Kompetenzzentrum Wasser Berlin gGmbH (KWB)", role = "cph")
   )
@@ -14,11 +14,24 @@ Description: Logs into public procurement portals (starting with
 License: MIT + file LICENSE
 URL: https://github.com/KWB-R/kwb.tenders
 BugReports: https://github.com/KWB-R/kwb.tenders/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    chromote,
+    dplyr,
+    jsonlite,
+    openxlsx,
+    rvest,
+    stringr,
+    tibble,
+    yaml
+Suggests:
+    covr,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 8.0.0
-Suggests: 
-    covr,
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr

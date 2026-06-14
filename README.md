@@ -32,6 +32,39 @@ if (! require("remotes")) {
 remotes::install_github("KWB-R/kwb.tenders")
 ```
 
+## Usage
+
+```r
+library(kwb.tenders)
+
+# Credentials via environment variables (e.g. in ~/.Renviron):
+#   VMP_BB_USERNAME = "you@example.com"
+#   VMP_BB_PASSWORD = "your-password"
+
+# One-shot: log in, scrape, score and write to reports/
+check_tenders()                 # headless
+check_tenders(headless = FALSE) # watch the browser (debug the login)
+```
+
+This writes `reports/vmp-bb_<date>.xlsx` (sheets *Relevant* / *Alle* / *Neu*)
+and `reports/latest.md`, flagging tenders that are new since the previous run.
+Tenders are scored against **all KWB research groups** (Grundwasser, Energie &
+Ressourcen, Regenwasser & Gewässer, Smart City & Infrastruktur, Wasseraufbereitung
+& -wiederverwendung, Wasser & Risiko) and tagged with the matching group(s).
+Keywords live in `inst/extdata/keywords_<group>.yml` (one file per group, fully
+configurable). See `vignette("tutorial")` for details.
+
+## Automated checks (GitHub Actions)
+
+The workflow `.github/workflows/check-tenders.yaml` runs `check_tenders()` on a
+schedule (weekdays 05:00 UTC by default), commits the updated report back to the
+repository and uploads the Excel file as an artifact. Required repository
+secrets: `VMP_BB_USERNAME` and `VMP_BB_PASSWORD`.
+
+> **Note:** The portal login runs in a headless browser on CI. If the Keycloak
+> login blocks headless automation, run the workflow on a self-hosted runner (or
+> locally via Windows Task Scheduler) instead.
+
 ## Documentation
 
 Release: [https://kwb-r.github.io/kwb.tenders](https://kwb-r.github.io/kwb.tenders)
