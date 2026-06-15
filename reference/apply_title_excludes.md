@@ -7,10 +7,11 @@ Drops tenders that are not a fit for a research institute, two ways:
     and no strong water keyword rescues it (so a "Grundwasser..." title
     is kept);
 
-2.  **CPV** shows a construction-works code (`45...`) without an
-    engineering-services code (`71...`) – a Bauauftrag; this is hard, so
-    even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..."
-    stays.
+2.  **CPV** shows a works / maintenance / cleaning code (`45...` Bau,
+    `50...` Reparatur/Wartung, `9046/9047/9061/9064/9091...` Reinigung)
+    without an engineering-services code (`71...`); hard veto, so even
+    "Neubau Klaeranlage" or "Reinigung Faulbehaelter" is dropped while
+    "Ingenieurleistungen ..." stays.
 
 Sets `is_relevant = FALSE` and records the reason in an `excluded`
 column. Matching folds umlauts / is case-insensitive.

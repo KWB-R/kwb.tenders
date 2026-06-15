@@ -3,17 +3,21 @@
 title contains a building/maintenance term (see
 tender_excludes()) and no strong water keyword rescues it (so a
 "Grundwasser..." title is kept);
-CPV shows a construction-works code (45...) without an
-engineering-services code (71...) – a Bauauftrag; this is hard, so
-even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.
+CPV shows a works / maintenance / cleaning code (45...
+Bau, 50... Reparatur/Wartung, 9046/9047/9061/9064/9091...
+Reinigung) without an engineering-services code (71...); hard veto,
+so even "Neubau Klaeranlage" or "Reinigung Faulbehaelter" is dropped while
+"Ingenieurleistungen ..." stays.
 Sets is_relevant = FALSE and records the reason in an excluded column.
 Matching folds umlauts / is case-insensitive.'><meta property="og:description" content='Drops tenders that are not a fit for a research institute, two ways:
 title contains a building/maintenance term (see
 tender_excludes()) and no strong water keyword rescues it (so a
 "Grundwasser..." title is kept);
-CPV shows a construction-works code (45...) without an
-engineering-services code (71...) – a Bauauftrag; this is hard, so
-even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.
+CPV shows a works / maintenance / cleaning code (45...
+Bau, 50... Reparatur/Wartung, 9046/9047/9061/9064/9091...
+Reinigung) without an engineering-services code (71...); hard veto,
+so even "Neubau Klaeranlage" or "Reinigung Faulbehaelter" is dropped while
+"Ingenieurleistungen ..." stays.
 Sets is_relevant = FALSE and records the reason in an excluded column.
 Matching folds umlauts / is case-insensitive.'></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -57,9 +61,11 @@ Matching folds umlauts / is case-insensitive.'></head><body>
     <p>Drops tenders that are not a fit for a research institute, two ways:</p><ol><li><p><strong>title</strong> contains a building/maintenance term (see
 <code><a href="tender_excludes.html">tender_excludes()</a></code>) and no strong water keyword rescues it (so a
 "Grundwasser..." title is kept);</p></li>
-<li><p><strong>CPV</strong> shows a construction-works code (<code>45...</code>) without an
-engineering-services code (<code>71...</code>) – a Bauauftrag; this is hard, so
-even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.</p></li>
+<li><p><strong>CPV</strong> shows a works / maintenance / cleaning code (<code>45...</code>
+Bau, <code>50...</code> Reparatur/Wartung, <code>9046/9047/9061/9064/9091...</code>
+Reinigung) without an engineering-services code (<code>71...</code>); hard veto,
+so even "Neubau Klaeranlage" or "Reinigung Faulbehaelter" is dropped while
+"Ingenieurleistungen ..." stays.</p></li>
 </ol><p>Sets <code>is_relevant = FALSE</code> and records the reason in an <code>excluded</code> column.
 Matching folds umlauts / is case-insensitive.</p>
     </div>
