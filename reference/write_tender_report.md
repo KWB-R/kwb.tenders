@@ -12,7 +12,7 @@ write_tender_report(
   tenders,
   dir = "reports",
   portal = "vmp-bb",
-  date = Sys.Date()
+  date = Sys.time()
 )
 ```
 
@@ -33,8 +33,10 @@ write_tender_report(
 
 - date:
 
-  Report date (default
-  [`Sys.Date()`](https://rdrr.io/r/base/Sys.time.html)).
+  Report timestamp (default
+  [`Sys.time()`](https://rdrr.io/r/base/Sys.time.html)); its date part
+  names the files, the full timestamp (Europe/Berlin) shows in the
+  "Stand" line.
 
 ## Value
 

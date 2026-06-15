@@ -25,19 +25,19 @@ A list of entries, each a list with `prefix` and `groups`.
 
 ``` r
 str(tender_cpv_map())
-#> List of 13
+#> List of 27
 #>  $ :List of 2
 #>   ..$ prefix: chr "71351"
 #>   ..$ groups: chr "groundwater"
 #>  $ :List of 2
+#>   ..$ prefix: chr "4512"
+#>   ..$ groups: chr "groundwater"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45262220"
+#>   ..$ groups: chr "groundwater"
+#>  $ :List of 2
 #>   ..$ prefix: chr "65120"
 #>   ..$ groups: chr "water-treatment-reuse"
-#>  $ :List of 2
-#>   ..$ prefix: chr "65110"
-#>   ..$ groups: chr [1:2] "smart-city-infrastructure" "water-treatment-reuse"
-#>  $ :List of 2
-#>   ..$ prefix: chr "65130"
-#>   ..$ groups: chr "smart-city-infrastructure"
 #>  $ :List of 2
 #>   ..$ prefix: chr "9041"
 #>   ..$ groups: chr "water-treatment-reuse"
@@ -45,10 +45,61 @@ str(tender_cpv_map())
 #>   ..$ prefix: chr "9042"
 #>   ..$ groups: chr "water-treatment-reuse"
 #>  $ :List of 2
+#>   ..$ prefix: chr "45252"
+#>   ..$ groups: chr "water-treatment-reuse"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45245"
+#>   ..$ groups: chr "water-treatment-reuse"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45259"
+#>   ..$ groups: chr "water-treatment-reuse"
+#>  $ :List of 2
+#>   ..$ prefix: chr "39350"
+#>   ..$ groups: chr "water-treatment-reuse"
+#>  $ :List of 2
+#>   ..$ prefix: chr "42996"
+#>   ..$ groups: chr "water-treatment-reuse"
+#>  $ :List of 2
+#>   ..$ prefix: chr "24962"
+#>   ..$ groups: chr "water-treatment-reuse"
+#>  $ :List of 2
 #>   ..$ prefix: chr "90440"
 #>   ..$ groups: chr [1:2] "water-treatment-reuse" "energy-resources"
 #>  $ :List of 2
+#>   ..$ prefix: chr "45247"
+#>   ..$ groups: chr "stormwater-surface-waters"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45246"
+#>   ..$ groups: chr "stormwater-surface-waters"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45248"
+#>   ..$ groups: chr "stormwater-surface-waters"
+#>  $ :List of 2
+#>   ..$ prefix: chr "71353"
+#>   ..$ groups: chr "stormwater-surface-waters"
+#>  $ :List of 2
+#>   ..$ prefix: chr "71354"
+#>   ..$ groups: chr "stormwater-surface-waters"
+#>  $ :List of 2
+#>   ..$ prefix: chr "38123"
+#>   ..$ groups: chr "stormwater-surface-waters"
+#>  $ :List of 2
+#>   ..$ prefix: chr "65110"
+#>   ..$ groups: chr [1:2] "smart-city-infrastructure" "water-treatment-reuse"
+#>  $ :List of 2
+#>   ..$ prefix: chr "65130"
+#>   ..$ groups: chr "smart-city-infrastructure"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45232"
+#>   ..$ groups: chr "smart-city-infrastructure"
+#>  $ :List of 2
+#>   ..$ prefix: chr "45231300"
+#>   ..$ groups: chr "smart-city-infrastructure"
+#>  $ :List of 2
 #>   ..$ prefix: chr "9048"
+#>   ..$ groups: chr [1:2] "water-treatment-reuse" "smart-city-infrastructure"
+#>  $ :List of 2
+#>   ..$ prefix: chr "71800"
 #>   ..$ groups: chr [1:2] "water-treatment-reuse" "smart-city-infrastructure"
 #>  $ :List of 2
 #>   ..$ prefix: chr "9070"
@@ -56,13 +107,4 @@ str(tender_cpv_map())
 #>  $ :List of 2
 #>   ..$ prefix: chr "9073"
 #>   ..$ groups: chr [1:2] "stormwater-surface-waters" "groundwater"
-#>  $ :List of 2
-#>   ..$ prefix: chr "45232"
-#>   ..$ groups: chr "smart-city-infrastructure"
-#>  $ :List of 2
-#>   ..$ prefix: chr "45252"
-#>   ..$ groups: chr "water-treatment-reuse"
-#>  $ :List of 2
-#>   ..$ prefix: chr "45247"
-#>   ..$ groups: chr "stormwater-surface-waters"
 ```
