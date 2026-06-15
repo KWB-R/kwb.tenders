@@ -2,11 +2,11 @@
 
 Stand: 2026-06-15
 
-Gesamt: 347 Ausschreibungen, davon 24 relevant, 0 neu.
+Gesamt: 347 Ausschreibungen, davon 23 relevant, 0 neu.
 
-Treffer je Gruppe: Wasser & Risiko (9), Wasseraufbereitung & -wiederverwendung (8), Regenwasser & Gewässer (7), Grundwasser (6), Energie & Ressourcen (2), Smart City & Infrastruktur (2)
+Treffer je Gruppe: Wasser & Risiko (9), Wasseraufbereitung & -wiederverwendung (8), Regenwasser & Gewässer (7), Grundwasser (5), Energie & Ressourcen (2), Smart City & Infrastruktur (2)
 
-## Ausschreibung (19)
+## Ausschreibung (18)
 
 | Veröffentlicht | Angebots- / Teilnahmefrist | Kurzbezeichnung | Typ | Vergabeplattform / Veröffentlicher | groups | match_source | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -26,7 +26,6 @@ Treffer je Gruppe: Wasser & Risiko (9), Wasseraufbereitung & -wiederverwendung (
 | 02.06.2026 | 24.06.2026 | Prüfung der ortsveränderlichen elektrischen Betriebsmittel in den Verwaltungsobjekten der Kreisverwaltung Barnim 2026 | UVgO Ausschreibung | Landkreis Barnim | Wasser & Risiko | cpv | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268215) |
 | 31.05.2026 | 06.07.2026 | Renaturierung Cantdorfer Wiesenteich: Deklarationsanalytik und abfallrechtliche Begleitung | VgV Ausschreibung | Stadt Spremberg - Vergabestelle | Wasser & Risiko | cpv | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268168) |
 | 31.05.2026 | 30.06.2026 | Gebäudereinigungsleistungen (Unterhalts- und Grundreinigungsleistungen) | VgV Ausschreibung | Landkreis Dahme-Spreewald | Wasser & Risiko | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268159) |
-| 22.05.2026 | 22.06.2026 | Fachplanungsleistung für die Revitalisierung des Bredower Teichs Gemeinde Brieselang | UVgO Ausschreibung | Gemeinde Brieselang | Grundwasser | notice | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=267787) |
 | 22.05.2026 | 22.06.2026 | Fachplanungsleistung für die Revitalisierung des Bredower Teichs Gemeinde Brieselang | UVgO Ausschreibung | Gemeinde Brieselang | Grundwasser | notice | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=267787) |
 | 22.04.2024 | nv | Gesamtbeschaffung eines PDMS Patientendatenmanagementsystemsund eines Anästhesieplanungs- / -dokumentationssystems | UVgO TNW | Alexianer St. Josef Potsdam GmbH | Smart City & Infrastruktur | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=220660) |
 
