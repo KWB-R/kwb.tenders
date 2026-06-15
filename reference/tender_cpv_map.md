@@ -25,7 +25,7 @@ A list of entries, each a list with `prefix` and `groups`.
 
 ``` r
 str(tender_cpv_map())
-#> List of 17
+#> List of 16
 #>  $ :List of 2
 #>   ..$ prefix: chr "71351"
 #>   ..$ groups: chr "groundwater"
@@ -38,9 +38,6 @@ str(tender_cpv_map())
 #>  $ :List of 2
 #>   ..$ prefix: chr "9042"
 #>   ..$ groups: chr "water-treatment-reuse"
-#>  $ :List of 2
-#>   ..$ prefix: chr "90440"
-#>   ..$ groups: chr [1:2] "water-treatment-reuse" "energy-resources"
 #>  $ :List of 2
 #>   ..$ prefix: chr "39350"
 #>   ..$ groups: chr "water-treatment-reuse"
