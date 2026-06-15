@@ -4,6 +4,8 @@
 
 - [`check_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/check_tenders.md)
   : Check Vergabemarktplatz Brandenburg for relevant tenders
+- [`cpv_summary()`](https://kwb-r.github.io/kwb.tenders/reference/cpv_summary.md)
+  : Summarise all CPV codes found across the tenders
 - [`enrich_with_details()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_details.md)
   : Enrich tenders with a detail-page relevance layer (rendered text +
   CPV codes)

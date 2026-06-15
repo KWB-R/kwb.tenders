@@ -40,7 +40,8 @@ vmp_bb_scrape_tenders(
 ## Value
 
 A tibble with one row per tender (all pages combined). The `Aktion`
-column holds the project detail URL.
+column holds the project detail URL; the `Veroeffentlichungstyp` column
+labels each row ("Ausschreibung" / "Geplante Ausschreibung").
 
 ## Examples
 
