@@ -2,7 +2,7 @@
 
 Stand: 2026-06-15
 
-Gesamt: 341 Ausschreibungen, davon 18 relevant, 0 neu.
+Gesamt: 347 Ausschreibungen, davon 18 relevant, 0 neu.
 
 Treffer je Gruppe: Wasser & Risiko (10), Wasseraufbereitung & -wiederverwendung (6), Grundwasser (4), Regenwasser & Gewässer (4), Energie & Ressourcen (2), Smart City & Infrastruktur (2)
 
@@ -30,7 +30,7 @@ Treffer je Gruppe: Wasser & Risiko (10), Wasseraufbereitung & -wiederverwendung 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 10.06.2026 | nv | Klärschlammentsorgung aus der Kläranlage Milmersdorf | UVgO Beabsichtigte Ausschreibung | Gemeinde Milmersdorf c/o Amt Gerswalde | Energie & Ressourcen, Wasseraufbereitung & -wiederverwendung | title+detail | 4 | Klärschlamm, Kläranlage | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/public/company/projectForwarding.do?pid=268754) |
 | 10.06.2026 | nv | Grundwassermonitoring 2026 - Probenahme und Analytik | UVgO Beabsichtigte Ausschreibung | Landkreis Spree-Neiße | Grundwasser, Regenwasser & Gewässer, Wasser & Risiko | title+detail+cpv | 4 | Grundwasser, Monitoring, Probenahme | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/public/company/projectForwarding.do?pid=268751) |
-| 09.06.2026 | nv | Hygieneinspektion der Lüftungsanlage | UVgO Beabsichtigte Ausschreibung | Stadt Templin | Wasser & Risiko, Wasseraufbereitung & -wiederverwendung | title+detail | 2 | Hygiene | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/public/company/projectForwarding.do?pid=268706) |
 | 10.06.2026 | nv | Gebäudereinigung Gymnasium II Altlandsberg (Ersatzbau) Landkreis MOL | UVgO Beabsichtigte Ausschreibung | Landkreis Märkisch-Oderland / Fachdienst Organisation/Zentrale Vergabestelle | Wasser & Risiko | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/public/company/projectForwarding.do?pid=268733) |
+| 09.06.2026 | nv | Hygieneinspektion der Lüftungsanlage | UVgO Beabsichtigte Ausschreibung | Stadt Templin | Wasser & Risiko, Wasseraufbereitung & -wiederverwendung | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/public/company/projectForwarding.do?pid=268706) |
 | 29.05.2026 | nv | Vorbereitende Maßnahme Illegales Abfalllager Schiebdorf | UVgO Beabsichtigte Ausschreibung | Landesamt für Umwelt | Wasseraufbereitung & -wiederverwendung | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/public/company/projectForwarding.do?pid=268141) |
 
