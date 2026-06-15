@@ -9,7 +9,8 @@
 #' @param tenders A scored tibble (see [score_relevance()]).
 #' @param dir Output directory (created if needed). Default `"reports"`.
 #' @param portal Short portal id used in file names. Default `"vmp-bb"`.
-#' @param date Report date (default `Sys.Date()`).
+#' @param date Report timestamp (default `Sys.time()`); its date part names the
+#'   files, the full timestamp (Europe/Berlin) shows in the "Stand" line.
 #' @return Invisibly, a list with the written file paths and counts.
 #' @export
 #' @examples
@@ -18,7 +19,7 @@
 #' write_tender_report(tenders)
 #' }
 write_tender_report <- function(tenders, dir = "reports",
-                                portal = "vmp-bb", date = Sys.Date()) {
+                                portal = "vmp-bb", date = Sys.time()) {
   if (is.null(tenders$is_relevant)) {
     stop("`tenders` must be scored first (see score_relevance()).", call. = FALSE)
   }
@@ -89,7 +90,7 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
   lines <- c(
     sprintf("# Vergabe-Report (%s)", toupper(portal)),
     "",
-    sprintf("Stand: %s", format(date, "%Y-%m-%d")),
+    sprintf("Stand: %s", format(date, "%Y-%m-%d %H:%M %Z", tz = "Europe/Berlin")),
     "",
     sprintf(
       "Gesamt: %d Ausschreibungen, davon %d relevant, %d neu.",
@@ -227,7 +228,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     sprintf("<style>%s</style></head><body>", css),
     sprintf("<h1>Vergabe-Report (%s)</h1>", toupper(portal)),
     sprintf("<p class=\"muted\">Stand: %s &middot; Gesamt: %d &middot; relevant: %d &middot; neu: %d</p>",
-            format(date, "%Y-%m-%d"), nrow(tenders), nrow(relevant), nrow(new_relevant))
+            format(date, "%Y-%m-%d %H:%M %Z", tz = "Europe/Berlin"), nrow(tenders), nrow(relevant), nrow(new_relevant))
   )
   if (nzchar(grp_line)) {
     head_part <- c(head_part, sprintf("<p class=\"muted\">%s</p>", esc(grp_line)))

@@ -8,7 +8,7 @@ write_tender_report(
   tenders,
   dir = "reports",
   portal = "vmp-bb",
-  date = Sys.Date()
+  date = Sys.time()
 )
 }
 \arguments{
@@ -18,7 +18,8 @@ write_tender_report(
 
 \item{portal}{Short portal id used in file names. Default \code{"vmp-bb"}.}
 
-\item{date}{Report date (default \code{Sys.Date()}).}
+\item{date}{Report timestamp (default \code{Sys.time()}); its date part names the
+files, the full timestamp (Europe/Berlin) shows in the "Stand" line.}
 }
 \value{
 Invisibly, a list with the written file paths and counts.
