@@ -255,9 +255,11 @@ tender_excludes <- function(path = system.file("extdata", "keywords_exclude.yml"
 #'   \item \strong{title} contains a building/maintenance term (see
 #'     [tender_excludes()]) and no strong water keyword rescues it (so a
 #'     "Grundwasser..." title is kept);
-#'   \item \strong{CPV} shows a construction-works code (\code{45...}) without an
-#'     engineering-services code (\code{71...}) -- a Bauauftrag; this is hard, so
-#'     even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.
+#'   \item \strong{CPV} shows a works / maintenance / cleaning code (\code{45...}
+#'     Bau, \code{50...} Reparatur/Wartung, \code{9046/9047/9061/9064/9091...}
+#'     Reinigung) without an engineering-services code (\code{71...}); hard veto,
+#'     so even "Neubau Klaeranlage" or "Reinigung Faulbehaelter" is dropped while
+#'     "Ingenieurleistungen ..." stays.
 #' }
 #' Sets `is_relevant = FALSE` and records the reason in an `excluded` column.
 #' Matching folds umlauts / is case-insensitive.
@@ -291,18 +293,21 @@ apply_title_excludes <- function(df,
     }
   }
 
-  # (2) Construction-CPV veto: a works code (45...) without an engineering-services
-  # code (71...) is a Bauauftrag -> out (KWB does services/studies, not Bau). This
-  # is hard (no water rescue): "Neubau Klaeranlage" (CPV 45252) is dropped, while
-  # "Ingenieurleistungen ..." (CPV 71...) is kept.
+  # (2) Out-of-scope CPV veto: a works / maintenance / cleaning code without an
+  # engineering-services code (71...) is a Bau-/Wartungs-/Reinigungsauftrag -> out
+  # (KWB does studies/planning/monitoring, not works). Hard (no water rescue), so
+  # "Neubau Klaeranlage" (45...) and "Reinigung Faulbehaelter" (9046...) are
+  # dropped while "Ingenieurleistungen ..." (71...) is kept.
   if (!is.null(df$cpv)) {
+    oos <- c("45", "50", "9046", "9047", "9061", "9064", "9091") # Bau / Reparatur+Wartung / Reinigung
     cpv_chr <- as.character(df$cpv)
     cpv_chr[is.na(cpv_chr)] <- ""
     for (i in which(df$is_relevant %in% TRUE & is.na(matched))) {
       codes <- trimws(unlist(strsplit(cpv_chr[i], "[,; ]+")))
       codes <- codes[nzchar(codes)]
-      if (length(codes) && any(startsWith(codes, "45")) && !any(startsWith(codes, "71"))) {
-        matched[i] <- "Bau-CPV"
+      out_of_scope <- any(vapply(oos, function(p) any(startsWith(codes, p)), logical(1)))
+      if (length(codes) && out_of_scope && !any(startsWith(codes, "71"))) {
+        matched[i] <- "Bau/Wartung-CPV"
       }
     }
   }

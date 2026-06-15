@@ -52,17 +52,18 @@ test_that("apply_title_excludes vetoes building titles but keeps water ones", {
   expect_true(!is.na(out$excluded[out$Kurzbezeichnung == "Krematorium Ofensanierung Rohbau"]))
 })
 
-test_that("apply_title_excludes drops construction by CPV (45 without 71)", {
+test_that("apply_title_excludes drops construction/maintenance by CPV (without 71)", {
   df <- data.frame(
     Kurzbezeichnung = c("Neubau Klaeranlage", "Ingenieurleistungen Klaeranlage Neubau",
-                        "Grundwassermonitoring"),
-    cpv = c("45252127-4", "71321000-4, 45252127-4", "90733000-4"),
-    is_relevant = c(TRUE, TRUE, TRUE),
+                        "Reinigung Faulbehaelter Klaeranlage", "Grundwassermonitoring"),
+    cpv = c("45252127-4", "71321000-4, 45252127-4", "90460000-3", "90733000-4"),
+    is_relevant = c(TRUE, TRUE, TRUE, TRUE),
     stringsAsFactors = FALSE
   )
   out <- apply_title_excludes(df)
   r <- stats::setNames(out$is_relevant, out$Kurzbezeichnung)
-  expect_false(r[["Neubau Klaeranlage"]])                    # CPV 45 only -> Bau-CPV veto
-  expect_true(r[["Ingenieurleistungen Klaeranlage Neubau"]]) # has 71 (engineering) -> kept
-  expect_true(r[["Grundwassermonitoring"]])                  # no 45 -> kept
+  expect_false(r[["Neubau Klaeranlage"]])                     # CPV 45 -> Bau veto
+  expect_false(r[["Reinigung Faulbehaelter Klaeranlage"]])    # CPV 9046 (cleaning) -> Wartung veto
+  expect_true(r[["Ingenieurleistungen Klaeranlage Neubau"]])  # has 71 (engineering) -> kept
+  expect_true(r[["Grundwassermonitoring"]])                   # no out-of-scope CPV -> kept
 })

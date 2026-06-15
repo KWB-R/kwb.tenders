@@ -19,8 +19,8 @@
   groups: [water-treatment-reuse]
 - prefix: "9042"       # Abwasserbehandlung (Dienstleistung)
   groups: [water-treatment-reuse]
-- prefix: "90440"      # Klaeranlagen-/Klaergrubendienste
-  groups: [water-treatment-reuse, energy-resources]
+# NOTE: "90440" (Klaergruben-/Faulbehaelter-Dienste) NOT mapped -- emptying/cleaning
+# (Wartung), not a study topic; caught by the out-of-scope CPV veto below.
 - prefix: "39350"      # Abwasserreinigungsanlage (Ausruestung)
   groups: [water-treatment-reuse]
 - prefix: "42996"      # Maschinen zur Reinigung von Abwasser / Schlammbehandlung
