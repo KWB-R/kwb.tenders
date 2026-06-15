@@ -16,6 +16,8 @@ check_tenders(
   contracting_rules = "VOL",
   screen_details = TRUE,
   max_detail = Inf,
+  screen_notice = FALSE,
+  max_notice = Inf,
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
   keywords = tender_keywords()
@@ -56,6 +58,17 @@ check_tenders(
 - max_detail:
 
   Maximum number of detail pages to screen (default `Inf`).
+
+- screen_notice:
+
+  Third relevance layer: log in and read each ongoing tender's published
+  Bekanntmachung PDF(s), matching the text (default `FALSE`; forces
+  `login = TRUE`). See
+  [`enrich_with_notice()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_notice.md).
+
+- max_notice:
+
+  Maximum number of new notice PDFs to read (default `Inf`).
 
 - username, password:
 
