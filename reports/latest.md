@@ -1,12 +1,12 @@
 # Vergabe-Report (VMP-BB)
 
-Stand: 2026-06-15
+Stand: 2026-06-15 20:22 CEST
 
-Gesamt: 350 Ausschreibungen, davon 20 relevant, 0 neu.
+Gesamt: 347 Ausschreibungen, davon 17 relevant, 0 neu.
 
-Treffer je Gruppe: Wasser & Risiko (9), Wasseraufbereitung & -wiederverwendung (7), Regenwasser & Gewässer (5), Grundwasser (4), Energie & Ressourcen (3), Smart City & Infrastruktur (3)
+Treffer je Gruppe: Wasser & Risiko (9), Wasseraufbereitung & -wiederverwendung (6), Grundwasser (4), Regenwasser & Gewässer (4), Energie & Ressourcen (2), Smart City & Infrastruktur (2)
 
-## Ausschreibung (15)
+## Ausschreibung (12)
 
 | Veröffentlicht | Angebots- / Teilnahmefrist | Kurzbezeichnung | Typ | Vergabeplattform / Veröffentlicher | groups | match_source | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,14 +16,11 @@ Treffer je Gruppe: Wasser & Risiko (9), Wasseraufbereitung & -wiederverwendung (
 | 14.06.2026 | 17.07.2026 | EU-WRRL - N2-Argon-Analytik an Grundwasserproben im Land Brandenburg im Herbst 2026 und Frühjahr 2027 | VgV Ausschreibung | Landesamt für Umwelt | Grundwasser, Regenwasser & Gewässer, Wasser & Risiko | title+detail+cpv | 2 | Grundwasser | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268927) |
 | 11.05.2026 | 16.06.2026 | AV Wartung Regenwasserbehandlungsanlagen SM Elsterwerda 2026-29 | VgV Ausschreibung | Landesbetrieb Straßenwesen Brandenburg Dienststätte Cottbus | Regenwasser & Gewässer | title+detail | 2 | Regenwasser | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=267116) |
 | 09.05.2026 | 18.06.2026 | Mobile Entsorgung von Schmutzwasser und nicht separiertem Klärschlamm im Gebiet des WAZ "Nieplitz" | VgV Ausschreibung | Wasser- und Abwasserzweckverband "Nieplitz" | Energie & Ressourcen, Wasseraufbereitung & -wiederverwendung | title+detail | 2 | Klärschlamm | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=267089) |
-| 11.05.2026 | 16.06.2026 | AV Wartung Regenwasserbehandlungsanlagen SM Elsterwerda 2026-29 | VgV Ausschreibung | Landesbetrieb Straßenwesen Brandenburg Dienststätte Cottbus | Regenwasser & Gewässer | title+detail | 2 | Regenwasser | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=267116) |
-| 09.05.2026 | 18.06.2026 | Mobile Entsorgung von Schmutzwasser und nicht separiertem Klärschlamm im Gebiet des WAZ "Nieplitz" | VgV Ausschreibung | Wasser- und Abwasserzweckverband "Nieplitz" | Energie & Ressourcen, Wasseraufbereitung & -wiederverwendung | title+detail | 2 | Klärschlamm | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=267089) |
 | 15.06.2026 | 09.07.2026 | Bauwerksprüfungen, Brückenhauptprüfung und einfache Prüfung in Schwedt/Oder | UVgO Ausschreibung | Stadt Schwedt/Oder | Wasser & Risiko | cpv | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268935) |
 | 04.06.2026 | 06.07.2026 | Stadt Cottbus OV 123-2026 Beprobung und analytische Sanierungsbegleitung ehem. Potsdamer Chemiehandel Cottbus | VgV Ausschreibung | Stadtverwaltung Cottbus | Grundwasser | cpv | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268416) |
 | 02.06.2026 | 24.06.2026 | Prüfung der ortsveränderlichen elektrischen Betriebsmittel in den Verwaltungsobjekten der Kreisverwaltung Barnim 2026 | UVgO Ausschreibung | Landkreis Barnim | Wasser & Risiko | cpv | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268215) |
 | 31.05.2026 | 06.07.2026 | Renaturierung Cantdorfer Wiesenteich: Deklarationsanalytik und abfallrechtliche Begleitung | VgV Ausschreibung | Stadt Spremberg - Vergabestelle | Wasser & Risiko | cpv | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268168) |
 | 31.05.2026 | 30.06.2026 | Gebäudereinigungsleistungen (Unterhalts- und Grundreinigungsleistungen) | VgV Ausschreibung | Landkreis Dahme-Spreewald | Wasser & Risiko | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268159) |
-| 22.04.2024 | nv | Gesamtbeschaffung eines PDMS Patientendatenmanagementsystemsund eines Anästhesieplanungs- / -dokumentationssystems | UVgO TNW | Alexianer St. Josef Potsdam GmbH | Smart City & Infrastruktur | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=220660) |
 | 22.04.2024 | nv | Gesamtbeschaffung eines PDMS Patientendatenmanagementsystemsund eines Anästhesieplanungs- / -dokumentationssystems | UVgO TNW | Alexianer St. Josef Potsdam GmbH | Smart City & Infrastruktur | detail | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=220660) |
 
 ## Geplante Ausschreibung (5)
