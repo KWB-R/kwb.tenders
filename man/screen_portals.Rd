@@ -9,6 +9,7 @@ screen_portals(
   dir = "reports",
   portal = "tenders",
   keywords = tender_keywords(),
+  keep_types = c("Ausschreibung", "Geplante Ausschreibung"),
   verbose = TRUE
 )
 }
@@ -22,6 +23,9 @@ screen_portals(
 \item{portal}{File-name id for the combined report (default \code{"tenders"}).}
 
 \item{keywords}{Passed to connectors that take it (currently informational).}
+
+\item{keep_types}{Keep only these \code{Veroeffentlichungstyp} values (default the
+biddable ones -> drops "Vergebener Auftrag"/awards). \code{NULL} keeps all.}
 
 \item{verbose}{Print progress (default \code{TRUE}).}
 }

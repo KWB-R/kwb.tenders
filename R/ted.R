@@ -63,7 +63,9 @@ ted_parse_notice <- function(nt) {
   if (!nzchar(dl)) dl <- pick_first("deadline-receipt-request-date-lot")
   if (!nzchar(dl)) dl <- pick_first("deadline-date-lot")
   ntype <- tolower(.ted_text(nt[["notice-type"]]))
-  typ <- if (grepl("pin|prior|planning", ntype)) "Geplante Ausschreibung" else "Ausschreibung"
+  typ <- if (grepl("can|award|result", ntype)) "Vergebener Auftrag"
+  else if (grepl("pin|prior|planning", ntype)) "Geplante Ausschreibung"
+  else "Ausschreibung"
   data.frame(
     Kurzbezeichnung = .ted_title(nt[["notice-title"]]),
     Beschreibung = trimws(paste(.ted_text(nt[["description-proc"]]),

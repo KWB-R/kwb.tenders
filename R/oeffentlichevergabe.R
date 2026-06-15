@@ -110,7 +110,9 @@ oeffentlichevergabe_parse_release <- function(rel) {
   }
 
   tag <- tolower(paste(unlist(rel[["tag"]]), collapse = ","))
-  typ <- if (grepl("planning", tag)) "Geplante Ausschreibung" else "Ausschreibung"
+  typ <- if (grepl("award|contract|implementation", tag)) "Vergebener Auftrag"
+  else if (grepl("planning", tag)) "Geplante Ausschreibung"
+  else "Ausschreibung"
 
   data.frame(
     Kurzbezeichnung = title, Beschreibung = desc, Vergabestelle = buyer,

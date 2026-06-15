@@ -55,6 +55,8 @@ combine_tenders <- function(tenders_list) {
 #' @param dir Output directory (default `"reports"`).
 #' @param portal File-name id for the combined report (default `"tenders"`).
 #' @param keywords Passed to connectors that take it (currently informational).
+#' @param keep_types Keep only these `Veroeffentlichungstyp` values (default the
+#'   biddable ones -> drops "Vergebener Auftrag"/awards). `NULL` keeps all.
 #' @param verbose Print progress (default `TRUE`).
 #' @return Invisibly, the combined scored tibble.
 #' @export
@@ -66,7 +68,9 @@ combine_tenders <- function(tenders_list) {
 #' ))
 #' }
 screen_portals <- function(sources, dir = "reports", portal = "tenders",
-                           keywords = tender_keywords(), verbose = TRUE) {
+                           keywords = tender_keywords(),
+                           keep_types = c("Ausschreibung", "Geplante Ausschreibung"),
+                           verbose = TRUE) {
   results <- lapply(names(sources), function(nm) {
     if (verbose) message("== Source: ", nm, " ==")
     out <- tryCatch(sources[[nm]](), error = function(e) {
@@ -83,6 +87,16 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
   if (nrow(combined) == 0L) {
     message("No tenders from any source.")
     return(invisible(combined))
+  }
+  # Keep only biddable notice types (drop awards / "Vergebener Auftrag").
+  if (length(keep_types) && !is.null(combined$Veroeffentlichungstyp)) {
+    typ <- combined$Veroeffentlichungstyp
+    keep <- is.na(typ) | !nzchar(typ) | typ %in% keep_types
+    if (verbose && any(!keep)) {
+      message(sprintf("Keeping biddable types only: dropped %d notice(s) (e.g. Vergebener Auftrag).",
+                      sum(!keep)))
+    }
+    combined <- combined[keep, , drop = FALSE]
   }
   res <- write_tender_report(combined, dir = dir, portal = portal)
   message(sprintf("Done: %d tenders, %d relevant, %d new across %d source(s). Report: %s",
