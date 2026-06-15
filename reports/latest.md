@@ -1,70 +1,15 @@
 # Vergabe-Report (TENDERS)
 
-Stand: 2026-06-15 23:29 CEST
+Stand: 2026-06-15 23:39 CEST
 
-Gesamt: 639 Ausschreibungen, davon 307 relevant, 48 neu.
+Gesamt: 639 Ausschreibungen, davon 305 relevant, 0 neu.
 
-Treffer je Gruppe: Wasseraufbereitung & -wiederverwendung (130), Grundwasser (91), Regenwasser & Gewässer (81), Energie & Ressourcen (48), Smart City & Infrastruktur (36), Wasser & Risiko (28)
+Treffer je Gruppe: Wasseraufbereitung & -wiederverwendung (130), Grundwasser (91), Regenwasser & Gewässer (81), Energie & Ressourcen (48), Smart City & Infrastruktur (36), Wasser & Risiko (26)
 
-## Neu seit letztem Lauf (48)
-
-| Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Oeffentliche Vergabe (Bund) | Beprobungskampagne zur Grundwasseruntersuchung an 43 Grundwassermessstellen zur Untersuchung der Schadstoffentwicklung in einer 2-jährigen Überwachungsphase |  | Kreis Recklinghausen, Der Landrat |  | 2026-06-10 |  | Grundwasser, Regenwasser & Gewässer, Wasser & Risiko | title+detail+cpv | Dienstleistungen im Umweltschutz | 3 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25456902) |
-| Oeffentliche Vergabe (Bund) | Rahmenvertrag Kanalinspektion 01.08.2026 bis 31.07.2028 plus 1 Jahr optional |  | Entsorgungsverband Saar | Saarbrücken | 2026-06-13 |  | Smart City & Infrastruktur, Wasseraufbereitung & -wiederverwendung | title+cpv | Verwaltung von Kanalisationsnetzen und Abwasseranlagen | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/ced73c1f-6d55-4ac2-9a44-ae15ed7ec831) |
-| Oeffentliche Vergabe (Bund) | Systematische, flächendeckende Erhebungen und Erstbewertungen Altlast-verdächtiger Flächen, Altlasten, schädlicher Bodenveränderungen und Verdachtsflächen |  | Oberbergischer Kreis - Der Landrat - Amt 10 Hauptamt | Gummersbach | 2026-06-11 |  | Regenwasser & Gewässer, Wasser & Risiko | cpv | Dienstleistungen im Umweltschutz | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/2e85aa26-9886-48b0-bd80-03d3bb7ddec4) |
-| Oeffentliche Vergabe (Bund) | Leitsystem der Ver- und Entsorgung |  | Procurement, Claim and Mobility | Frankfurt am Main | 2026-06-10 |  | Regenwasser & Gewässer, Wasseraufbereitung & -wiederverwendung | detail |  | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/ab7b8e3a-58a5-4065-b6b9-fa10528d6067) |
-| Oeffentliche Vergabe (Bund) | Stadt Boizenburg / Elbe - Rahmenvereinbarung für Reinigung, Inspektion, Druckprüfung von Abwasseranlagen sowie Abfuhr von Kleinkläranlagen/abflusslosen Sammelgruben |  | Stadt Boizenburg/Elbe - Der Bürgermeister | Boizenburg/Elbe | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung, Energie & Ressourcen | title+detail+cpv | Reinigung von Klärgruben | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/5d9b10b2-3379-4bd2-9a83-acef210b913d) |
-| Oeffentliche Vergabe (Bund) | Arten-Monitoring nach Artikel 11 und 17 der FFH-Richtlinie in Sachsen-Anhalt: Landesweite Kartierung des Fischotters (Anhang II und IV FFH-RL) in Sachsen-Anhalt |  | Landesamt für Umweltschutz | Halle (Saale) | 2026-06-10 |  | Regenwasser & Gewässer, Wasser & Risiko | cpv | Dienstleistungen im Umweltschutz | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/8279dd54-fa00-4fad-a1aa-1a2a988dc013) |
-| Oeffentliche Vergabe (Bund) | Rahmenvereinbarung zur Durchführung der Grünpflegearbeiten beim AZV Südholstein |  | Abwasser-Zweckverband Südholstein | Hetlingen | 2026-06-10 |  | Regenwasser & Gewässer, Wasseraufbereitung & -wiederverwendung | detail |  | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/f388599c-4703-4906-b45e-41dcd2bc9464) |
-| Oeffentliche Vergabe (Bund) | Stadtwerke Meppen - Teilerneuerung und Erweiterung Kläranlage Meppen - Generalplanungsleistungen |  | Stadtwerke Meppen - Eigenbetrieb der Stadt Meppen | Meppen | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung, Energie & Ressourcen | title+detail |  | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/116d0157-f69d-482a-8a4c-4683c18ec575) |
-| Oeffentliche Vergabe (Bund) | Stadt Boizenburg / Elbe - Rahmenvereinbarung für Reinigung, Inspektion, Druckprüfung von Abwasseranlagen sowie Abfuhr von Kleinkläranlagen/abflusslosen Sammelgruben |  | Stadt Boizenburg/Elbe - Der Bürgermeister | Boizenburg/Elbe | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung, Energie & Ressourcen | title+detail+cpv | Reinigung von Klärgruben | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/d3ab2da4-8ba3-4743-8422-004dfaff2adf) |
-| Oeffentliche Vergabe (Bund) | Wolfsmonitoring 2026 (Lose 1 bis 6) |  | Landesamt für Umwelt | Potsdam OT Groß Glienicke | 2026-06-07 |  | Regenwasser & Gewässer, Wasser & Risiko | cpv | Dienstleistungen im Umweltschutz | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/74d2f79d-cf27-402e-a469-6707310b6783) |
-| Oeffentliche Vergabe (Bund) | Ziel der Leistung ist die turnusgemäße Wiederholungsuntersuchung bekannter Stichprobenflächen für die Arten der Anhänge II und IV FFH-RL Angelica palustre, Cypripedium calceolus, Jurinea cyanoides für die laufende FFH-Berichtsperiode der Jahre 2025-2030 in Sachsen-Anhalt. Grundlage sind die Monitoringkonzepte des Bundes und Landes. |  | Landesamt für Umweltschutz | Halle (Saale) | 2026-06-07 |  | Regenwasser & Gewässer, Wasser & Risiko | cpv | Dienstleistungen im Umweltschutz | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/0b833c5c-a152-4246-82e5-d34963ca10b2) |
-| Oeffentliche Vergabe (Bund) | Stichproben-Monitoring der Kreuzkröte in Niedersachsen, in den Jahren 2027 und 2029 |  | Logistik Zentrum Niedersachsen Landesbetrieb - Außenstelle Hannover |  | 2026-06-07 |  | Regenwasser & Gewässer, Wasser & Risiko | cpv | Dienstleistungen im Umweltschutz | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25437122) |
-| Oeffentliche Vergabe (Bund) | Entsorgung und Verwertung von entwässertem Klärschlamm inkl. Phosphorrückgewinnung |  | Abwasserzweckverband Saalemündung | Calbe (Saale) | 2026-06-11 |  | Energie & Ressourcen | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/77cbd803-a139-4f3a-828e-0a3ce8949272) |
-| Oeffentliche Vergabe (Bund) | Beschaffung von Biogas (Biomethan) |  | Wärmeversorgung Damme GmbH | Damme | 2026-06-13 |  | Energie & Ressourcen | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/54d6c1a1-94b8-4a3f-b509-af349c2feaba) |
-| Oeffentliche Vergabe (Bund) | Wasseraufbereitung |  | Deutsche Rentenversicherung Nord |  | 2026-06-11 |  | Wasseraufbereitung & -wiederverwendung | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25459356) |
-| Oeffentliche Vergabe (Bund) | Schloss Erkersreuth - Technische Ausrüstung, Anlagengruppen 1, 2, 3 und 7, 8 anteilig gem. §53 HOAI 2021 |  | Stiftung Kulturerbe Bayern | München | 2026-06-10 |  | Grundwasser | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/7fc6795e-015a-4f82-b753-1f2977d9b1ae) |
-| Oeffentliche Vergabe (Bund) | Ernst-Bergeest-Weg 54 - Küche |  | GMH \| Gebäudemanagement Hamburg GmbH | Hamburg | 2026-06-10 |  | Regenwasser & Gewässer | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/fc774ce8-4a62-484e-8310-9dd73674c4e7) |
-| Oeffentliche Vergabe (Bund) | Beauftragung einer archäologischen Ausgrabung |  | Gemeinde Großenkneten | Großenkneten | 2026-06-10 |  | Grundwasser | detail+cpv | Archäologische Untersuchungen | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/78e46247-95a8-46be-a646-05da0ff31f2b) |
-| Oeffentliche Vergabe (Bund) | 2026-05 Lieferung von frischer Pulveraktivkohle |  | Abwasserverband Murg | Rastatt | 2026-06-11 |  | Wasseraufbereitung & -wiederverwendung | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/0bff4a85-87aa-40b8-a424-d65acd1039ad) |
-| Oeffentliche Vergabe (Bund) | Entsorgung von Klärschlamm des AZV Löbau-Nord |  | Abwasserzweckverband Löbau-Nord | Löbau | 2026-06-10 |  | Energie & Ressourcen | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/019eb5f1-4bdf-4db5-beeb-f18b69dbcf5a) |
-| Oeffentliche Vergabe (Bund) | Vergabe der Lieferung und Inbetriebnahme einer Anlage zur Konfektionierung von Klärschlammasche |  | Zweckverband Abfallverwertung Südhessen | Darmstadt | 2026-06-11 |  | Energie & Ressourcen | title |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/4c15ac7e-7042-460c-b831-f720df992365) |
-| Oeffentliche Vergabe (Bund) | Ingenieursleistung Trinkwasseraufbereitung |  | Stadt Warstein |  | 2026-06-10 |  | Wasseraufbereitung & -wiederverwendung | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25456684) |
-| Oeffentliche Vergabe (Bund) | Kanalreinigung, optische Inspektion und Dichtheitsprüfung Schwabach-Ost |  | Stadt Schwabach | Schwabach | 2026-06-08 |  | Smart City & Infrastruktur | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/6ca1d772-2dcb-4e7a-b6bd-861864781e6b) |
-| Oeffentliche Vergabe (Bund) | Inbetriebnahmemanagement |  | Max-Planck-Gesellschaft , GV-Bauabteilung | München | 2026-06-09 |  | Regenwasser & Gewässer | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/d4f23f38-95ea-41e9-be44-ddf4c98a9b7d) |
-| Oeffentliche Vergabe (Bund) | Objektplanung, Tragwerksplanung und Geotechnik |  | Landeshauptstadt München, Baureferat | München | 2026-06-09 |  | Smart City & Infrastruktur | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/902c2e64-9df4-452e-a0d5-bf2a62ff13c7) |
-| Oeffentliche Vergabe (Bund) | Stadt Einbeck - Ausbau der OD Einbeck |  | Stadt Einbeck | Einbeck | 2026-06-09 |  | Regenwasser & Gewässer | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/b64f07a4-8924-4c52-96e4-2e0f3c66df9f) |
-| Oeffentliche Vergabe (Bund) | NBS Frankfurt Mannheim, PFA 1 „Zeppelinheim – Darmstadt Nord“, Str. 3657 km 4,875 – 19,782 und Str. 3544 km 0,0 - 2,730  |  | DB Netz AG (Bukr 16) | Frankfurt Main | 2026-06-08 |  | Grundwasser | cpv | Bodenuntersuchungen | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/198659e3-f7ad-4e9b-b0a0-27671099ae40) |
-| Oeffentliche Vergabe (Bund) | ARV Wartung Regenwasserbehandlungsanlagen SM Herzberg 26-29 |  | Landesbetrieb Straßenwesen Brandenburg Dienststätte Cottbus | Hoppegarten | 2026-06-09 |  | Regenwasser & Gewässer | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/424fb387-b889-4d8c-878c-a299fbdae7b2) |
-| Oeffentliche Vergabe (Bund) | Planung Neubau Kläranlage Großschwabhausen |  | Stadtwerke Jena Netze GmbH | Jena | 2026-06-10 |  | Wasseraufbereitung & -wiederverwendung | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/922a0f83-d846-42ae-857f-f73230e18b0f) |
-| Oeffentliche Vergabe (Bund) | Beschaffung eines Schredders für den Einsatz auf der Kompostierungsanlage awm Münster |  | Stadt Münster - Zentrale Rechtsdienstleistungen und Vergabemanagement | Münster | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung | cpv | Zerkleinerungsmaschinen | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/33ad3656-0ffe-44fa-b085-30b18aa44888) |
-| Oeffentliche Vergabe (Bund) | Dezentrale Entsorgung von Abwasser und Fäkalschlamm und Entsorgung Wasserwerksschlämme aus dem Wasserwerk Zillierbach |  | Wasser- und Abwasserverband Holtemme-Bode | Wernigerode - OT Silstedt | 2026-06-09 |  | Grundwasser | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/8bcc89f6-ce99-4f10-bc4d-b42edb34c1f4) |
-| Oeffentliche Vergabe (Bund) | Gestellung von Anlagen- und Rohrleitungsbauern für Shutdownarbeiten 2026 - 2028 (Wertkontrakt) |  | Deutsches Elektronen-Synchrotron DESY | Hamburg | 2026-06-09 |  | Smart City & Infrastruktur | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/11a6b01e-8b58-4a77-b064-488e1c665d77) |
-| Oeffentliche Vergabe (Bund) | Lieferung von Eisen-II-Sulfat für den Zeitraum 01.01.27 bis 31.12.2028 |  | Stadt Sankt Augustin | Sankt Augustin | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/2f40a9ba-5b62-46d9-a1f5-dd6fac8ad51a) |
-| Oeffentliche Vergabe (Bund) | Tiefbau Brunnengründung für Netzersatzanlage |  | Staatsbetrieb Sächsisches Immobilien- und Baumanagement, Zentrale,  Zentralstelle Vergabe- und Vertragsmanagement |  | 2026-06-09 |  | Grundwasser | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25451818) |
-| Oeffentliche Vergabe (Bund) | Kanalinspektion im Vorlaus Straßenbauprogramm 2026 Reinigung, Kanal- und Schachtinspektion |  | Stadtwerke Abensberg (2) |  | 2026-06-09 |  | Smart City & Infrastruktur | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25451766) |
-| Oeffentliche Vergabe (Bund) | Stadt Viechtach: Beschaffung von Kommunalfahrzeugen |  | Stadt Viechtach | Viechtach | 2026-06-08 |  | Grundwasser | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/e0b72cd7-b836-4b66-b46c-2f2cee1573d7) |
-| Oeffentliche Vergabe (Bund) | Örtliche Bauüberwachung zur Maßnahme  "Ertüchtigung GWRA Pößnitz zum Funktionserhalt" |  | Lausitzer und Mitteldeutsche Bergbau-Verwaltungsgesellschaft mbH | Senftenberg | 2026-06-08 |  | Grundwasser | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/61676df8-c755-4c82-a3a3-b12959fdb34e) |
-| Oeffentliche Vergabe (Bund) | ARV Wartung Regenwasserbehandlungsanlagen SM Forst 26-29 |  | Landesbetrieb Straßenwesen Brandenburg Dienststätte Cottbus | Hoppegarten | 2026-06-08 |  | Regenwasser & Gewässer | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/68ef5b23-3619-4b76-b9e8-65fcbc51e730) |
-| Oeffentliche Vergabe (Bund) | Sanierung von Wasserwerk und Pumpenhaus in Bonn - Gutachterliche Leistungen (Rissgutachten) -   (888/26) |  | Bundesanstalt für Immobilienaufgaben, vertreten durch das Bundesamt für Bauwesen und Raumordnung | Bonn | 2026-05-05 |  | Grundwasser | title |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/f48145b5-c3dc-42fc-b0a0-a7db4c7827b4) |
-| Oeffentliche Vergabe (Bund) | vergebener Auftrag 26B0041N, Greifen- Kaserne Torgelow, Ableitung Regenwasser, Herstellung Vorflut |  | Staatliches Bau- und Liegenschaftsamt Neubrandenburg |  | 2026-06-09 |  | Regenwasser & Gewässer | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25446596) |
-| Oeffentliche Vergabe (Bund) | Expert platform for Ukraine"s EU alignment in the rule of law |  | Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH | Eschborn | 2026-06-07 |  | Smart City & Infrastruktur | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/c90ddd75-7b22-46d9-b713-5cc368d70989) |
-| Oeffentliche Vergabe (Bund) | B3, OU Celle, Nordteil, 4. Bauabschnitt, Orientierende Untersuchung. Phase IIa |  | Niedersächsische Landesbehörde für Straßenbau und Verkehr - Geschäftsbereich Verden | Verden | 2026-06-07 |  | Grundwasser | cpv | Bodenuntersuchungen | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/514b7c14-55ac-481a-b1ea-80ae27dc48e5) |
-| Oeffentliche Vergabe (Bund) | Ing.-Vertrag Kanalsansierung Asseln-Wickede |  | Vergabe und Beschaffungszentrum Dortmund | Dortmund | 2026-06-07 |  | Smart City & Infrastruktur | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/b58bf74e-c981-4dc0-b983-8449120b41fd) |
-| Oeffentliche Vergabe (Bund) | WRRL Gewässerökologie Wiese, Maulburg-Wiechs |  | Regierungspräsidium Freiburg, Dienstsitz Bad Säckingen, Abteilung Umwelt, Referat 53.1 |  | 2026-06-07 |  | Regenwasser & Gewässer | title |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25439980) |
-| Oeffentliche Vergabe (Bund) | 68-0664-26 Klärwerke -1488 Medientrasse |  | Landeshauptstadt Hannover Stadtentwässerung Hannover |  | 2026-06-07 |  | Wasseraufbereitung & -wiederverwendung | title+detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/25436108) |
-| Oeffentliche Vergabe (Bund) | Riff-Pilotmonitoring in den Küstengewässern von M-V |  | Landesamt für innere Verwaltung M-V, Abteilung Beschaffung/Dienstleistungen | Schwerin | 2026-06-04 |  | Grundwasser | cpv | Ozeanografische Untersuchungen (physikalische Aspekte) | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/36a27c08-5848-4e23-b4cd-99b8e11cca4c) |
-| Oeffentliche Vergabe (Bund) | Machbarkeitsstudie Seen |  | Kommunales Nachbarschaftsforum Berlin-Brandenburg e.V. c/o complan Kommunalberatung GmbH | Potsdam | 2026-06-04 |  | Grundwasser | detail+cpv | Geologische, ozeanografische und hydrologische Untersuchungen | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/8b443fe4-d52e-43a1-b770-09b8f170a074) |
-| Oeffentliche Vergabe (Bund) | ARA + ABA Düsseldorf DB Regio - 545 |  | DB Regio AG (Bukr 12) | Frankfurt am Main | 2026-06-04 |  | Wasseraufbereitung & -wiederverwendung | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/79cdef27-858a-4aa4-99d4-b3568ded2631) |
-
-## Ausschreibung (305)
+## Ausschreibung (303)
 
 | Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -369,7 +314,7 @@ Treffer je Gruppe: Wasseraufbereitung & -wiederverwendung (130), Grundwasser (91
 | TED (EU) | Optische Inspektion / Kanalreinigung Schwäbisch Hall 2025 |  | Stadt Schwäbisch Hall, Zentrale Vergabestelle |  | 2026-05-13 |  | Smart City & Infrastruktur | detail |  | 1 |  | [Details](https://ted.europa.eu/de/notice/-/detail/329439-2026) |
 | TED (EU) | Planungsleistung Leistungsphasen 1-8 - Neubau von drei Hauptpumpwerken inkl Havariekonzepts |  | Zweckverband Ostholstein |  | 2026-05-13 |  | Wasseraufbereitung & -wiederverwendung | detail |  | 1 |  | [Details](https://ted.europa.eu/de/notice/-/detail/330156-2026) |
 
-## Geplante Ausschreibung (17)
+## Geplante Ausschreibung (15)
 
 | Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -386,17 +331,13 @@ Treffer je Gruppe: Wasseraufbereitung & -wiederverwendung (130), Grundwasser (91
 |  |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Oeffentliche Vergabe (Bund) | Leitsystem der Ver- und Entsorgung |  | Procurement, Claim and Mobility | Frankfurt am Main | 2026-06-10 |  | Regenwasser & Gewässer, Wasseraufbereitung & -wiederverwendung | detail |  | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/ab7b8e3a-58a5-4065-b6b9-fa10528d6067) |
 | Oeffentliche Vergabe (Bund) | Lieferung von Eisen-II-Sulfat für den Zeitraum 01.01.27 bis 31.12.2028 |  | Stadt Sankt Augustin | Sankt Augustin | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/2f40a9ba-5b62-46d9-a1f5-dd6fac8ad51a) |
 
-## NA (307)
+## NA (305)
 
 | Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |  |  |  |  |
