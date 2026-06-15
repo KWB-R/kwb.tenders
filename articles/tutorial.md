@@ -88,8 +88,10 @@ Beyond the result-table title (layer 1),
 text **plus** the CPV procurement codes (mapped to groups via
 `inst/extdata/cpv_groups.yml`). The report’s `match_source` column shows
 which layer flagged each tender (`title` / `detail` / `cpv`). This needs
-no login (the detail page is public) and uses a plain HTTP GET; cap the
-fetches with `max_detail`.
+no login (the detail page is public). The scheduled job caches detail
+results (on `gh-pages`) and only deep-screens **new** tenders, so daily
+runs stay cheap while coverage grows; cap the per-run fetches with
+`max_detail`.
 
 ``` r
 

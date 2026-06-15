@@ -149,8 +149,10 @@ description text <strong>plus</strong> the CPV procurement codes (mapped
 to groups via <code>inst/extdata/cpv_groups.yml</code>). The report’s
 <code>match_source</code> column shows which layer flagged each tender
 (<code>title</code> / <code>detail</code> / <code>cpv</code>). This
-needs no login (the detail page is public) and uses a plain HTTP GET;
-cap the fetches with <code>max_detail</code>.</p>
+needs no login (the detail page is public). The scheduled job caches
+detail results (on <code>gh-pages</code>) and only deep-screens
+<strong>new</strong> tenders, so daily runs stay cheap while coverage
+grows; cap the per-run fetches with <code>max_detail</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_tenders.html">check_tenders</a></span><span class="op">(</span>screen_details <span class="op">=</span> <span class="cn">TRUE</span>, max_detail <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
 </div>

@@ -1,30 +1,38 @@
-# Fetch a tender detail page and extract its text + CPV codes
+# Fetch a tender detail page (rendered) and extract its text + CPV codes
 
-Uses a plain HTTP GET (the published detail page is public), so no
-browser or login is required.
+Navigates the (JavaScript-rendered) public detail page via the chromote
+session and reads the rendered text. No login required.
 
 ## Usage
 
 ``` r
-tender_detail_text(url)
+tender_detail_text(session, url, wait = 10)
 ```
 
 ## Arguments
 
+- session:
+
+  A session from
+  [`vmp_bb_session()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_session.md).
+
 - url:
 
-  Project detail URL (the `Aktion` column from
-  [`vmp_bb_scrape_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_scrape_tenders.md)).
+  Project detail URL (the `Aktion` column).
+
+- wait:
+
+  Maximum seconds to wait for the page to render (default `10`).
 
 ## Value
 
-A list with `text` (page text) and `cpv` (character vector of CPV
-codes).
+A list with `text` (rendered page text) and `cpv` (character vector).
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-tender_detail_text(tenders$Aktion[1])
+session <- vmp_bb_session()
+tender_detail_text(session, tenders$Aktion[1])
 } # }
 ```
