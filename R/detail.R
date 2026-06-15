@@ -279,6 +279,14 @@ enrich_with_details <- function(session, tenders, keywords = tender_keywords(),
   if (length(pick) > max_detail) pick <- pick[seq_len(max_detail)]
   urls <- if (!is.null(tenders$Aktion)) as.character(tenders$Aktion) else rep(NA_character_, n)
 
+  # The rendered detail page (full innerText incl. menus/boilerplate) is noisy, so
+  # match it on STRONG keywords only -- supporting hits there are mostly incidental
+  # (building cleaning, ventilation hygiene, waste-dump prep would otherwise sneak
+  # in). CPV codes are matched separately below and keep their own signal.
+  detail_keywords <- lapply(normalize_keyword_groups(keywords), function(g) {
+    list(name = g$name, strong = g$strong)
+  })
+
   message(sprintf("Detail layer: %d cached, screening %d new page(s)...",
                   sum(have), length(pick)))
   fetched <- logical(n)
@@ -289,7 +297,7 @@ enrich_with_details <- function(session, tenders, keywords = tender_keywords(),
     det <- tryCatch(tender_detail_text(session, u), error = function(e) NULL)
     if (is.null(det)) next
     if (nzchar(det$text)) {
-      sc <- score_relevance(data.frame(t = det$text, stringsAsFactors = FALSE), keywords = keywords)
+      sc <- score_relevance(data.frame(t = det$text, stringsAsFactors = FALSE), keywords = detail_keywords)
       tenders$detail_groups[i] <- sc$groups[1]
     }
     tenders$cpv[i] <- paste(det$cpv, collapse = ", ")
