@@ -1,0 +1,39 @@
+# Title-level exclusion (veto) list.
+# A tender is dropped (is_relevant -> FALSE) when its TITLE contains one of these
+# terms AND the title carries NO strong water keyword -- so "Klaeranlage ...
+# Bauleistungen" or any "Grundwasser..." title is kept. Matching folds umlauts
+# (ae/oe/ue/ss) and is case-insensitive. Edit freely; this file is NOT a research
+# group (tender_keywords() ignores it).
+name: "Ausschluss (kein Bau / Wartung / Gebaeude)"
+terms:
+  - Krematorium
+  - Sporthalle
+  - Turnhalle
+  - Mehrzweckhalle
+  - Gymnasium
+  - Grundschule
+  - Kindergarten
+  - Kita
+  - Rohbau
+  - Hochbau
+  - Strassenbau
+  - Gebaeudereinigung
+  - Unterhaltsreinigung
+  - Glasreinigung
+  - Lueftungsanlage
+  - Heizungsanlage
+  - Raumlufttechnik
+  - RLT-Anlage
+  - Klimaanlage
+  - Labor
+  - Aufzug
+  - Fassade
+  - Dachsanierung
+  - Friedhof
+  - Spielplatz
+  - Sportplatz
+  - Moeblierung
+  - Mobiliar
+  - Bestuhlung
+  - Catering
+  - Verpflegung

@@ -22,7 +22,7 @@
   groups: [water-treatment-reuse]
 - prefix: "45245"      # Nassbagger-/Pumparbeiten fuer Wasseraufbereitungsanlagen
   groups: [water-treatment-reuse]
-- prefix: "45259"      # Reparatur/Wartung von Klaeranlagen
+- prefix: "45259100"   # Reparatur/Wartung von Klaeranlagen (NICHT 45259 = generische Anlagen-Wartung)
   groups: [water-treatment-reuse]
 - prefix: "39350"      # Abwasserreinigungsanlage (Ausruestung)
   groups: [water-treatment-reuse]
@@ -40,9 +40,9 @@
   groups: [stormwater-surface-waters]
 - prefix: "45248"      # Hydromechanische Anlagen (Wehre, Schuetze)
   groups: [stormwater-surface-waters]
-- prefix: "71353"      # Hydrografische Untersuchungen
+- prefix: "71353100"   # Hydrografische Untersuchungen (NICHT 71353 = allg. Vermessung)
   groups: [stormwater-surface-waters]
-- prefix: "71354"      # Hydrografische Dienste
+- prefix: "71354400"   # Hydrografische Dienste (NICHT 71354 = allg. Kartografie)
   groups: [stormwater-surface-waters]
 - prefix: "38123"      # Niederschlags-/Verdunstungsschreiber
   groups: [stormwater-surface-waters]

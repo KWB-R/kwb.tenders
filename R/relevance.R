@@ -15,6 +15,7 @@
 #' names(tender_keywords())
 tender_keywords <- function(dir = system.file("extdata", package = "kwb.tenders")) {
   files <- list.files(dir, pattern = "^keywords_.*\\.ya?ml$", full.names = TRUE)
+  files <- files[!grepl("^keywords_exclude\\.ya?ml$", basename(files))] # veto list, not a group
   if (length(files) == 0L) {
     stop("No keyword files (keywords_*.yml) found in: ", dir, call. = FALSE)
   }
@@ -148,4 +149,142 @@ score_relevance <- function(tenders, keywords = tender_keywords()) {
   tenders$is_relevant <- nzchar(tenders$groups)
 
   tenders[order(-tenders$score), , drop = FALSE]
+}
+
+#' Per-row matching group names (no reordering), given normalised groups
+#' @noRd
+.row_group_hits <- function(df, groups) {
+  n <- nrow(df)
+  if (n == 0L) return(character(0))
+  row_text <- build_row_text(df)
+  gn <- vapply(groups, function(g) g$name, character(1))
+  mm <- matrix(FALSE, nrow = n, ncol = length(groups))
+  for (gi in seq_along(groups)) {
+    g <- groups[[gi]]
+    ns <- lengths(match_terms(row_text, g$strong))
+    np <- lengths(match_terms(row_text, g$supporting)) # empty supporting -> strong-only
+    mm[, gi] <- ns >= 1L | np >= 2L
+  }
+  vapply(seq_len(n), function(i) paste(gn[mm[i, ]], collapse = ", "), character(1))
+}
+
+#' Layered relevance scoring for portal connectors (title + long text + CPV)
+#'
+#' Scores a tender tibble the way the VMP-BB pipeline does, but in one call for
+#' connectors that already ship a description and CPV codes (e.g. the API
+#' portals): `title_cols` use the full rule (>=1 strong OR >=2 supporting),
+#' `text_cols` (long free text) are matched STRONG-only (incidental supporting
+#' hits in long text are noise), and `cpv_col` codes are mapped to groups. The
+#' three group sets are merged into `groups`, with `match_source`
+#' (title/detail/cpv), `cpv_groups`, `score` and `is_relevant`.
+#'
+#' @param df A data frame of tenders.
+#' @param title_cols Columns scored with the full rule (e.g. the title).
+#' @param text_cols Columns scored strong-only (e.g. description); default none.
+#' @param cpv_col Name of a comma/space-separated CPV column, or `NULL`.
+#' @param keywords Keyword groups (default [tender_keywords()]).
+#' @param cpv_map CPV-to-group map (default [tender_cpv_map()]).
+#' @return `df` with `groups`, `cpv_groups`, `match_source`, `score`,
+#'   `is_relevant` added, sorted by descending score.
+#' @export
+score_layered <- function(df, title_cols, text_cols = character(), cpv_col = NULL,
+                          keywords = tender_keywords(), cpv_map = tender_cpv_map(),
+                          exclude = TRUE) {
+  n <- nrow(df)
+  full <- normalize_keyword_groups(keywords)
+  strong <- lapply(full, function(g) list(name = g$name, strong = g$strong, supporting = character()))
+  # slug2name must be keyed by slug (names of the keyword list) for the CPV map.
+  slug2name <- vapply(keywords, function(g) if (is.null(g$name)) "" else as.character(g$name),
+                      character(1))
+  split_g <- function(x) { g <- unlist(strsplit(x, ", ", fixed = TRUE)); g[nzchar(g)] }
+  pick <- function(cols) {
+    cols <- intersect(cols, names(df))
+    if (length(cols) == 0L) return(data.frame(.t = rep("", n), stringsAsFactors = FALSE))
+    df[, cols, drop = FALSE]
+  }
+
+  title_hits <- if (n) .row_group_hits(pick(title_cols), full) else character(0)
+  text_hits <- if (n && length(text_cols)) .row_group_hits(pick(text_cols), strong) else rep("", n)
+  cpv_hits <- rep("", n)
+  if (n && !is.null(cpv_col) && !is.null(df[[cpv_col]])) {
+    cpv_hits <- vapply(as.character(df[[cpv_col]]), function(s) {
+      codes <- unlist(strsplit(s, "[,; ]+"))
+      paste(cpv_to_group_names(codes[nzchar(codes)], cpv_map, slug2name), collapse = ", ")
+    }, character(1), USE.NAMES = FALSE)
+  }
+
+  df$groups <- if (n) vapply(seq_len(n), function(i) {
+    paste(unique(split_g(c(title_hits[i], text_hits[i], cpv_hits[i]))), collapse = ", ")
+  }, character(1)) else character(0)
+  df$cpv_groups <- cpv_hits
+  df$match_source <- if (n) vapply(seq_len(n), function(i) paste(c(
+    if (nzchar(title_hits[i])) "title",
+    if (nzchar(text_hits[i])) "detail",
+    if (nzchar(cpv_hits[i])) "cpv"
+  ), collapse = "+"), character(1)) else character(0)
+  df$is_relevant <- nzchar(df$groups)
+  df$score <- if (n) vapply(strsplit(df$groups, ", ", fixed = TRUE),
+                            function(g) sum(nzchar(g)), integer(1)) else integer(0)
+  out <- df[order(-df$score), , drop = FALSE]
+  if (isTRUE(exclude)) out <- apply_title_excludes(out, title_cols = title_cols, keywords = keywords)
+  out
+}
+
+#' Title-level exclusion (veto) terms
+#'
+#' Reads `inst/extdata/keywords_exclude.yml` -- terms that mark a tender as not
+#' relevant when they appear in its title (and no strong water keyword does). Used
+#' by [apply_title_excludes()]. This file is deliberately ignored by
+#' [tender_keywords()]; it is not a research group.
+#'
+#' @param path YAML file with a `terms:` list (and optional `name`).
+#' @return A list with `name` and `terms` (character vector).
+#' @export
+tender_excludes <- function(path = system.file("extdata", "keywords_exclude.yml", package = "kwb.tenders")) {
+  if (!nzchar(path) || !file.exists(path)) return(list(name = "exclude", terms = character()))
+  y <- yaml::read_yaml(path)
+  list(name = if (!is.null(y$name)) as.character(y$name) else "exclude", terms = or_empty(y$terms))
+}
+
+#' Veto out-of-scope tenders by title (e.g. pure building / maintenance projects)
+#'
+#' Sets `is_relevant = FALSE` for tenders whose **title** contains an exclusion
+#' term (see [tender_excludes()]) **unless** the title also contains a strong
+#' water keyword (so "Klaeranlage ... Bauleistungen" or any "Grundwasser..."
+#' title is kept). Adds an `excluded` column naming the vetoing term (`NA`
+#' otherwise). Catches building/maintenance notices that only matched via
+#' incidental detail text or CPV codes. Matching folds umlauts / is
+#' case-insensitive.
+#'
+#' @param df A scored tibble (must contain `is_relevant`).
+#' @param title_cols Candidate title columns (those present are used).
+#' @param keywords Keyword groups, for the strong-keyword rescue (default
+#'   [tender_keywords()]).
+#' @param excludes Exclusion list (default [tender_excludes()]).
+#' @return `df` with vetoed rows' `is_relevant` set `FALSE` and an `excluded` column.
+#' @export
+apply_title_excludes <- function(df,
+                                 title_cols = c("Kurzbezeichnung", "Bezeichnung", "Titel"),
+                                 keywords = tender_keywords(),
+                                 excludes = tender_excludes()) {
+  n <- nrow(df)
+  if (n == 0L || is.null(df$is_relevant)) return(df)
+  terms <- excludes$terms
+  tcols <- intersect(title_cols, names(df))
+  if (length(terms) == 0L || length(tcols) == 0L) {
+    if (is.null(df$excluded)) df$excluded <- rep(NA_character_, n)
+    return(df)
+  }
+  title <- normalize_de(do.call(paste, c(df[tcols], sep = " ")))
+  ex_norm <- normalize_de(terms)
+  strong_all <- normalize_de(unlist(lapply(normalize_keyword_groups(keywords), function(g) g$strong)))
+  matched <- rep(NA_character_, n)
+  for (i in which(df$is_relevant %in% TRUE)) {
+    if (any(vapply(strong_all, function(k) grepl(k, title[i], fixed = TRUE), logical(1)))) next # water title -> keep
+    hit <- which(vapply(ex_norm, function(k) grepl(k, title[i], fixed = TRUE), logical(1)))
+    if (length(hit)) matched[i] <- terms[hit[1]]
+  }
+  df$excluded <- matched
+  df$is_relevant[!is.na(matched)] <- FALSE
+  df
 }

@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
     inputs:
       login:
-        description: "Log in before scraping (default ON; uncheck to skip). Needs VMP_BB_* repo secrets."
+        description: "VMP-BB: log in before scraping (default ON; the API portals are login-free). Needs VMP_BB_* secrets."
         type: boolean
         default: true
       notice:
-        description: "Also read Bekanntmachung PDFs (forces login; default ON, uncheck to skip). Needs VMP_BB_* secrets."
+        description: "VMP-BB: also read Bekanntmachung PDFs (forces login; default ON). Needs VMP_BB_* secrets."
         type: boolean
         default: true
 
@@ -59,8 +59,8 @@ jobs:
             git worktree add --detach ../gh-pages origin/gh-pages
           fi
           mkdir -p reports
-          if [ -f ../gh-pages/reports/vmp-bb_state.rds ]; then
-            cp ../gh-pages/reports/vmp-bb_state.rds reports/
+          if [ -f ../gh-pages/reports/tenders_state.rds ]; then
+            cp ../gh-pages/reports/tenders_state.rds reports/
             echo "Restored previous state for the 'new since last run' diff."
           else
             echo "No previous state found (first run)."
@@ -81,7 +81,7 @@ jobs:
         # it must NOT be set on Windows. Hence it is applied only here, not in
         # vmp_bb_session()'s defaults.
         run: >
-          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::check_tenders(login = ${{ github.event.inputs.login != 'false' && 'TRUE' || 'FALSE' }}, screen_notice = ${{ github.event.inputs.notice != 'false' && 'TRUE' || 'FALSE' }})'
+          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::screen_all_portals(vmp_bb_login = ${{ github.event.inputs.login != 'false' && 'TRUE' || 'FALSE' }}, vmp_bb_notice = ${{ github.event.inputs.notice != 'false' && 'TRUE' || 'FALSE' }})'
 
       - name: Publish report to gh-pages
         run: |
