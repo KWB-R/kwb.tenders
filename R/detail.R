@@ -1,6 +1,8 @@
 # Detail-page enrichment (second relevance layer) ------------------------------
-# For ongoing tenders, fetch the PUBLIC detail page (no login/browser needed),
-# match the keyword groups against its full text and map its CPV codes to groups.
+# The detail page is a JavaScript app, so it is rendered via the chromote
+# session (same origin as the search -> stable on CI; no login needed). For each
+# ongoing tender we match the keyword groups against the rendered text and map
+# its CPV codes to groups.
 
 #' CPV-code to research-group mapping
 #'
@@ -18,38 +20,42 @@ tender_cpv_map <- function(path = system.file("extdata", "cpv_groups.yml",
   yaml::read_yaml(path)
 }
 
-#' Fetch a tender detail page and extract its text + CPV codes
+#' Extract CPV codes (8 digits, optional check digit) from text
+#' @noRd
+extract_cpv <- function(text) {
+  if (length(text) == 0L || is.na(text[1]) || !nzchar(text[1])) {
+    return(character())
+  }
+  unique(stringr::str_extract_all(text, "[0-9]{8}(-[0-9])?")[[1]])
+}
+
+#' Fetch a tender detail page (rendered) and extract its text + CPV codes
 #'
-#' Uses a plain HTTP GET (the published detail page is public), so no browser or
-#' login is required.
+#' Navigates the (JavaScript-rendered) public detail page via the chromote
+#' session and reads the rendered text. No login required.
 #'
-#' @param url Project detail URL (the `Aktion` column from
-#'   [vmp_bb_scrape_tenders()]).
-#' @return A list with `text` (page text) and `cpv` (character vector of CPV codes).
+#' @param session A session from [vmp_bb_session()].
+#' @param url Project detail URL (the `Aktion` column).
+#' @param wait Maximum seconds to wait for the page to render (default `10`).
+#' @return A list with `text` (rendered page text) and `cpv` (character vector).
 #' @export
 #' @examples
 #' \dontrun{
-#' tender_detail_text(tenders$Aktion[1])
+#' session <- vmp_bb_session()
+#' tender_detail_text(session, tenders$Aktion[1])
 #' }
-tender_detail_text <- function(url) {
-  resp <- httr::GET(url, httr::user_agent(
-    "kwb.tenders (https://github.com/KWB-R/kwb.tenders)"
-  ))
-  html <- httr::content(resp, as = "text", encoding = "UTF-8")
-  parse_detail_html(html)
-}
-
-#' @noRd
-parse_detail_html <- function(html) {
-  if (!is.character(html) || length(html) == 0 || is.na(html[1]) || !nzchar(html[1])) {
-    return(list(text = "", cpv = character()))
+tender_detail_text <- function(session, url, wait = 10) {
+  session$Page$navigate(url)
+  t0 <- Sys.time()
+  text <- ""
+  repeat {
+    Sys.sleep(0.5)
+    text <- cdp_eval(session, "(document.body && document.body.innerText) || ''")
+    if (is.character(text) && nchar(text) > 200) break # rendered
+    if (as.numeric(difftime(Sys.time(), t0, units = "secs")) > wait) break
   }
-  doc <- rvest::read_html(html)
-  body <- rvest::html_element(doc, "body")
-  text <- rvest::html_text2(body)
-  if (length(text) == 0 || is.na(text)) text <- ""
-  cpv <- stringr::str_extract_all(text, "[0-9]{8}(-[0-9])?")[[1]]
-  list(text = text, cpv = unique(cpv))
+  if (is.null(text) || !is.character(text)) text <- ""
+  list(text = text, cpv = extract_cpv(text))
 }
 
 #' Map CPV codes to research-group display names
@@ -84,48 +90,113 @@ is_ongoing <- function(tenders, today = Sys.Date()) {
   is.na(d) | d >= today # keep undated rows (be inclusive)
 }
 
-#' Enrich tenders with a detail-page relevance layer (full text + CPV codes)
+#' Stable per-tender id (the portal `pid` from the `Aktion` URL)
+#' @noRd
+tender_ids <- function(tenders) {
+  n <- nrow(tenders)
+  url <- if (!is.null(tenders$Aktion)) as.character(tenders$Aktion) else rep(NA_character_, n)
+  pid <- stringr::str_match(url, "pid=([0-9]+)")[, 2]
+  ifelse(!is.na(pid), pid,
+         ifelse(!is.na(url) & nzchar(url), url, paste0("row-", seq_len(n))))
+}
+
+#' @noRd
+empty_detail_cache <- function() {
+  data.frame(tender_id = character(), detail_groups = character(),
+             cpv = character(), cpv_groups = character(), stringsAsFactors = FALSE)
+}
+
+#' Read / write the detail-screening cache
 #'
-#' For ongoing tenders, fetches the public detail page, matches the keyword
-#' groups against its full text and maps its CPV codes to groups. The matching
-#' group(s) are merged into `groups`/`is_relevant`; adds columns `detail_groups`,
-#' `cpv`, `cpv_groups` and `match_source` (which layer(s) matched).
+#' The cache (one row per already-screened tender) lets the scheduled job screen
+#' only *new* tenders and reuse earlier results; persisted with the report so it
+#' survives across runs.
 #'
+#' @param path Cache file path (`.rds`).
+#' @param cache A cache data.frame (columns `tender_id`, `detail_groups`, `cpv`,
+#'   `cpv_groups`).
+#' @return `read_detail_cache()` returns the cache data.frame (empty if absent);
+#'   `write_detail_cache()` returns `path` invisibly.
+#' @export
+read_detail_cache <- function(path) {
+  if (length(path) != 1L || is.na(path) || !file.exists(path)) {
+    return(empty_detail_cache())
+  }
+  out <- tryCatch(readRDS(path), error = function(e) NULL)
+  ok <- is.data.frame(out) &&
+    all(c("tender_id", "detail_groups", "cpv", "cpv_groups") %in% names(out))
+  if (ok) out else empty_detail_cache()
+}
+
+#' @rdname read_detail_cache
+#' @export
+write_detail_cache <- function(cache, path) {
+  if (is.null(cache)) cache <- empty_detail_cache()
+  saveRDS(cache, path)
+  invisible(path)
+}
+
+#' Enrich tenders with a detail-page relevance layer (rendered text + CPV codes)
+#'
+#' For ongoing tenders that are not yet in `cache`, renders the public detail
+#' page via `session`, matches the keyword groups against its full text and maps
+#' its CPV codes to groups. Cached tenders are reused without re-fetching. The
+#' matching group(s) are merged into `groups`/`is_relevant`; adds columns
+#' `detail_groups`, `cpv`, `cpv_groups`, `match_source`. The updated cache is
+#' returned as `attr(result, "detail_cache")`.
+#'
+#' @param session A session from [vmp_bb_session()].
 #' @param tenders A scored tibble (see [score_relevance()]).
 #' @param keywords Keyword groups (default [tender_keywords()]).
 #' @param cpv_map CPV-to-group mapping (default [tender_cpv_map()]).
 #' @param ongoing_only Only screen tenders whose deadline has not passed
 #'   (default `TRUE`).
-#' @param max_detail Maximum number of detail pages to fetch (default `Inf`).
-#' @param delay Seconds between detail requests (politeness; default `0.3`).
-#' @return `tenders` with the detail layer merged in.
+#' @param max_detail Maximum number of *new* detail pages to render per call
+#'   (default `Inf`).
+#' @param delay Seconds between detail pages (politeness; default `0.2`).
+#' @param cache Detail cache from a previous run (see [read_detail_cache()]).
+#' @return `tenders` with the detail layer merged in; the updated cache is in
+#'   `attr(result, "detail_cache")`.
 #' @export
-enrich_with_details <- function(tenders, keywords = tender_keywords(),
+enrich_with_details <- function(session, tenders, keywords = tender_keywords(),
                                 cpv_map = tender_cpv_map(),
-                                ongoing_only = TRUE, max_detail = Inf, delay = 0.3) {
+                                ongoing_only = TRUE, max_detail = Inf, delay = 0.2,
+                                cache = NULL) {
   n <- nrow(tenders)
   tenders$detail_groups <- rep("", n)
   tenders$cpv <- rep("", n)
   tenders$cpv_groups <- rep("", n)
   if (n == 0L) {
     tenders$match_source <- character()
+    attr(tenders, "detail_cache") <- empty_detail_cache()
     return(tenders)
   }
+  if (is.null(cache)) cache <- empty_detail_cache()
 
   slug2name <- vapply(keywords, function(g) {
     if (is.null(g$name)) "" else as.character(g$name)
   }, character(1))
 
-  pick <- if (isTRUE(ongoing_only)) which(is_ongoing(tenders)) else seq_len(n)
+  ids <- tender_ids(tenders)
+  cidx <- match(ids, cache$tender_id)
+  have <- !is.na(cidx)
+  tenders$detail_groups[have] <- cache$detail_groups[cidx[have]]
+  tenders$cpv[have] <- cache$cpv[cidx[have]]
+  tenders$cpv_groups[have] <- cache$cpv_groups[cidx[have]]
+
+  base_pick <- if (isTRUE(ongoing_only)) which(is_ongoing(tenders)) else seq_len(n)
+  pick <- base_pick[!have[base_pick]] # only ongoing AND not yet cached (= new)
   if (length(pick) > max_detail) pick <- pick[seq_len(max_detail)]
   urls <- if (!is.null(tenders$Aktion)) as.character(tenders$Aktion) else rep(NA_character_, n)
 
-  message(sprintf("Screening %d detail page(s) (description + CPV)...", length(pick)))
+  message(sprintf("Detail layer: %d cached, screening %d new page(s)...",
+                  sum(have), length(pick)))
+  fetched <- logical(n)
   for (k in seq_along(pick)) {
     i <- pick[k]
     u <- urls[i]
     if (is.na(u) || !nzchar(u)) next
-    det <- tryCatch(tender_detail_text(u), error = function(e) NULL)
+    det <- tryCatch(tender_detail_text(session, u), error = function(e) NULL)
     if (is.null(det)) next
     if (nzchar(det$text)) {
       sc <- score_relevance(data.frame(t = det$text, stringsAsFactors = FALSE), keywords = keywords)
@@ -133,6 +204,7 @@ enrich_with_details <- function(tenders, keywords = tender_keywords(),
     }
     tenders$cpv[i] <- paste(det$cpv, collapse = ", ")
     tenders$cpv_groups[i] <- paste(cpv_to_group_names(det$cpv, cpv_map, slug2name), collapse = ", ")
+    fetched[i] <- TRUE
     if (delay > 0) Sys.sleep(delay)
     if (k %% 25 == 0) message(sprintf("  ...%d/%d", k, length(pick)))
   }
@@ -154,5 +226,18 @@ enrich_with_details <- function(tenders, keywords = tender_keywords(),
     ), collapse = "+")
   }, character(1))
   tenders$is_relevant <- nzchar(tenders$groups)
+
+  # Updated cache: current tenders that were cached before OR freshly screened
+  # (prunes entries for tenders that dropped out of the listing).
+  screened <- have | fetched
+  upd <- data.frame(
+    tender_id = ids[screened],
+    detail_groups = tenders$detail_groups[screened],
+    cpv = tenders$cpv[screened],
+    cpv_groups = tenders$cpv_groups[screened],
+    stringsAsFactors = FALSE
+  )
+  upd <- upd[nzchar(upd$tender_id) & !duplicated(upd$tender_id), , drop = FALSE]
+  attr(tenders, "detail_cache") <- upd
   tenders
 }

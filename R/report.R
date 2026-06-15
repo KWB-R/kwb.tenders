@@ -24,14 +24,13 @@ write_tender_report <- function(tenders, dir = "reports",
   }
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
 
-  # Aktion holds the project detail URL; derive a stable id (pid) + project_url.
-  url <- if (!is.null(tenders$Aktion)) as.character(tenders$Aktion) else rep(NA_character_, nrow(tenders))
-  pid <- stringr::str_match(url, "pid=([0-9]+)")[, 2]
-  tenders$project_url <- url
-  tenders$tender_id <- ifelse(
-    !is.na(pid), pid,
-    ifelse(!is.na(url) & nzchar(url), url, paste0("row-", seq_len(nrow(tenders))))
-  )
+  # Aktion holds the project detail URL; derive project_url + a stable id (pid).
+  tenders$project_url <- if (!is.null(tenders$Aktion)) {
+    as.character(tenders$Aktion)
+  } else {
+    rep(NA_character_, nrow(tenders))
+  }
+  tenders$tender_id <- tender_ids(tenders)
 
   # Diff against the previous run.
   state_file <- file.path(dir, paste0(portal, "_state.rds"))

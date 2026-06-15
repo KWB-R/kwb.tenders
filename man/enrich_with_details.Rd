@@ -2,18 +2,22 @@
 % Please edit documentation in R/detail.R
 \name{enrich_with_details}
 \alias{enrich_with_details}
-\title{Enrich tenders with a detail-page relevance layer (full text + CPV codes)}
+\title{Enrich tenders with a detail-page relevance layer (rendered text + CPV codes)}
 \usage{
 enrich_with_details(
+  session,
   tenders,
   keywords = tender_keywords(),
   cpv_map = tender_cpv_map(),
   ongoing_only = TRUE,
   max_detail = Inf,
-  delay = 0.3
+  delay = 0.2,
+  cache = NULL
 )
 }
 \arguments{
+\item{session}{A session from \code{\link[=vmp_bb_session]{vmp_bb_session()}}.}
+
 \item{tenders}{A scored tibble (see \code{\link[=score_relevance]{score_relevance()}}).}
 
 \item{keywords}{Keyword groups (default \code{\link[=tender_keywords]{tender_keywords()}}).}
@@ -23,16 +27,22 @@ enrich_with_details(
 \item{ongoing_only}{Only screen tenders whose deadline has not passed
 (default \code{TRUE}).}
 
-\item{max_detail}{Maximum number of detail pages to fetch (default \code{Inf}).}
+\item{max_detail}{Maximum number of \emph{new} detail pages to render per call
+(default \code{Inf}).}
 
-\item{delay}{Seconds between detail requests (politeness; default \code{0.3}).}
+\item{delay}{Seconds between detail pages (politeness; default \code{0.2}).}
+
+\item{cache}{Detail cache from a previous run (see \code{\link[=read_detail_cache]{read_detail_cache()}}).}
 }
 \value{
-\code{tenders} with the detail layer merged in.
+\code{tenders} with the detail layer merged in; the updated cache is in
+\code{attr(result, "detail_cache")}.
 }
 \description{
-For ongoing tenders, fetches the public detail page, matches the keyword
-groups against its full text and maps its CPV codes to groups. The matching
-group(s) are merged into \code{groups}/\code{is_relevant}; adds columns \code{detail_groups},
-\code{cpv}, \code{cpv_groups} and \code{match_source} (which layer(s) matched).
+For ongoing tenders that are not yet in \code{cache}, renders the public detail
+page via \code{session}, matches the keyword groups against its full text and maps
+its CPV codes to groups. Cached tenders are reused without re-fetching. The
+matching group(s) are merged into \code{groups}/\code{is_relevant}; adds columns
+\code{detail_groups}, \code{cpv}, \code{cpv_groups}, \code{match_source}. The updated cache is
+returned as \code{attr(result, "detail_cache")}.
 }

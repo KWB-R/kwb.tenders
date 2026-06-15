@@ -56,10 +56,18 @@ check_tenders <- function(dir = "reports",
     max_pages = max_pages
   )
   scored <- score_relevance(tenders, keywords = keywords)
+  cache_file <- file.path(dir, "detail_cache.rds")
   if (isTRUE(screen_details)) {
-    scored <- enrich_with_details(scored, keywords = keywords, max_detail = max_detail)
+    scored <- enrich_with_details(
+      session, scored,
+      keywords = keywords, max_detail = max_detail,
+      cache = read_detail_cache(cache_file)
+    )
   }
   res <- write_tender_report(scored, dir = dir)
+  if (isTRUE(screen_details)) {
+    write_detail_cache(attr(scored, "detail_cache"), cache_file)
+  }
 
   message(sprintf(
     "Done: %d tenders, %d relevant, %d new. Report: %s",

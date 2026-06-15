@@ -1,9 +1,8 @@
-test_that("parse_detail_html extracts text and CPV codes", {
-  html <- "<html><body><h1>Grundwassermonitoring</h1><p>CPV: 71351910-5, 90733000</p></body></html>"
-  d <- kwb.tenders:::parse_detail_html(html)
-  expect_true(grepl("Grundwasser", d$text))
-  expect_true("71351910-5" %in% d$cpv)
-  expect_true("90733000" %in% d$cpv)
+test_that("extract_cpv finds CPV codes in text", {
+  cpv <- kwb.tenders:::extract_cpv("Leistung: Grundwasser. CPV 71351910-5, 90733000.")
+  expect_true("71351910-5" %in% cpv)
+  expect_true("90733000" %in% cpv)
+  expect_equal(kwb.tenders:::extract_cpv(""), character())
 })
 
 test_that("cpv_to_group_names maps CPV prefixes to group display names", {
@@ -40,8 +39,41 @@ test_that("enrich_with_details adds columns without fetching when max_detail = 0
     Aktion = "https://example.org/x?pid=1",
     stringsAsFactors = FALSE
   ))
-  out <- enrich_with_details(scored, max_detail = 0)
+  out <- enrich_with_details(NULL, scored, max_detail = 0)
   expect_true(all(c("detail_groups", "cpv", "cpv_groups", "match_source") %in% names(out)))
   expect_true(out$is_relevant[1]) # title layer still flags it
   expect_true(grepl("title", out$match_source[1]))
+  expect_true(is.data.frame(attr(out, "detail_cache")))
+})
+
+test_that("enrich_with_details reuses the cache and prunes stale entries", {
+  scored <- score_relevance(data.frame(
+    Kurzbezeichnung = "Buerobedarf", # no title match
+    Aktion = "https://x/y?pid=42",
+    stringsAsFactors = FALSE
+  ))
+  cache <- data.frame(
+    tender_id = c("42", "999"), # 999 no longer in the listing -> should be pruned
+    detail_groups = c("Grundwasser", "Wasser & Risiko"),
+    cpv = c("71351910-5", ""),
+    cpv_groups = c("Grundwasser", ""),
+    stringsAsFactors = FALSE
+  )
+  # session is NULL: id 42 is cached, so no fetch happens (session never used).
+  out <- enrich_with_details(NULL, scored, cache = cache)
+  expect_true(grepl("Grundwasser", out$groups[1])) # reused from cache
+  expect_true(out$is_relevant[1])
+  expect_true(grepl("detail", out$match_source[1]))
+  expect_equal(attr(out, "detail_cache")$tender_id, "42") # 999 pruned, 42 kept
+})
+
+test_that("read/write detail cache round-trips", {
+  p <- file.path(tempdir(), "detail_cache.rds")
+  unlink(p)
+  expect_equal(nrow(read_detail_cache(p)), 0L) # missing -> empty
+  cc <- data.frame(tender_id = "1", detail_groups = "Grundwasser",
+                   cpv = "", cpv_groups = "", stringsAsFactors = FALSE)
+  write_detail_cache(cc, p)
+  expect_equal(read_detail_cache(p)$tender_id, "1")
+  unlink(p)
 })

@@ -5,6 +5,11 @@ on:
     # Weekdays at 05:00 UTC (~07:00 Europe/Berlin). Adjust as needed.
     - cron: "0 5 * * 1-5"
   workflow_dispatch:
+    inputs:
+      login:
+        description: "Log in before scraping (needs VMP_BB_* repo secrets)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -56,6 +61,10 @@ jobs:
           else
             echo "No previous state found (first run)."
           fi
+          if [ -f ../gh-pages/reports/detail_cache.rds ]; then
+            cp ../gh-pages/reports/detail_cache.rds reports/
+            echo "Restored detail-screening cache (only new tenders get deep-screened)."
+          fi
 
       - name: Check tenders
         env:
@@ -64,7 +73,7 @@ jobs:
         # it must NOT be set on Windows. Hence it is applied only here, not in
         # vmp_bb_session()'s defaults.
         run: >
-          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::check_tenders()'
+          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::check_tenders(login = ${{ inputs.login && 'TRUE' || 'FALSE' }})'
 
       - name: Publish report to gh-pages
         run: |

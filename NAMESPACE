@@ -2,6 +2,7 @@
 
 export(check_tenders)
 export(enrich_with_details)
+export(read_detail_cache)
 export(score_relevance)
 export(tender_cpv_map)
 export(tender_detail_text)
@@ -9,4 +10,5 @@ export(tender_keywords)
 export(vmp_bb_login)
 export(vmp_bb_scrape_tenders)
 export(vmp_bb_session)
+export(write_detail_cache)
 export(write_tender_report)

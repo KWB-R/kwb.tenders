@@ -2,23 +2,27 @@
 % Please edit documentation in R/detail.R
 \name{tender_detail_text}
 \alias{tender_detail_text}
-\title{Fetch a tender detail page and extract its text + CPV codes}
+\title{Fetch a tender detail page (rendered) and extract its text + CPV codes}
 \usage{
-tender_detail_text(url)
+tender_detail_text(session, url, wait = 10)
 }
 \arguments{
-\item{url}{Project detail URL (the \code{Aktion} column from
-\code{\link[=vmp_bb_scrape_tenders]{vmp_bb_scrape_tenders()}}).}
+\item{session}{A session from \code{\link[=vmp_bb_session]{vmp_bb_session()}}.}
+
+\item{url}{Project detail URL (the \code{Aktion} column).}
+
+\item{wait}{Maximum seconds to wait for the page to render (default \code{10}).}
 }
 \value{
-A list with \code{text} (page text) and \code{cpv} (character vector of CPV codes).
+A list with \code{text} (rendered page text) and \code{cpv} (character vector).
 }
 \description{
-Uses a plain HTTP GET (the published detail page is public), so no browser or
-login is required.
+Navigates the (JavaScript-rendered) public detail page via the chromote
+session and reads the rendered text. No login required.
 }
 \examples{
 \dontrun{
-tender_detail_text(tenders$Aktion[1])
+session <- vmp_bb_session()
+tender_detail_text(session, tenders$Aktion[1])
 }
 }
