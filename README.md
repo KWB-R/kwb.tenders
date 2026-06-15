@@ -57,13 +57,19 @@ configurable). See `vignette("tutorial")` for details.
 ## Automated checks (GitHub Actions)
 
 The workflow `.github/workflows/check-tenders.yaml` runs `check_tenders()` on a
-schedule (weekdays 05:00 UTC by default), commits the updated report back to the
-repository and uploads the Excel file as an artifact. Required repository
-secrets: `VMP_BB_USERNAME` and `VMP_BB_PASSWORD`.
+schedule (weekdays 05:00 UTC by default) and publishes the report to the
+**`gh-pages`** branch under `reports/`:
 
-> **Note:** The portal login runs in a headless browser on CI. If the Keycloak
-> login blocks headless automation, run the workflow on a self-hosted runner (or
-> locally via Windows Task Scheduler) instead.
+- Overview: <https://kwb-r.github.io/kwb.tenders/reports/latest.html>
+- Excel: `https://kwb-r.github.io/kwb.tenders/reports/vmp-bb_<date>.xlsx`
+
+The public tender search needs **no login**, so no repository secrets are
+required. Publishing to `gh-pages` keeps the report out of the `main` history and
+browsable on the project site. The Excel file is also kept as a build artifact.
+
+> **Note:** The portal scrape runs in a headless browser on CI (login is
+> optional, off by default). If a future logged-in scrape is blocked headless,
+> run the workflow on a self-hosted runner instead.
 
 ## Documentation
 

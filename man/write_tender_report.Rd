@@ -2,7 +2,7 @@
 % Please edit documentation in R/report.R
 \name{write_tender_report}
 \alias{write_tender_report}
-\title{Write a tender overview report (Excel + Markdown)}
+\title{Write a tender overview report (Excel + Markdown + HTML)}
 \usage{
 write_tender_report(
   tenders,
@@ -25,8 +25,8 @@ Invisibly, a list with the written file paths and counts.
 }
 \description{
 Writes a dated Excel workbook (sheets "Relevant", "Alle", "Neu"), a
-\code{latest.md} summary that renders nicely on GitHub, and a small state file
-used to flag tenders that are new since the previous run.
+\code{latest.md} summary, a browsable \code{latest.html} (for GitHub Pages) and a small
+state file used to flag tenders that are new since the previous run.
 }
 \examples{
 \dontrun{

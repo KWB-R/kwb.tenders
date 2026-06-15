@@ -16,6 +16,10 @@
 #' @param publication_types,contracting_rules Search filter passed to
 #'   [vmp_bb_scrape_tenders()]. Defaults to Beabsichtigte Ausschreibung +
 #'   Ausschreibung (`c("ExAnte", "Tender")`) and VgV / VOL/A / UVgO (`"VOL"`).
+#' @param screen_details Second relevance layer: fetch each ongoing tender's
+#'   public detail page and match its full text + CPV codes (default `TRUE`).
+#'   See [enrich_with_details()].
+#' @param max_detail Maximum number of detail pages to screen (default `Inf`).
 #' @param username,password Credentials used when `login = TRUE` (default env
 #'   vars `VMP_BB_USERNAME` / `VMP_BB_PASSWORD`).
 #' @param keywords Keyword list for relevance scoring (default
@@ -33,6 +37,8 @@ check_tenders <- function(dir = "reports",
                           max_pages = Inf,
                           publication_types = c("ExAnte", "Tender"),
                           contracting_rules = "VOL",
+                          screen_details = TRUE,
+                          max_detail = Inf,
                           username = Sys.getenv("VMP_BB_USERNAME"),
                           password = Sys.getenv("VMP_BB_PASSWORD"),
                           keywords = tender_keywords()) {
@@ -50,6 +56,9 @@ check_tenders <- function(dir = "reports",
     max_pages = max_pages
   )
   scored <- score_relevance(tenders, keywords = keywords)
+  if (isTRUE(screen_details)) {
+    scored <- enrich_with_details(scored, keywords = keywords, max_detail = max_detail)
+  }
   res <- write_tender_report(scored, dir = dir)
 
   message(sprintf(

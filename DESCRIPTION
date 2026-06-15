@@ -19,6 +19,7 @@ Depends:
 Imports:
     chromote,
     dplyr,
+    httr,
     jsonlite,
     openxlsx,
     rvest,

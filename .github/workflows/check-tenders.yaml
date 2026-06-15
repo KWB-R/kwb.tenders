@@ -38,6 +38,25 @@ jobs:
             any::sessioninfo
             local::.
 
+      - name: Restore previous report state from gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages --depth 1 || true
+          git worktree remove --force ../gh-pages 2>/dev/null || true
+          git worktree prune || true
+          rm -rf ../gh-pages
+          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+            git worktree add --detach ../gh-pages origin/gh-pages
+          fi
+          mkdir -p reports
+          if [ -f ../gh-pages/reports/vmp-bb_state.rds ]; then
+            cp ../gh-pages/reports/vmp-bb_state.rds reports/
+            echo "Restored previous state for the 'new since last run' diff."
+          else
+            echo "No previous state found (first run)."
+          fi
+
       - name: Check tenders
         env:
           CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
@@ -47,17 +66,30 @@ jobs:
         run: >
           Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::check_tenders()'
 
-      - name: Commit report
+      - name: Publish report to gh-pages
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports || true
-          if git diff --staged --quiet; then
-            echo "No report changes to commit."
-          else
-            git commit -m "data: tender report $(date -u +%F) [skip ci]"
-            git push
+          if [ ! -d reports ] || [ -z "$(ls -A reports 2>/dev/null)" ]; then
+            echo "::warning::check_tenders() produced no reports/ -- nothing to publish."
+            exit 0
           fi
+          echo "reports/ contents:"; ls -la reports
+          if [ ! -d ../gh-pages ]; then
+            git worktree add --force -B gh-pages ../gh-pages
+          fi
+          mkdir -p ../gh-pages/reports
+          cp -f reports/* ../gh-pages/reports/
+          cd ../gh-pages
+          git add reports
+          if git diff --staged --quiet; then
+            echo "Report unchanged -- nothing to publish."
+            exit 0
+          fi
+          git commit -m "data: tender report $(date -u +%F)"
+          git pull --rebase origin gh-pages || true
+          git push origin HEAD:gh-pages || {
+            git pull --rebase origin gh-pages
+            git push origin HEAD:gh-pages
+          }
 
       - name: Upload Excel artifact
         if: always()

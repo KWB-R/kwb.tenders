@@ -1,0 +1,32 @@
+# CPV (Common Procurement Vocabulary) prefix -> KWB research-group slugs.
+# A tender's CPV codes are matched by prefix (digits only); all matches count.
+# Slugs must match the keywords_<slug>.yml files. Tune freely.
+
+- prefix: "71351"   # Geologie, Geophysik, Baugrunduntersuchung
+  groups: [groundwater]
+- prefix: "65120"   # Wasseraufbereitung
+  groups: [water-treatment-reuse]
+- prefix: "65110"   # Wasserverteilung
+  groups: [smart-city-infrastructure, water-treatment-reuse]
+- prefix: "65130"   # Wasserversorgung
+  groups: [smart-city-infrastructure]
+- prefix: "9041"    # Abwasserbeseitigung
+  groups: [water-treatment-reuse]
+- prefix: "9042"    # Abwasserbehandlung
+  groups: [water-treatment-reuse]
+- prefix: "90440"   # Klaeranlagen
+  groups: [water-treatment-reuse, energy-resources]
+- prefix: "9048"    # Abwassermanagement
+  groups: [water-treatment-reuse, smart-city-infrastructure]
+- prefix: "9070"    # Umweltdienstleistungen
+  groups: [stormwater-surface-waters, water-risk]
+- prefix: "9073"    # Umweltverschmutzung / Monitoring
+  groups: [stormwater-surface-waters, groundwater]
+- prefix: "716"     # Technische Untersuchung und Analyse
+  groups: [water-risk]
+- prefix: "45232"   # Kanal- und Wasserbau
+  groups: [smart-city-infrastructure]
+- prefix: "45252"   # Bau von Klaeranlagen / Wasserwerken
+  groups: [water-treatment-reuse]
+- prefix: "45247"   # Daemme, Kanaele, Bewaesserung
+  groups: [stormwater-surface-waters]

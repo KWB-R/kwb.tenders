@@ -11,6 +11,8 @@ check_tenders(
   max_pages = Inf,
   publication_types = c("ExAnte", "Tender"),
   contracting_rules = "VOL",
+  screen_details = TRUE,
+  max_detail = Inf,
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
   keywords = tender_keywords()
@@ -28,6 +30,12 @@ check_tenders(
 \item{publication_types, contracting_rules}{Search filter passed to
 \code{\link[=vmp_bb_scrape_tenders]{vmp_bb_scrape_tenders()}}. Defaults to Beabsichtigte Ausschreibung +
 Ausschreibung (\code{c("ExAnte", "Tender")}) and VgV / VOL/A / UVgO (\code{"VOL"}).}
+
+\item{screen_details}{Second relevance layer: fetch each ongoing tender's
+public detail page and match its full text + CPV codes (default \code{TRUE}).
+See \code{\link[=enrich_with_details]{enrich_with_details()}}.}
+
+\item{max_detail}{Maximum number of detail pages to screen (default \code{Inf}).}
 
 \item{username, password}{Credentials used when \code{login = TRUE} (default env
 vars \code{VMP_BB_USERNAME} / \code{VMP_BB_PASSWORD}).}
