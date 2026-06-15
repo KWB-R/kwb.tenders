@@ -67,15 +67,22 @@ test_that("enrich_with_details reuses the cache and prunes stale entries", {
   expect_equal(attr(out, "detail_cache")$tender_id, "42") # 999 pruned, 42 kept
 })
 
-test_that("cpv_summary aggregates CPV codes with counts and groups", {
+test_that("cpv_summary returns cpv_id, cpv_name, counts and groups", {
   tenders <- data.frame(
-    cpv = c("71351910-5, 90733000", "71351910-5", ""),
+    cpv = c("71351500-8, 90733000-4", "71351500-8", ""),
     stringsAsFactors = FALSE
   )
   s <- cpv_summary(tenders)
-  expect_true(all(c("cpv", "n_tenders", "groups") %in% names(s)))
-  expect_equal(s$n_tenders[s$cpv == "71351910-5"], 2L)
-  expect_true(grepl("Grundwasser", s$groups[s$cpv == "71351910-5"])) # 71351 -> groundwater
+  expect_true(all(c("cpv_id", "cpv_name", "n_tenders", "groups") %in% names(s)))
+  expect_equal(s$n_tenders[s$cpv_id == "71351500-8"], 2L)
+  expect_true(grepl("Grundwasser", s$groups[s$cpv_id == "71351500-8"])) # 71351 -> groundwater
+  expect_true(nzchar(s$cpv_name[s$cpv_id == "71351500-8"]))             # label from cpv_labels.csv
+})
+
+test_that("cpv_labels loads the lookup and resolves a known code", {
+  l <- cpv_labels()
+  expect_true(length(l) > 0)
+  expect_true(nzchar(unname(l["90700000-4"]))) # known code -> non-empty label
 })
 
 test_that("read/write detail cache round-trips", {

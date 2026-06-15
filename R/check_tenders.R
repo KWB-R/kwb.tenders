@@ -20,6 +20,10 @@
 #'   public detail page and match its full text + CPV codes (default `TRUE`).
 #'   See [enrich_with_details()].
 #' @param max_detail Maximum number of detail pages to screen (default `Inf`).
+#' @param screen_notice Third relevance layer: log in and read each ongoing
+#'   tender's published Bekanntmachung PDF(s), matching the text (default
+#'   `FALSE`; forces `login = TRUE`). See [enrich_with_notice()].
+#' @param max_notice Maximum number of new notice PDFs to read (default `Inf`).
 #' @param username,password Credentials used when `login = TRUE` (default env
 #'   vars `VMP_BB_USERNAME` / `VMP_BB_PASSWORD`).
 #' @param keywords Keyword list for relevance scoring (default
@@ -39,9 +43,13 @@ check_tenders <- function(dir = "reports",
                           contracting_rules = "VOL",
                           screen_details = TRUE,
                           max_detail = Inf,
+                          screen_notice = FALSE,
+                          max_notice = Inf,
                           username = Sys.getenv("VMP_BB_USERNAME"),
                           password = Sys.getenv("VMP_BB_PASSWORD"),
                           keywords = tender_keywords()) {
+  if (isTRUE(screen_notice)) login <- TRUE # notice PDFs need a logged-in session
+
   session <- vmp_bb_session(headless = headless)
   on.exit(try(session$close(), silent = TRUE), add = TRUE)
 
@@ -56,18 +64,32 @@ check_tenders <- function(dir = "reports",
     max_pages = max_pages
   )
   scored <- score_relevance(tenders, keywords = keywords)
-  cache_file <- file.path(dir, "detail_cache.rds")
+
+  detail_cache_file <- file.path(dir, "detail_cache.rds")
+  notice_cache_file <- file.path(dir, "notice_cache.rds")
+  detail_cache_out <- NULL
+  notice_cache_out <- NULL
+
   if (isTRUE(screen_details)) {
     scored <- enrich_with_details(
       session, scored,
       keywords = keywords, max_detail = max_detail,
-      cache = read_detail_cache(cache_file)
+      cache = read_detail_cache(detail_cache_file)
     )
+    detail_cache_out <- attr(scored, "detail_cache")
   }
+  if (isTRUE(screen_notice)) {
+    scored <- enrich_with_notice(
+      session, scored,
+      keywords = keywords, max_notice = max_notice,
+      cache = read_notice_cache(notice_cache_file)
+    )
+    notice_cache_out <- attr(scored, "notice_cache")
+  }
+
   res <- write_tender_report(scored, dir = dir)
-  if (isTRUE(screen_details)) {
-    write_detail_cache(attr(scored, "detail_cache"), cache_file)
-  }
+  if (!is.null(detail_cache_out)) write_detail_cache(detail_cache_out, detail_cache_file)
+  if (!is.null(notice_cache_out)) write_notice_cache(notice_cache_out, notice_cache_file)
 
   message(sprintf(
     "Done: %d tenders, %d relevant, %d new. Report: %s",

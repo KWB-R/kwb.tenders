@@ -22,8 +22,9 @@
   groups: [stormwater-surface-waters, water-risk]
 - prefix: "9073"    # Umweltverschmutzung / Monitoring
   groups: [stormwater-surface-waters, groundwater]
-- prefix: "716"     # Technische Untersuchung und Analyse
-  groups: [water-risk]
+# NOTE: "716" (Technische Untersuchung/Inspektion) intentionally NOT mapped --
+# too generic (caught bridge/pressure-vessel/electrical inspections). Real water
+# lab analysis is captured by keywords (Probenahme, Hydrochemie, ...).
 - prefix: "45232"   # Kanal- und Wasserbau
   groups: [smart-city-infrastructure]
 - prefix: "45252"   # Bau von Klaeranlagen / Wasserwerken

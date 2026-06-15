@@ -19,11 +19,14 @@ Depends:
 Imports:
     chromote,
     dplyr,
+    httr,
     jsonlite,
     openxlsx,
+    pdftools,
     rvest,
     stringr,
     tibble,
+    utils,
     yaml
 Suggests:
     covr,

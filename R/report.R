@@ -145,7 +145,8 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
 tender_markdown_table <- function(df) {
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
             "groups", "match_source", "score", "matched_keywords",
-            "detail_groups", "cpv", "cpv_groups", "Veroeffentlichungstyp")
+            "detail_groups", "cpv", "cpv_groups", "notice_groups",
+            "Veroeffentlichungstyp")
   base_cols <- setdiff(names(df), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
@@ -192,7 +193,8 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
 
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
             "groups", "match_source", "score", "matched_keywords",
-            "detail_groups", "cpv", "cpv_groups", "Veroeffentlichungstyp")
+            "detail_groups", "cpv", "cpv_groups", "notice_groups",
+            "Veroeffentlichungstyp")
   base_cols <- setdiff(names(relevant), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   data_cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")

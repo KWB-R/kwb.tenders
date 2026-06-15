@@ -4,7 +4,12 @@
 \alias{cpv_summary}
 \title{Summarise all CPV codes found across the tenders}
 \usage{
-cpv_summary(tenders, cpv_map = tender_cpv_map(), keywords = tender_keywords())
+cpv_summary(
+  tenders,
+  cpv_map = tender_cpv_map(),
+  keywords = tender_keywords(),
+  labels = cpv_labels()
+)
 }
 \arguments{
 \item{tenders}{A tibble with a \code{cpv} column (comma-separated CPV codes).}
@@ -13,16 +18,19 @@ cpv_summary(tenders, cpv_map = tender_cpv_map(), keywords = tender_keywords())
 
 \item{keywords}{Keyword groups, for group display names (default
 \code{\link[=tender_keywords]{tender_keywords()}}).}
+
+\item{labels}{CPV code -> name lookup (default \code{\link[=cpv_labels]{cpv_labels()}}).}
 }
 \value{
-A data.frame with columns \code{cpv}, \code{n_tenders}, \code{groups}, sorted by
-descending frequency.
+A data.frame with columns \code{cpv_id}, \code{cpv_name}, \code{n_tenders}, \code{groups},
+sorted by descending frequency.
 }
 \description{
 Aggregates the CPV codes collected by \code{\link[=enrich_with_details]{enrich_with_details()}} into a table:
-one row per code, the number of tenders it appears in, and the KWB research
-group(s) it maps to. Useful as an extra "CPV" sheet in the Excel report.
+one row per code (\code{cpv_id}) with its German label (\code{cpv_name}, via
+\code{\link[=cpv_labels]{cpv_labels()}}), the number of tenders it appears in (\code{n_tenders}) and the KWB
+research group(s) it maps to (\code{groups}). Used as the "CPV" sheet of the report.
 }
 \examples{
-cpv_summary(data.frame(cpv = c("71351910-5, 90733000", "71351910-5")))
+cpv_summary(data.frame(cpv = c("90700000-4, 90733000-4", "90700000-4")))
 }

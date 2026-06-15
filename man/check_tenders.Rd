@@ -13,6 +13,8 @@ check_tenders(
   contracting_rules = "VOL",
   screen_details = TRUE,
   max_detail = Inf,
+  screen_notice = FALSE,
+  max_notice = Inf,
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
   keywords = tender_keywords()
@@ -36,6 +38,12 @@ public detail page and match its full text + CPV codes (default \code{TRUE}).
 See \code{\link[=enrich_with_details]{enrich_with_details()}}.}
 
 \item{max_detail}{Maximum number of detail pages to screen (default \code{Inf}).}
+
+\item{screen_notice}{Third relevance layer: log in and read each ongoing
+tender's published Bekanntmachung PDF(s), matching the text (default
+\code{FALSE}; forces \code{login = TRUE}). See \code{\link[=enrich_with_notice]{enrich_with_notice()}}.}
+
+\item{max_notice}{Maximum number of new notice PDFs to read (default \code{Inf}).}
 
 \item{username, password}{Credentials used when \code{login = TRUE} (default env
 vars \code{VMP_BB_USERNAME} / \code{VMP_BB_PASSWORD}).}

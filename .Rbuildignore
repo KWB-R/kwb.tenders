@@ -14,3 +14,4 @@
 ^R/\.create_r_package_from_scratch\.R$
 ^\.Renviron$
 ^dev$
+^data-raw$
