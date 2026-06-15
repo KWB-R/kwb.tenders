@@ -55,6 +55,10 @@ vmp_bb_tenders <- function(keywords = tender_keywords(),
     contracting_rules = contracting_rules,
     max_pages = max_pages
   )
+  # Canonical date column names, shared with the API connectors (the portal
+  # headers are e.g. "Veroeffentlicht" / "Angebots- / Teilnahmefrist").
+  names(tenders)[grepl("frist", names(tenders), ignore.case = TRUE)] <- "Frist"
+  names(tenders)[grepl("ffentlich", names(tenders), ignore.case = TRUE)] <- "Veroeffentlicht"
   scored <- score_relevance(tenders, keywords = keywords)
 
   dir.create(cache_dir, showWarnings = FALSE, recursive = TRUE)

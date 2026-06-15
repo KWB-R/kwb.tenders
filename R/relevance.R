@@ -184,6 +184,8 @@ score_relevance <- function(tenders, keywords = tender_keywords()) {
 #' @param cpv_col Name of a comma/space-separated CPV column, or `NULL`.
 #' @param keywords Keyword groups (default [tender_keywords()]).
 #' @param cpv_map CPV-to-group map (default [tender_cpv_map()]).
+#' @param exclude Apply [apply_title_excludes()] afterwards to drop construction
+#'   / building / maintenance tenders (default `TRUE`).
 #' @return `df` with `groups`, `cpv_groups`, `match_source`, `score`,
 #'   `is_relevant` added, sorted by descending score.
 #' @export
@@ -246,15 +248,19 @@ tender_excludes <- function(path = system.file("extdata", "keywords_exclude.yml"
   list(name = if (!is.null(y$name)) as.character(y$name) else "exclude", terms = or_empty(y$terms))
 }
 
-#' Veto out-of-scope tenders by title (e.g. pure building / maintenance projects)
+#' Veto out-of-scope tenders (construction / building / maintenance)
 #'
-#' Sets `is_relevant = FALSE` for tenders whose **title** contains an exclusion
-#' term (see [tender_excludes()]) **unless** the title also contains a strong
-#' water keyword (so "Klaeranlage ... Bauleistungen" or any "Grundwasser..."
-#' title is kept). Adds an `excluded` column naming the vetoing term (`NA`
-#' otherwise). Catches building/maintenance notices that only matched via
-#' incidental detail text or CPV codes. Matching folds umlauts / is
-#' case-insensitive.
+#' Drops tenders that are not a fit for a research institute, two ways:
+#' \enumerate{
+#'   \item \strong{title} contains a building/maintenance term (see
+#'     [tender_excludes()]) and no strong water keyword rescues it (so a
+#'     "Grundwasser..." title is kept);
+#'   \item \strong{CPV} shows a construction-works code (\code{45...}) without an
+#'     engineering-services code (\code{71...}) -- a Bauauftrag; this is hard, so
+#'     even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.
+#' }
+#' Sets `is_relevant = FALSE` and records the reason in an `excluded` column.
+#' Matching folds umlauts / is case-insensitive.
 #'
 #' @param df A scored tibble (must contain `is_relevant`).
 #' @param title_cols Candidate title columns (those present are used).
@@ -269,21 +275,38 @@ apply_title_excludes <- function(df,
                                  excludes = tender_excludes()) {
   n <- nrow(df)
   if (n == 0L || is.null(df$is_relevant)) return(df)
+  matched <- rep(NA_character_, n)
+
+  # (1) Title veto: building/maintenance terms, unless a strong water term rescues.
   terms <- excludes$terms
   tcols <- intersect(title_cols, names(df))
-  if (length(terms) == 0L || length(tcols) == 0L) {
-    if (is.null(df$excluded)) df$excluded <- rep(NA_character_, n)
-    return(df)
+  if (length(terms) && length(tcols)) {
+    title <- normalize_de(do.call(paste, c(df[tcols], sep = " ")))
+    ex_norm <- normalize_de(terms)
+    strong_all <- normalize_de(unlist(lapply(normalize_keyword_groups(keywords), function(g) g$strong)))
+    for (i in which(df$is_relevant %in% TRUE)) {
+      if (any(vapply(strong_all, function(k) grepl(k, title[i], fixed = TRUE), logical(1)))) next # water title -> keep
+      hit <- which(vapply(ex_norm, function(k) grepl(k, title[i], fixed = TRUE), logical(1)))
+      if (length(hit)) matched[i] <- terms[hit[1]]
+    }
   }
-  title <- normalize_de(do.call(paste, c(df[tcols], sep = " ")))
-  ex_norm <- normalize_de(terms)
-  strong_all <- normalize_de(unlist(lapply(normalize_keyword_groups(keywords), function(g) g$strong)))
-  matched <- rep(NA_character_, n)
-  for (i in which(df$is_relevant %in% TRUE)) {
-    if (any(vapply(strong_all, function(k) grepl(k, title[i], fixed = TRUE), logical(1)))) next # water title -> keep
-    hit <- which(vapply(ex_norm, function(k) grepl(k, title[i], fixed = TRUE), logical(1)))
-    if (length(hit)) matched[i] <- terms[hit[1]]
+
+  # (2) Construction-CPV veto: a works code (45...) without an engineering-services
+  # code (71...) is a Bauauftrag -> out (KWB does services/studies, not Bau). This
+  # is hard (no water rescue): "Neubau Klaeranlage" (CPV 45252) is dropped, while
+  # "Ingenieurleistungen ..." (CPV 71...) is kept.
+  if (!is.null(df$cpv)) {
+    cpv_chr <- as.character(df$cpv)
+    cpv_chr[is.na(cpv_chr)] <- ""
+    for (i in which(df$is_relevant %in% TRUE & is.na(matched))) {
+      codes <- trimws(unlist(strsplit(cpv_chr[i], "[,; ]+")))
+      codes <- codes[nzchar(codes)]
+      if (length(codes) && any(startsWith(codes, "45")) && !any(startsWith(codes, "71"))) {
+        matched[i] <- "Bau-CPV"
+      }
+    }
   }
+
   df$excluded <- matched
   df$is_relevant[!is.na(matched)] <- FALSE
   df

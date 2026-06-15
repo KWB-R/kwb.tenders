@@ -2,7 +2,7 @@
 % Please edit documentation in R/relevance.R
 \name{apply_title_excludes}
 \alias{apply_title_excludes}
-\title{Veto out-of-scope tenders by title (e.g. pure building / maintenance projects)}
+\title{Veto out-of-scope tenders (construction / building / maintenance)}
 \usage{
 apply_title_excludes(
   df,
@@ -25,11 +25,15 @@ apply_title_excludes(
 \code{df} with vetoed rows' \code{is_relevant} set \code{FALSE} and an \code{excluded} column.
 }
 \description{
-Sets \code{is_relevant = FALSE} for tenders whose \strong{title} contains an exclusion
-term (see \code{\link[=tender_excludes]{tender_excludes()}}) \strong{unless} the title also contains a strong
-water keyword (so "Klaeranlage ... Bauleistungen" or any "Grundwasser..."
-title is kept). Adds an \code{excluded} column naming the vetoing term (\code{NA}
-otherwise). Catches building/maintenance notices that only matched via
-incidental detail text or CPV codes. Matching folds umlauts / is
-case-insensitive.
+Drops tenders that are not a fit for a research institute, two ways:
+\enumerate{
+\item \strong{title} contains a building/maintenance term (see
+\code{\link[=tender_excludes]{tender_excludes()}}) and no strong water keyword rescues it (so a
+"Grundwasser..." title is kept);
+\item \strong{CPV} shows a construction-works code (\code{45...}) without an
+engineering-services code (\code{71...}) -- a Bauauftrag; this is hard, so
+even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.
+}
+Sets \code{is_relevant = FALSE} and records the reason in an \code{excluded} column.
+Matching folds umlauts / is case-insensitive.
 }

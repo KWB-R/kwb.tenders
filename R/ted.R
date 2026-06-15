@@ -33,18 +33,20 @@
   s <- .ted_text(x)
   if (!nzchar(s)) return("")
   first <- strsplit(s, " | ", fixed = TRUE)[[1]][1]      # one language variant
-  seg <- strsplit(first, " – ", fixed = TRUE)[[1]]  # split on en-dash " - "
+  dash <- intToUtf8(0x2013)                              # en-dash separator (keep source ASCII)
+  seg <- strsplit(first, paste0(" ", dash, " "), fixed = TRUE)[[1]] # "Country - Type - Title"
   trimws(seg[length(seg)])                               # the actual project title
 }
 
 #' Default German full-text query terms for TED (water-specific strong terms)
 #' @noRd
 ted_default_terms <- function() {
+  ae <- intToUtf8(0x00e4) # a-umlaut, built at runtime to keep this source ASCII
   c("Grundwasser", "Wassermanagement", "Wassermengenmanagement", "Uferfiltration",
     "Hydrogeologie", "Grundwassermessstelle", "Trinkwassergewinnung", "Wasserwerk",
-    "Kläranlage", "Wasseraufbereitung", "Abwasserbehandlung", "Klärschlamm",
-    "Wasserwiederverwendung", "Regenwasserbewirtschaftung", "Niederschlagswasser",
-    "Trinkwasserhygiene")
+    paste0("Kl", ae, "ranlage"), "Wasseraufbereitung", "Abwasserbehandlung",
+    paste0("Kl", ae, "rschlamm"), "Wasserwiederverwendung", "Regenwasserbewirtschaftung",
+    "Niederschlagswasser", "Trinkwasserhygiene")
 }
 
 #' Parse one TED notice into a standard tender row
@@ -62,6 +64,7 @@ ted_parse_notice <- function(nt) {
                                 .ted_text(nt[["description-lot"]]))),
     Vergabestelle = .ted_text(nt[["buyer-name"]]),
     Frist = if (length(dl)) dl[1] else "",
+    Veroeffentlicht = substr(.ted_text(nt[["publication-date"]]), 1, 10),
     cpv = paste(cpv, collapse = ", "),
     Aktion = .ted_link(nt),
     Veroeffentlichungstyp = typ,
@@ -106,7 +109,8 @@ ted_tenders <- function(keywords = tender_keywords(), cpv_map = tender_cpv_map()
     query <- sprintf("%s AND publication-date >= today(-%d)", query, as.integer(since_days))
   }
   fields <- list("publication-number", "notice-title", "description-proc", "description-lot",
-                 "buyer-name", "classification-cpv", "deadline-receipt-tender-date-lot", "notice-type")
+                 "buyer-name", "classification-cpv", "deadline-receipt-tender-date-lot",
+                 "publication-date", "notice-type")
   if (verbose) message("TED: query = ", query)
 
   rows <- list()

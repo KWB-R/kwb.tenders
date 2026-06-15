@@ -10,3 +10,5 @@ dev/*.log
 dev/*.png
 reports
 dev
+..ghp/
+ghp/

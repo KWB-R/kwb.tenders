@@ -83,16 +83,30 @@ oeffentlichevergabe_parse_release <- function(rel) {
   if (length(ten[["lots"]])) for (lo in ten[["lots"]]) cpv <- c(cpv, .oeffentlichevergabe_cpv_from_items(lo[["items"]]))
   cpv <- unique(cpv[nzchar(cpv)])
 
+  # Detail link: a direct document URL from the source portal when the notice
+  # carries one, otherwise the canonical notice page on oeffentlichevergabe.de.
+  # The OCDS release id is the notice UUID and
+  # https://oeffentlichevergabe.de/ui/de/notices/<id> is its public detail page;
+  # `documents[].url` is frequently absent, which is why federal notices
+  # previously had no "Details" link in the report.
   url <- ""
   docs <- ten[["documents"]]
   if (length(docs)) url <- .oeffentlichevergabe_chr(.oeffentlichevergabe_pluck(docs[[1]], "url"))
+  if (!nzchar(url)) {
+    notice_id <- .oeffentlichevergabe_chr(rel[["id"]])
+    if (nzchar(notice_id)) {
+      url <- sprintf("https://oeffentlichevergabe.de/ui/de/notices/%s", notice_id)
+    }
+  }
 
   tag <- tolower(paste(unlist(rel[["tag"]]), collapse = ","))
   typ <- if (grepl("planning", tag)) "Geplante Ausschreibung" else "Ausschreibung"
 
   data.frame(
     Kurzbezeichnung = title, Beschreibung = desc, Vergabestelle = buyer,
-    Erfuellungsort = ort, Frist = deadline, cpv = paste(cpv, collapse = ", "),
+    Erfuellungsort = ort, Frist = deadline,
+    Veroeffentlicht = substr(.oeffentlichevergabe_chr(rel[["date"]]), 1, 10),
+    cpv = paste(cpv, collapse = ", "),
     Aktion = url, Veroeffentlichungstyp = typ, ocid = .oeffentlichevergabe_chr(rel[["ocid"]]),
     stringsAsFactors = FALSE
   )

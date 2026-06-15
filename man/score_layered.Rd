@@ -26,6 +26,9 @@ score_layered(
 \item{keywords}{Keyword groups (default \code{\link[=tender_keywords]{tender_keywords()}}).}
 
 \item{cpv_map}{CPV-to-group map (default \code{\link[=tender_cpv_map]{tender_cpv_map()}}).}
+
+\item{exclude}{Apply \code{\link[=apply_title_excludes]{apply_title_excludes()}} afterwards to drop construction
+/ building / maintenance tenders (default \code{TRUE}).}
 }
 \value{
 \code{df} with \code{groups}, \code{cpv_groups}, \code{match_source}, \code{score},

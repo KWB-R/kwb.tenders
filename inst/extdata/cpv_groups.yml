@@ -1,62 +1,47 @@
 # CPV (Common Procurement Vocabulary) prefix -> KWB research-group slugs.
 # A tender's CPV codes are matched by prefix (digits only); all matches count.
 # Slugs must match the keywords_<slug>.yml files. Comments give the CPV label.
-# Keep prefixes SPECIFIC: broad/generic ones produce false positives (see NOTE).
+#
+# NOTE: construction works (division 45, "Bauarbeiten") are deliberately NOT
+# mapped -- KWB does studies / planning / monitoring, not Bau. Construction
+# tenders are additionally vetoed by CPV in apply_title_excludes() (a "45..."
+# works code without a "71..." engineering-services code => Bauauftrag => out).
+# Likewise "716" (generic inspection) and "76" (oil/gas drilling) are omitted.
 
 # --- Grundwasser (groundwater) ----------------------------------------------
-- prefix: "71351"      # Geologische/geophysikalische Prospektion, Bodenuntersuchung
-  groups: [groundwater]
-- prefix: "4512"       # Versuchs- und Aufschlussbohrungen
-  groups: [groundwater]
-- prefix: "45262220"   # Brunnenbohrung
+- prefix: "71351"      # Geolog./geophysik. Prospektion, Bodenuntersuchung (Dienstleistung)
   groups: [groundwater]
 
 # --- Wasseraufbereitung & -wiederverwendung (water-treatment-reuse) ----------
 - prefix: "65120"      # Betrieb einer Wasseraufbereitungsanlage
   groups: [water-treatment-reuse]
-- prefix: "9041"       # Abwasserbeseitigung
+- prefix: "9041"       # Abwasserbeseitigung (Dienstleistung)
   groups: [water-treatment-reuse]
-- prefix: "9042"       # Abwasserbehandlung
+- prefix: "9042"       # Abwasserbehandlung (Dienstleistung)
   groups: [water-treatment-reuse]
-- prefix: "45252"      # Bau von Klaeranlagen / Wasseraufbereitungsanlagen
-  groups: [water-treatment-reuse]
-- prefix: "45245"      # Nassbagger-/Pumparbeiten fuer Wasseraufbereitungsanlagen
-  groups: [water-treatment-reuse]
-- prefix: "45259100"   # Reparatur/Wartung von Klaeranlagen (NICHT 45259 = generische Anlagen-Wartung)
-  groups: [water-treatment-reuse]
+- prefix: "90440"      # Klaeranlagen-/Klaergrubendienste
+  groups: [water-treatment-reuse, energy-resources]
 - prefix: "39350"      # Abwasserreinigungsanlage (Ausruestung)
   groups: [water-treatment-reuse]
 - prefix: "42996"      # Maschinen zur Reinigung von Abwasser / Schlammbehandlung
   groups: [water-treatment-reuse]
 - prefix: "24962"      # Chemikalien fuer die Wasseraufbereitung
   groups: [water-treatment-reuse]
-- prefix: "90440"      # Klaeranlagen-/Klaergrubendienste
-  groups: [water-treatment-reuse, energy-resources]
 
 # --- Regenwasser & Gewaesser (stormwater-surface-waters) --------------------
-- prefix: "45247"      # Daemme, Kanaele, Bewaesserungskanaele, Aquaedukte
+- prefix: "71353100"   # Hydrografische Untersuchungen (Dienstleistung)
   groups: [stormwater-surface-waters]
-- prefix: "45246"      # Flussregulierung und Hochwasserschutz
+- prefix: "71354400"   # Hydrografische Dienste
   groups: [stormwater-surface-waters]
-- prefix: "45248"      # Hydromechanische Anlagen (Wehre, Schuetze)
-  groups: [stormwater-surface-waters]
-- prefix: "71353100"   # Hydrografische Untersuchungen (NICHT 71353 = allg. Vermessung)
-  groups: [stormwater-surface-waters]
-- prefix: "71354400"   # Hydrografische Dienste (NICHT 71354 = allg. Kartografie)
-  groups: [stormwater-surface-waters]
-- prefix: "38123"      # Niederschlags-/Verdunstungsschreiber
+- prefix: "38123"      # Niederschlags-/Verdunstungsschreiber (Messtechnik)
   groups: [stormwater-surface-waters]
 
 # --- Smart City & Infrastruktur (smart-city-infrastructure) -----------------
-- prefix: "65110"      # Wasserversorgung / -verteilung
+- prefix: "65110"      # Wasserversorgung / -verteilung (Betrieb)
   groups: [smart-city-infrastructure, water-treatment-reuse]
 - prefix: "65130"      # Betrieb von Wasserversorgungsunternehmen
   groups: [smart-city-infrastructure]
-- prefix: "45232"      # Wasser-/Abwasserrohrleitungen, Kanalbau
-  groups: [smart-city-infrastructure]
-- prefix: "45231300"   # Bau von Wasser- und Abwasserrohrleitungen
-  groups: [smart-city-infrastructure]
-- prefix: "9048"       # Abwassernetz-/Kanalmanagement
+- prefix: "9048"       # Abwassernetz-/Kanalmanagement (Dienstleistung)
   groups: [water-treatment-reuse, smart-city-infrastructure]
 - prefix: "71800"      # Beratung Wasserversorgung und Abfaelle
   groups: [water-treatment-reuse, smart-city-infrastructure]
@@ -66,8 +51,3 @@
   groups: [stormwater-surface-waters, water-risk]
 - prefix: "9073"       # Umweltverschmutzung / Monitoring (inkl. Wasserverschmutzung)
   groups: [stormwater-surface-waters, groundwater]
-
-# NOTE: "716" (Technische Untersuchung/Inspektion) intentionally NOT mapped --
-# too generic (caught bridge/pressure-vessel/electrical inspections). Likewise
-# "76" (Bohrungen) is oil/gas drilling. Real water lab analysis is captured by
-# keywords (Probenahme, Hydrochemie, ...).

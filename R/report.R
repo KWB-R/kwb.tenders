@@ -153,12 +153,13 @@ tender_markdown_table <- function(df) {
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
             "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups", "excluded",
-            "Plattform", "Beschreibung", "ocid", "publication_number",
-            "Veroeffentlichungstyp")
+            "Plattform", "Beschreibung", "ocid", "publication_number", "Veroeffentlicht",
+            "Frist", "Veroeffentlichungstyp")
   base_cols <- setdiff(names(df), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   cols <- c(if ("Plattform" %in% names(df)) "Plattform", base_cols,
-            "groups", "match_source", "matched_cpv", "score", "matched_keywords")
+            "Veroeffentlicht", "Frist", "groups", "match_source", "matched_cpv",
+            "score", "matched_keywords")
   cols <- cols[cols %in% names(df)]
 
   esc <- function(x) {
@@ -203,12 +204,13 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
             "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups", "excluded",
-            "Plattform", "Beschreibung", "ocid", "publication_number",
-            "Veroeffentlichungstyp")
+            "Plattform", "Beschreibung", "ocid", "publication_number", "Veroeffentlicht",
+            "Frist", "Veroeffentlichungstyp")
   base_cols <- setdiff(names(relevant), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   data_cols <- c(if ("Plattform" %in% names(relevant)) "Plattform", base_cols,
-                 "groups", "match_source", "matched_cpv", "score", "matched_keywords")
+                 "Veroeffentlicht", "Frist", "groups", "match_source", "matched_cpv",
+                 "score", "matched_keywords")
   data_cols <- data_cols[data_cols %in% names(relevant)]
   headers <- c(data_cols, "Neu", "Link")
 

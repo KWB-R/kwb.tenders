@@ -15,3 +15,5 @@
 ^\.Renviron$
 ^dev$
 ^data-raw$
+^\.\.ghp
+^ghp$
