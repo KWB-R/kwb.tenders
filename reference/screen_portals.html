@@ -57,6 +57,7 @@ logged and skipped, so one portal failing does not abort the run.</p>
 <span>  dir <span class="op">=</span> <span class="st">"reports"</span>,</span>
 <span>  portal <span class="op">=</span> <span class="st">"tenders"</span>,</span>
 <span>  keywords <span class="op">=</span> <span class="fu"><a href="tender_keywords.html">tender_keywords</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  keep_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Ausschreibung"</span>, <span class="st">"Geplante Ausschreibung"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -81,6 +82,11 @@ logged and skipped, so one portal failing does not abort the run.</p>
 
 <dt id="arg-keywords">keywords<a class="anchor" aria-label="anchor" href="#arg-keywords"></a></dt>
 <dd><p>Passed to connectors that take it (currently informational).</p></dd>
+
+
+<dt id="arg-keep-types">keep_types<a class="anchor" aria-label="anchor" href="#arg-keep-types"></a></dt>
+<dd><p>Keep only these <code>Veroeffentlichungstyp</code> values (default the
+biddable ones -&gt; drops "Vergebener Auftrag"/awards). <code>NULL</code> keeps all.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
