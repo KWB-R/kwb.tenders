@@ -140,6 +140,21 @@ tune the keywords, or add a new file to add a group – no code change
 needed.</p>
 </div>
 <div class="section level2">
+<h2 id="two-relevance-layers">Two relevance layers<a class="anchor" aria-label="anchor" href="#two-relevance-layers"></a>
+</h2>
+<p>Beyond the result-table title (layer 1),
+<code>check_tenders(screen_details = TRUE)</code> (the default) opens
+each <em>ongoing</em> tender’s public detail page and matches the full
+description text <strong>plus</strong> the CPV procurement codes (mapped
+to groups via <code>inst/extdata/cpv_groups.yml</code>). The report’s
+<code>match_source</code> column shows which layer flagged each tender
+(<code>title</code> / <code>detail</code> / <code>cpv</code>). This
+needs no login (the detail page is public) and uses a plain HTTP GET;
+cap the fetches with <code>max_detail</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_tenders.html">check_tenders</a></span><span class="op">(</span>screen_details <span class="op">=</span> <span class="cn">TRUE</span>, max_detail <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="automation-github-actions">Automation (GitHub Actions)<a class="anchor" aria-label="anchor" href="#automation-github-actions"></a>
 </h2>
 <p>The workflow <code>.github/workflows/check-tenders.yaml</code> runs

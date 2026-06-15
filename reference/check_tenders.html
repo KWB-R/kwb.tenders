@@ -56,6 +56,8 @@ function called by the scheduled GitHub Action.</p>
 <span>  max_pages <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  publication_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ExAnte"</span>, <span class="st">"Tender"</span><span class="op">)</span>,</span>
 <span>  contracting_rules <span class="op">=</span> <span class="st">"VOL"</span>,</span>
+<span>  screen_details <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  max_detail <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  username <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"VMP_BB_USERNAME"</span><span class="op">)</span>,</span>
 <span>  password <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"VMP_BB_PASSWORD"</span><span class="op">)</span>,</span>
 <span>  keywords <span class="op">=</span> <span class="fu"><a href="tender_keywords.html">tender_keywords</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -86,6 +88,16 @@ function called by the scheduled GitHub Action.</p>
 <dd><p>Search filter passed to
 <code><a href="vmp_bb_scrape_tenders.html">vmp_bb_scrape_tenders()</a></code>. Defaults to Beabsichtigte Ausschreibung +
 Ausschreibung (<code>c("ExAnte", "Tender")</code>) and VgV / VOL/A / UVgO (<code>"VOL"</code>).</p></dd>
+
+
+<dt id="arg-screen-details">screen_details<a class="anchor" aria-label="anchor" href="#arg-screen-details"></a></dt>
+<dd><p>Second relevance layer: fetch each ongoing tender's
+public detail page and match its full text + CPV codes (default <code>TRUE</code>).
+See <code><a href="enrich_with_details.html">enrich_with_details()</a></code>.</p></dd>
+
+
+<dt id="arg-max-detail">max_detail<a class="anchor" aria-label="anchor" href="#arg-max-detail"></a></dt>
+<dd><p>Maximum number of detail pages to screen (default <code>Inf</code>).</p></dd>
 
 
 <dt id="arg-username-password">username, password<a class="anchor" aria-label="anchor" href="#arg-username-password"></a></dt>

@@ -14,6 +14,8 @@ check_tenders(
   max_pages = Inf,
   publication_types = c("ExAnte", "Tender"),
   contracting_rules = "VOL",
+  screen_details = TRUE,
+  max_detail = Inf,
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
   keywords = tender_keywords()
@@ -44,6 +46,16 @@ check_tenders(
   [`vmp_bb_scrape_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_scrape_tenders.md).
   Defaults to Beabsichtigte Ausschreibung + Ausschreibung
   (`c("ExAnte", "Tender")`) and VgV / VOL/A / UVgO (`"VOL"`).
+
+- screen_details:
+
+  Second relevance layer: fetch each ongoing tender's public detail page
+  and match its full text + CPV codes (default `TRUE`). See
+  [`enrich_with_details()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_details.md).
+
+- max_detail:
+
+  Maximum number of detail pages to screen (default `Inf`).
 
 - username, password:
 

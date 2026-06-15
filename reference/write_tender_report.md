@@ -1,8 +1,9 @@
-# Write a tender overview report (Excel + Markdown)
+# Write a tender overview report (Excel + Markdown + HTML)
 
 Writes a dated Excel workbook (sheets "Relevant", "Alle", "Neu"), a
-`latest.md` summary that renders nicely on GitHub, and a small state
-file used to flag tenders that are new since the previous run.
+`latest.md` summary, a browsable `latest.html` (for GitHub Pages) and a
+small state file used to flag tenders that are new since the previous
+run.
 
 ## Usage
 

@@ -80,6 +80,22 @@ scored <- score_relevance(tenders, keywords = kw[c("groundwater", "water-risk")]
 Edit the `inst/extdata/keywords_<slug>.yml` files to tune the keywords,
 or add a new file to add a group – no code change needed.
 
+## Two relevance layers
+
+Beyond the result-table title (layer 1),
+`check_tenders(screen_details = TRUE)` (the default) opens each
+*ongoing* tender’s public detail page and matches the full description
+text **plus** the CPV procurement codes (mapped to groups via
+`inst/extdata/cpv_groups.yml`). The report’s `match_source` column shows
+which layer flagged each tender (`title` / `detail` / `cpv`). This needs
+no login (the detail page is public) and uses a plain HTTP GET; cap the
+fetches with `max_detail`.
+
+``` r
+
+check_tenders(screen_details = TRUE, max_detail = 50)
+```
+
 ## Automation (GitHub Actions)
 
 The workflow `.github/workflows/check-tenders.yaml` runs
