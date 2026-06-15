@@ -38,6 +38,12 @@ write_tender_report <- function(tenders, dir = "reports",
   prev_ids <- if (file.exists(state_file)) readRDS(state_file) else character()
   tenders$is_new <- !(tenders$tender_id %in% prev_ids)
 
+  # Human-readable names of the CPV codes that drove the cpv layer (derived from
+  # the raw codes now, so it tracks the current mapping + labels).
+  if (!is.null(tenders$cpv)) {
+    tenders$matched_cpv <- matched_cpv_names(tenders$cpv)
+  }
+
   relevant <- tenders[tenders$is_relevant %in% TRUE, , drop = FALSE]
   new_relevant <- relevant[relevant$is_new %in% TRUE, , drop = FALSE]
 
@@ -145,12 +151,12 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
 #' @noRd
 tender_markdown_table <- function(df) {
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
-            "groups", "match_source", "score", "matched_keywords",
+            "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups",
             "Veroeffentlichungstyp")
   base_cols <- setdiff(names(df), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
-  cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
+  cols <- c(base_cols, "groups", "match_source", "matched_cpv", "score", "matched_keywords")
   cols <- cols[cols %in% names(df)]
 
   esc <- function(x) {
@@ -193,12 +199,12 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   }
 
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
-            "groups", "match_source", "score", "matched_keywords",
+            "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups",
             "Veroeffentlichungstyp")
   base_cols <- setdiff(names(relevant), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
-  data_cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
+  data_cols <- c(base_cols, "groups", "match_source", "matched_cpv", "score", "matched_keywords")
   data_cols <- data_cols[data_cols %in% names(relevant)]
   headers <- c(data_cols, "Neu", "Link")
 

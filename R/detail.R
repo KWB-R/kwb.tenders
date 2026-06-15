@@ -82,6 +82,34 @@ cpv_summary <- function(tenders, cpv_map = tender_cpv_map(), keywords = tender_k
              groups = groups, stringsAsFactors = FALSE, row.names = NULL)
 }
 
+#' German labels of a tender's CPV codes that match the group mapping
+#'
+#' For each row, returns the [cpv_labels()] names of the `cpv` codes that map to
+#' at least one research group (via `cpv_map`), "; "-separated (empty if none).
+#' Derived at report time from the raw codes, so it tracks the current mapping.
+#' @param cpv Character vector; each element comma-separated CPV codes.
+#' @param cpv_map CPV-to-group mapping (default [tender_cpv_map()]).
+#' @param labels CPV code -> German name lookup (default [cpv_labels()]).
+#' @return Character vector (one per input element); names "; "-separated.
+#' @noRd
+matched_cpv_names <- function(cpv, cpv_map = tender_cpv_map(), labels = cpv_labels()) {
+  prefixes <- vapply(cpv_map, function(e) gsub("[^0-9]", "", as.character(e$prefix)), character(1))
+  prefixes <- prefixes[nzchar(prefixes)]
+  by_base8 <- as.character(labels)
+  names(by_base8) <- substr(gsub("[^0-9]", "", names(labels)), 1, 8) # match on 8-digit base
+  vapply(as.character(cpv), function(s) {
+    codes <- unlist(strsplit(s, ", ", fixed = TRUE))
+    codes <- codes[!is.na(codes) & nzchar(codes)]
+    if (length(codes) == 0L || length(prefixes) == 0L) return("")
+    digits <- gsub("[^0-9]", "", codes)
+    matched <- vapply(digits, function(d) any(startsWith(d, prefixes)), logical(1))
+    if (!any(matched)) return("")
+    nm <- unname(by_base8[substr(digits[matched], 1, 8)])
+    nm <- ifelse(is.na(nm) | !nzchar(nm), codes[matched], nm) # fall back to the code
+    paste(unique(nm), collapse = "; ")
+  }, character(1), USE.NAMES = FALSE)
+}
+
 #' Extract CPV codes (8 digits, optional check digit) from text
 #' @noRd
 extract_cpv <- function(text) {

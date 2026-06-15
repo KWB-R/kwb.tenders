@@ -85,6 +85,15 @@ test_that("cpv_labels loads the lookup and resolves a known code", {
   expect_true(nzchar(unname(l["90700000-4"]))) # known code -> non-empty label
 })
 
+test_that("matched_cpv_names returns labels of mapping-matched codes only", {
+  out <- kwb.tenders:::matched_cpv_names(
+    c("71351500-8, 33600000-6", ""), # 71351500 maps (groundwater); 33600000 does not
+    labels = c("71351500-8" = "Bodenuntersuchungen")
+  )
+  expect_equal(out[1], "Bodenuntersuchungen")
+  expect_equal(out[2], "")
+})
+
 test_that("read/write detail cache round-trips", {
   p <- file.path(tempdir(), "detail_cache.rds")
   unlink(p)
