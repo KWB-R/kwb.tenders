@@ -2,8 +2,14 @@
 
 ## All functions
 
+- [`apply_title_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.md)
+  : Veto out-of-scope tenders by title (e.g. pure building / maintenance
+  projects)
 - [`check_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/check_tenders.md)
   : Check Vergabemarktplatz Brandenburg for relevant tenders
+  (single-portal report)
+- [`combine_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/combine_tenders.md)
+  : Combine scored tender tibbles from several portal connectors
 - [`cpv_labels()`](https://kwb-r.github.io/kwb.tenders/reference/cpv_labels.md)
   : CPV code -\> German label lookup
 - [`cpv_summary()`](https://kwb-r.github.io/kwb.tenders/reference/cpv_summary.md)
@@ -13,19 +19,33 @@
   CPV codes)
 - [`enrich_with_notice()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_notice.md)
   : Enrich tenders with a notice-PDF (Bekanntmachung) relevance layer
+- [`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md)
+  : Screen the Datenservice Oeffentlicher Einkauf
+  (oeffentlichevergabe.de)
 - [`read_detail_cache()`](https://kwb-r.github.io/kwb.tenders/reference/read_detail_cache.md)
   [`write_detail_cache()`](https://kwb-r.github.io/kwb.tenders/reference/read_detail_cache.md)
   : Read / write the detail-screening cache
 - [`read_notice_cache()`](https://kwb-r.github.io/kwb.tenders/reference/read_notice_cache.md)
   [`write_notice_cache()`](https://kwb-r.github.io/kwb.tenders/reference/read_notice_cache.md)
   : Read / write the notice-screening cache
+- [`score_layered()`](https://kwb-r.github.io/kwb.tenders/reference/score_layered.md)
+  : Layered relevance scoring for portal connectors (title + long text +
+  CPV)
 - [`score_relevance()`](https://kwb-r.github.io/kwb.tenders/reference/score_relevance.md)
   : Score tenders for relevance to KWB research groups
+- [`screen_all_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_all_portals.md)
+  : Screen all configured portals into one combined report
+- [`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md)
+  : Run several portal connectors, combine and write one report
+- [`ted_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/ted_tenders.md)
+  : Screen TED (Tenders Electronic Daily) for relevant tenders
 - [`tender_cpv_map()`](https://kwb-r.github.io/kwb.tenders/reference/tender_cpv_map.md)
   : CPV-code to research-group mapping
 - [`tender_detail_text()`](https://kwb-r.github.io/kwb.tenders/reference/tender_detail_text.md)
   : Fetch a tender detail page (rendered) and extract its text + CPV
   codes
+- [`tender_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/tender_excludes.md)
+  : Title-level exclusion (veto) terms
 - [`tender_keywords()`](https://kwb-r.github.io/kwb.tenders/reference/tender_keywords.md)
   : KWB research-group keywords
 - [`tender_notice_text()`](https://kwb-r.github.io/kwb.tenders/reference/tender_notice_text.md)
@@ -37,5 +57,7 @@
   : Search for and scrape tender results
 - [`vmp_bb_session()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_session.md)
   : Start a chromote browser session
+- [`vmp_bb_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.md)
+  : Scrape + score Vergabemarktplatz Brandenburg (portal connector)
 - [`write_tender_report()`](https://kwb-r.github.io/kwb.tenders/reference/write_tender_report.md)
   : Write a tender overview report (Excel + Markdown + HTML)

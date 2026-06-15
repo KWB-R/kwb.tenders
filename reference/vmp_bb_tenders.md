@@ -1,17 +1,24 @@
-# Check Vergabemarktplatz Brandenburg for relevant tenders (single-portal report)
+# Scrape + score Vergabemarktplatz Brandenburg (portal connector)
 
-Convenience wrapper around
-[`vmp_bb_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.md)
-that also writes the overview report. For the combined multi-portal run
-see
-[`screen_all_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_all_portals.md).
+The VMP-BB connector for
+[`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md)
+/
+[`screen_all_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_all_portals.md):
+opens a chromote session, optionally logs in, scrapes tenders, scores
+them
+([`score_relevance()`](https://kwb-r.github.io/kwb.tenders/reference/score_relevance.md)),
+enriches via the detail and (optional) notice layers, applies the title
+exclusions
+([`apply_title_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.md))
+and tags `Plattform = "Vergabe Brandenburg"`. Returns the scored tibble
+(it writes no report); the detail/notice screening caches are
+read/written under `cache_dir`.
 
 ## Usage
 
 ``` r
-check_tenders(
-  dir = "reports",
-  headless = TRUE,
+vmp_bb_tenders(
+  keywords = tender_keywords(),
   login = FALSE,
   max_pages = Inf,
   publication_types = c("ExAnte", "Tender"),
@@ -22,19 +29,17 @@ check_tenders(
   max_notice = Inf,
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
-  keywords = tender_keywords()
+  cache_dir = "reports",
+  headless = TRUE
 )
 ```
 
 ## Arguments
 
-- dir:
+- keywords:
 
-  Output directory for the report and caches (default `"reports"`).
-
-- headless:
-
-  Run chromote headless (default `TRUE`).
+  Keyword list for relevance scoring (default
+  [`tender_keywords()`](https://kwb-r.github.io/kwb.tenders/reference/tender_keywords.md)).
 
 - login:
 
@@ -72,20 +77,22 @@ check_tenders(
   Credentials when `login = TRUE` (default env vars `VMP_BB_USERNAME` /
   `VMP_BB_PASSWORD`).
 
-- keywords:
+- cache_dir:
 
-  Keyword list for relevance scoring (default
-  [`tender_keywords()`](https://kwb-r.github.io/kwb.tenders/reference/tender_keywords.md)).
+  Directory for the detail/notice caches (default `"reports"`).
+
+- headless:
+
+  Run chromote headless (default `TRUE`).
 
 ## Value
 
-Invisibly, the scored tibble of all tenders.
+A scored tibble with a `Plattform` column.
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
-check_tenders() # public search, all pages
-check_tenders(max_pages = 2) # quick test
+vmp_bb_tenders(max_pages = 2)
 } # }
 ```
