@@ -67,6 +67,17 @@ test_that("enrich_with_details reuses the cache and prunes stale entries", {
   expect_equal(attr(out, "detail_cache")$tender_id, "42") # 999 pruned, 42 kept
 })
 
+test_that("cpv_summary aggregates CPV codes with counts and groups", {
+  tenders <- data.frame(
+    cpv = c("71351910-5, 90733000", "71351910-5", ""),
+    stringsAsFactors = FALSE
+  )
+  s <- cpv_summary(tenders)
+  expect_true(all(c("cpv", "n_tenders", "groups") %in% names(s)))
+  expect_equal(s$n_tenders[s$cpv == "71351910-5"], 2L)
+  expect_true(grepl("Grundwasser", s$groups[s$cpv == "71351910-5"])) # 71351 -> groundwater
+})
+
 test_that("read/write detail cache round-trips", {
   p <- file.path(tempdir(), "detail_cache.rds")
   unlink(p)

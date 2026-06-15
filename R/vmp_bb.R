@@ -98,7 +98,8 @@ vmp_bb_filter_hash <- function(publication_types, contracting_rules, page = 1) {
 #'   (VgV / VOL/A / UVgO). Others: `"VOB"`, `"VSVGV"`, `"SEKTVO"`, `"OTHER"`.
 #' @param max_pages Maximum number of result pages to scrape (default `Inf`).
 #' @return A tibble with one row per tender (all pages combined). The `Aktion`
-#'   column holds the project detail URL.
+#'   column holds the project detail URL; the `Veroeffentlichungstyp` column
+#'   labels each row ("Ausschreibung" / "Geplante Ausschreibung").
 #' @export
 #' @examples
 #' \dontrun{
@@ -109,25 +110,42 @@ vmp_bb_scrape_tenders <- function(session,
                                   publication_types = c("ExAnte", "Tender"),
                                   contracting_rules = "VOL",
                                   max_pages = Inf) {
-  hash <- vmp_bb_filter_hash(publication_types, contracting_rules, page = 1)
-  cdp_navigate(session, paste0(VMP_BB_SEARCH_URL, "#", hash), wait = 7)
-  if (!cdp_wait_for(session, ".browsePagesText", timeout = 25)) {
-    stop("Search results did not load.", call. = FALSE)
-  }
+  labels <- c(ExAnte = "Geplante Ausschreibung",
+              Tender = "Ausschreibung",
+              ExPost = "Vergebener Auftrag")
 
-  pc <- cdp_read_counter(session)
-  if (is.na(pc$max)) stop("Could not read the results counter.", call. = FALSE)
-  n_pages <- min(pc$max, max_pages)
-  message(sprintf("Found %s tender(s) on %s page(s); scraping %s.",
-                  pc$total, pc$max, n_pages))
+  # Search each publication type separately so each row can be labelled.
+  out <- list()
+  for (pt in publication_types) {
+    hash <- vmp_bb_filter_hash(pt, contracting_rules, page = 1)
+    cdp_navigate(session, paste0(VMP_BB_SEARCH_URL, "#", hash), wait = 7)
+    if (!cdp_wait_for(session, ".browsePagesText", timeout = 25)) {
+      warning(sprintf("Results did not load for publication type '%s'.", pt), call. = FALSE)
+      next
+    }
+    pc <- cdp_read_counter(session)
+    if (is.na(pc$max)) {
+      warning(sprintf("Could not read the counter for publication type '%s'.", pt), call. = FALSE)
+      next
+    }
+    n_pages <- min(pc$max, max_pages)
+    label <- if (pt %in% names(labels)) labels[[pt]] else pt
+    message(sprintf("[%s] %s tender(s) on %s page(s); scraping %s.",
+                    label, pc$total, pc$max, n_pages))
 
-  tbls <- vector("list", n_pages)
-  for (p in seq_len(n_pages)) {
-    message(sprintf("Scraping page %02d/%02d", p, n_pages))
-    tbls[[p]] <- scrape_current_table(session)
-    if (p < n_pages && !next_page(session, p)) break
+    tbls <- vector("list", n_pages)
+    for (p in seq_len(n_pages)) {
+      message(sprintf("  [%s] page %02d/%02d", label, p, n_pages))
+      tbls[[p]] <- scrape_current_table(session)
+      if (p < n_pages && !next_page(session, p)) break
+    }
+    df <- dplyr::bind_rows(tbls)
+    if (nrow(df) > 0) {
+      df$Veroeffentlichungstyp <- label
+      out[[pt]] <- df
+    }
   }
-  dplyr::bind_rows(tbls)
+  dplyr::bind_rows(out)
 }
 
 #' Scrape the tender table currently shown

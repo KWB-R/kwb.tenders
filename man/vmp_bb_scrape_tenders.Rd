@@ -25,7 +25,8 @@ Further option: \code{"ExPost"} (Vergebener Auftrag).}
 }
 \value{
 A tibble with one row per tender (all pages combined). The \code{Aktion}
-column holds the project detail URL.
+column holds the project detail URL; the \code{Veroeffentlichungstyp} column
+labels each row ("Ausschreibung" / "Geplante Ausschreibung").
 }
 \description{
 Applies a filter via the portal's deep-link (the search state is a base64

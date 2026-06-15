@@ -51,6 +51,9 @@ write_tender_report <- function(tenders, dir = "reports",
   add_sheet("Relevant", relevant)
   add_sheet("Alle", tenders)
   add_sheet("Neu", new_relevant)
+  if (!is.null(tenders$cpv) && any(nzchar(tenders$cpv))) {
+    add_sheet("CPV", cpv_summary(tenders))
+  }
   openxlsx::saveWorkbook(wb, xlsx_file, overwrite = TRUE)
 
   # Markdown summary --------------------------------------------------------
@@ -118,13 +121,22 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
     )
   }
 
-  lines <- c(lines, sprintf("## Relevante Vergaben (%d)", nrow(relevant)), "")
-  if (nrow(relevant) > 0) {
-    lines <- c(lines, tender_markdown_table(relevant))
-  } else {
-    lines <- c(lines, "Keine relevanten Vergaben gefunden.")
+  if (nrow(relevant) == 0L) {
+    return(c(lines, "## Relevante Vergaben (0)", "", "Keine relevanten Vergaben gefunden."))
   }
-
+  typ <- if (!is.null(relevant$Veroeffentlichungstyp)) {
+    as.character(relevant$Veroeffentlichungstyp)
+  } else {
+    rep("Ausschreibung", nrow(relevant))
+  }
+  ord <- c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag")
+  present <- c(intersect(ord, unique(typ)), setdiff(unique(typ), ord))
+  for (tp in present) {
+    sub <- relevant[typ == tp, , drop = FALSE]
+    if (nrow(sub) == 0L) next
+    lines <- c(lines, sprintf("## %s (%d)", tp, nrow(sub)), "",
+               tender_markdown_table(sub), "")
+  }
   lines
 }
 
@@ -133,7 +145,7 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
 tender_markdown_table <- function(df) {
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
             "groups", "match_source", "score", "matched_keywords",
-            "detail_groups", "cpv", "cpv_groups")
+            "detail_groups", "cpv", "cpv_groups", "Veroeffentlichungstyp")
   base_cols <- setdiff(names(df), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
@@ -180,7 +192,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
 
   meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
             "groups", "match_source", "score", "matched_keywords",
-            "detail_groups", "cpv", "cpv_groups")
+            "detail_groups", "cpv", "cpv_groups", "Veroeffentlichungstyp")
   base_cols <- setdiff(names(relevant), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   data_cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
@@ -224,27 +236,42 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   }
 
   head_cells <- paste0("<th>", esc(headers), "</th>", collapse = "")
-  body_rows <- vapply(seq_len(nrow(relevant)), function(i) {
-    vals <- vapply(data_cols, function(cn) esc(relevant[[cn]][i]), character(1))
-    neu <- if (isTRUE(relevant$is_new[i])) "ja" else "nein"
-    u <- if (!is.null(relevant$project_url)) relevant$project_url[i] else NA_character_
-    link <- if (!is.na(u) && nzchar(u)) sprintf("<a href=\"%s\" target=\"_blank\">Details</a>", esc(u)) else ""
-    paste0("<tr>", paste0("<td>", c(vals, neu, link), "</td>", collapse = ""), "</tr>")
-  }, character(1))
+  one_table <- function(sub, id) {
+    body_rows <- vapply(seq_len(nrow(sub)), function(i) {
+      vals <- vapply(data_cols, function(cn) esc(sub[[cn]][i]), character(1))
+      neu <- if (isTRUE(sub$is_new[i])) "ja" else "nein"
+      u <- if (!is.null(sub$project_url)) sub$project_url[i] else NA_character_
+      link <- if (!is.na(u) && nzchar(u)) sprintf("<a href=\"%s\" target=\"_blank\">Details</a>", esc(u)) else ""
+      paste0("<tr>", paste0("<td>", c(vals, neu, link), "</td>", collapse = ""), "</tr>")
+    }, character(1))
+    paste0("<table id=\"", id, "\" class=\"display tender-table\" style=\"width:100%\">",
+           "<thead><tr>", head_cells, "</tr></thead>",
+           "<tfoot><tr>", head_cells, "</tr></tfoot>",
+           "<tbody>", paste(body_rows, collapse = ""), "</tbody></table>")
+  }
 
-  table_html <- paste0(
-    "<p class=\"muted\">Tabelle: oben global suchen, Spalten per Klick sortieren, unten je Spalte filtern.</p>",
-    "<table id=\"tenders\" class=\"display\" style=\"width:100%\">",
-    "<thead><tr>", head_cells, "</tr></thead>",
-    "<tfoot><tr>", head_cells, "</tr></tfoot>",
-    "<tbody>", paste(body_rows, collapse = ""), "</tbody></table>"
-  )
+  typ <- if (!is.null(relevant$Veroeffentlichungstyp)) {
+    as.character(relevant$Veroeffentlichungstyp)
+  } else {
+    rep("Ausschreibung", nrow(relevant))
+  }
+  ord <- c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag")
+  present <- c(intersect(ord, unique(typ)), setdiff(unique(typ), ord))
+  body_parts <- "<p class=\"muted\">Tabellen: oben global suchen, Spalten per Klick sortieren, unten je Spalte filtern.</p>"
+  k <- 0L
+  for (tp in present) {
+    sub <- relevant[typ == tp, , drop = FALSE]
+    if (nrow(sub) == 0L) next
+    k <- k + 1L
+    body_parts <- c(body_parts, sprintf("<h2>%s (%d)</h2>", esc(tp), nrow(sub)),
+                    one_table(sub, paste0("tenders-", k)))
+  }
 
   score_idx <- which(headers == "score")
   opts_line <- if (length(score_idx) > 0) {
-    sprintf("    pageLength: 25, scrollX: true, order: [[%d, 'desc']],", score_idx[1] - 1L)
+    sprintf("      pageLength: 25, scrollX: true, order: [[%d, 'desc']],", score_idx[1] - 1L)
   } else {
-    "    pageLength: 25, scrollX: true,"
+    "      pageLength: 25, scrollX: true,"
   }
 
   scripts <- c(
@@ -252,21 +279,24 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     "<script src=\"https://cdn.datatables.net/2.1.8/js/dataTables.min.js\"></script>",
     "<script>",
     "$(function () {",
-    "  $('#tenders tfoot th').each(function () { var t = $(this).text(); $(this).html('<input type=\"text\" placeholder=\"' + t + '\" />'); });",
-    "  var table = new DataTable('#tenders', {",
+    "  $('table.tender-table').each(function () {",
+    "    var tbl = this;",
+    "    $('tfoot th', tbl).each(function () { var t = $(this).text(); $(this).html('<input type=\"text\" placeholder=\"' + t + '\" />'); });",
+    "    new DataTable(tbl, {",
     opts_line,
-    "    initComplete: function () {",
-    "      this.api().columns().every(function () {",
-    "        var that = this;",
-    "        $('input', this.footer()).on('keyup change clear', function () {",
-    "          if (that.search() !== this.value) { that.search(this.value).draw(); }",
+    "      initComplete: function () {",
+    "        this.api().columns().every(function () {",
+    "          var that = this;",
+    "          $('input', this.footer()).on('keyup change clear', function () {",
+    "            if (that.search() !== this.value) { that.search(this.value).draw(); }",
+    "          });",
     "        });",
-    "      });",
-    "    }",
+    "      }",
+    "    });",
     "  });",
     "});",
     "</script>"
   )
 
-  c(head_part, table_html, scripts, "</body></html>")
+  c(head_part, body_parts, scripts, "</body></html>")
 }

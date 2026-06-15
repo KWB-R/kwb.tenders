@@ -20,6 +20,40 @@ tender_cpv_map <- function(path = system.file("extdata", "cpv_groups.yml",
   yaml::read_yaml(path)
 }
 
+#' Summarise all CPV codes found across the tenders
+#'
+#' Aggregates the CPV codes collected by [enrich_with_details()] into a table:
+#' one row per code, the number of tenders it appears in, and the KWB research
+#' group(s) it maps to. Useful as an extra "CPV" sheet in the Excel report.
+#'
+#' @param tenders A tibble with a `cpv` column (comma-separated CPV codes).
+#' @param cpv_map CPV-to-group mapping (default [tender_cpv_map()]).
+#' @param keywords Keyword groups, for group display names (default
+#'   [tender_keywords()]).
+#' @return A data.frame with columns `cpv`, `n_tenders`, `groups`, sorted by
+#'   descending frequency.
+#' @export
+#' @examples
+#' cpv_summary(data.frame(cpv = c("71351910-5, 90733000", "71351910-5")))
+cpv_summary <- function(tenders, cpv_map = tender_cpv_map(), keywords = tender_keywords()) {
+  empty <- data.frame(cpv = character(), n_tenders = integer(),
+                      groups = character(), stringsAsFactors = FALSE)
+  if (is.null(tenders$cpv)) return(empty)
+  codes <- unlist(strsplit(as.character(tenders$cpv), ", ", fixed = TRUE))
+  codes <- codes[nzchar(codes)]
+  if (length(codes) == 0L) return(empty)
+  tab <- sort(table(codes), decreasing = TRUE)
+  slug2name <- vapply(keywords, function(g) {
+    if (is.null(g$name)) "" else as.character(g$name)
+  }, character(1))
+  cpvs <- names(tab)
+  groups <- vapply(cpvs, function(cc) {
+    paste(cpv_to_group_names(cc, cpv_map, slug2name), collapse = ", ")
+  }, character(1))
+  data.frame(cpv = cpvs, n_tenders = as.integer(tab), groups = groups,
+             stringsAsFactors = FALSE, row.names = NULL)
+}
+
 #' Extract CPV codes (8 digits, optional check digit) from text
 #' @noRd
 extract_cpv <- function(text) {
