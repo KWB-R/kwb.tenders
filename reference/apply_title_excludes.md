@@ -1,13 +1,19 @@
-# Veto out-of-scope tenders by title (e.g. pure building / maintenance projects)
+# Veto out-of-scope tenders (construction / building / maintenance)
 
-Sets `is_relevant = FALSE` for tenders whose **title** contains an
-exclusion term (see
-[`tender_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/tender_excludes.md))
-**unless** the title also contains a strong water keyword (so
-"Klaeranlage ... Bauleistungen" or any "Grundwasser..." title is kept).
-Adds an `excluded` column naming the vetoing term (`NA` otherwise).
-Catches building/maintenance notices that only matched via incidental
-detail text or CPV codes. Matching folds umlauts / is case-insensitive.
+Drops tenders that are not a fit for a research institute, two ways:
+
+1.  **title** contains a building/maintenance term (see
+    [`tender_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/tender_excludes.md))
+    and no strong water keyword rescues it (so a "Grundwasser..." title
+    is kept);
+
+2.  **CPV** shows a construction-works code (`45...`) without an
+    engineering-services code (`71...`) – a Bauauftrag; this is hard, so
+    even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..."
+    stays.
+
+Sets `is_relevant = FALSE` and records the reason in an `excluded`
+column. Matching folds umlauts / is case-insensitive.
 
 ## Usage
 

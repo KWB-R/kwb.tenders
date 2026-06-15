@@ -3,8 +3,7 @@
 ## All functions
 
 - [`apply_title_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.md)
-  : Veto out-of-scope tenders by title (e.g. pure building / maintenance
-  projects)
+  : Veto out-of-scope tenders (construction / building / maintenance)
 - [`check_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/check_tenders.md)
   : Check Vergabemarktplatz Brandenburg for relevant tenders
   (single-portal report)

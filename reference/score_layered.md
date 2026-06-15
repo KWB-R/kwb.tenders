@@ -51,6 +51,13 @@ score_layered(
   CPV-to-group map (default
   [`tender_cpv_map()`](https://kwb-r.github.io/kwb.tenders/reference/tender_cpv_map.md)).
 
+- exclude:
+
+  Apply
+  [`apply_title_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.md)
+  afterwards to drop construction / building / maintenance tenders
+  (default `TRUE`).
+
 ## Value
 
 `df` with `groups`, `cpv_groups`, `match_source`, `score`, `is_relevant`
