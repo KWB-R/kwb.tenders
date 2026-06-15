@@ -145,6 +145,14 @@ enrich_with_notice <- function(session, tenders, keywords = tender_keywords(),
   if (length(pick) > max_notice) pick <- pick[seq_len(max_notice)]
   urls <- if (!is.null(tenders$Aktion)) as.character(tenders$Aktion) else rep(NA_character_, n)
 
+  # A multi-page legal Bekanntmachung mentions drainage/groundwater/wastewater in
+  # passing, so supporting keywords are noise here -> score the PDF on STRONG
+  # keywords only. (And below, the notice layer only corroborates, never creates
+  # relevance.)
+  notice_keywords <- lapply(normalize_keyword_groups(keywords), function(g) {
+    list(name = g$name, strong = g$strong)
+  })
+
   message(sprintf("Notice layer: %d cached, reading %d new notice PDF(s)...",
                   sum(have), length(pick)))
   fetched <- logical(n)
@@ -154,7 +162,7 @@ enrich_with_notice <- function(session, tenders, keywords = tender_keywords(),
     if (is.na(u) || !nzchar(u)) next
     txt <- tryCatch(tender_notice_text(session, u), error = function(e) "")
     if (nzchar(txt)) {
-      sc <- score_relevance(data.frame(t = txt, stringsAsFactors = FALSE), keywords = keywords)
+      sc <- score_relevance(data.frame(t = txt, stringsAsFactors = FALSE), keywords = notice_keywords)
       tenders$notice_groups[i] <- sc$groups[1]
     }
     fetched[i] <- TRUE
@@ -169,7 +177,11 @@ enrich_with_notice <- function(session, tenders, keywords = tender_keywords(),
     g[nzchar(g)]
   }
   cur <- col("groups")
-  ng <- tenders$notice_groups
+  already <- nzchar(cur) # relevant via title/detail/cpv (computed before notice)
+  # Notice corroborates an already-relevant tender; it must NOT turn an otherwise
+  # irrelevant one relevant -- full PDFs are too noisy for independent discovery.
+  # (notice_groups itself stays raw, so the cache keeps the true PDF result.)
+  ng <- ifelse(already, tenders$notice_groups, "")
   tenders$groups <- vapply(seq_len(n), function(i) {
     paste(unique(split_g(c(cur[i], ng[i]))), collapse = ", ")
   }, character(1))
