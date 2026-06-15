@@ -2,7 +2,7 @@
 
 Stand: 2026-06-15
 
-Gesamt: 355 Ausschreibungen, davon 21 relevant, 0 neu.
+Gesamt: 356 Ausschreibungen, davon 21 relevant, 0 neu.
 
 Treffer je Gruppe: Wasser & Risiko (11), Wasseraufbereitung & -wiederverwendung (7), Grundwasser (5), Regenwasser & Gewässer (5), Energie & Ressourcen (2), Smart City & Infrastruktur (2)
 
