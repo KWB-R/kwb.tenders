@@ -163,53 +163,13 @@ tender_markdown_table <- function(df) {
   c(header, sep, rows)
 }
 
-#' Render a browsable HTML summary for a report
+#' Render a browsable, filterable HTML report (interactive DataTables table)
+#'
+#' The relevant tenders are shown in a sortable/filterable table (global search,
+#' per-column filters, pagination) enhanced with DataTables from a CDN. Without
+#' JavaScript it degrades to a plain HTML table.
 #' @noRd
 render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
-  css <- paste(
-    "body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:2rem;max-width:1100px;color:#222}",
-    "table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px}",
-    "th,td{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:top}",
-    "th{background:#f4f6f8}tr:nth-child(even){background:#fafafa}",
-    "h1{font-size:1.4rem}h2{font-size:1.1rem;margin-top:1.5rem}.muted{color:#666}",
-    sep = "\n"
-  )
-  parts <- c(
-    "<!doctype html>",
-    "<html lang=\"de\"><head><meta charset=\"utf-8\">",
-    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-    sprintf("<title>Vergabe-Report %s</title>", toupper(portal)),
-    sprintf("<style>%s</style></head><body>", css),
-    sprintf("<h1>Vergabe-Report (%s)</h1>", toupper(portal)),
-    sprintf(
-      "<p class=\"muted\">Stand: %s &middot; Gesamt: %d &middot; relevant: %d &middot; neu: %d</p>",
-      format(date, "%Y-%m-%d"), nrow(tenders), nrow(relevant), nrow(new_relevant)
-    )
-  )
-  if (nrow(new_relevant) > 0) {
-    parts <- c(parts, sprintf("<h2>Neu seit letztem Lauf (%d)</h2>", nrow(new_relevant)),
-               tender_html_table(new_relevant))
-  }
-  parts <- c(parts, sprintf("<h2>Relevante Vergaben (%d)</h2>", nrow(relevant)))
-  if (nrow(relevant) > 0) {
-    parts <- c(parts, tender_html_table(relevant))
-  } else {
-    parts <- c(parts, "<p>Keine relevanten Vergaben gefunden.</p>")
-  }
-  c(parts, "</body></html>")
-}
-
-#' Build an HTML table from a sensible subset of tender columns
-#' @noRd
-tender_html_table <- function(df) {
-  meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
-            "groups", "match_source", "score", "matched_keywords",
-            "detail_groups", "cpv", "cpv_groups")
-  base_cols <- setdiff(names(df), meta)
-  if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
-  cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
-  cols <- cols[cols %in% names(df)]
-
   esc <- function(x) {
     x <- as.character(x)
     x[is.na(x)] <- ""
@@ -218,23 +178,95 @@ tender_html_table <- function(df) {
     gsub(">", "&gt;", x, fixed = TRUE)
   }
 
-  has_link <- "project_url" %in% names(df) &&
-    any(!is.na(df$project_url) & nzchar(df$project_url))
-  head_cells <- paste0("<th>", esc(c(cols, if (has_link) "Link")), "</th>", collapse = "")
+  meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
+            "groups", "match_source", "score", "matched_keywords",
+            "detail_groups", "cpv", "cpv_groups")
+  base_cols <- setdiff(names(relevant), meta)
+  if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
+  data_cols <- c(base_cols, "groups", "match_source", "score", "matched_keywords")
+  data_cols <- data_cols[data_cols %in% names(relevant)]
+  headers <- c(data_cols, "Neu", "Link")
 
-  rows <- vapply(seq_len(nrow(df)), function(i) {
-    cells <- vapply(cols, function(cn) paste0("<td>", esc(df[[cn]][i]), "</td>"), character(1))
-    if (has_link) {
-      u <- df$project_url[i]
-      cells <- c(cells, if (!is.na(u) && nzchar(u)) {
-        sprintf("<td><a href=\"%s\">Details</a></td>", esc(u))
-      } else {
-        "<td></td>"
-      })
-    }
-    paste0("<tr>", paste(cells, collapse = ""), "</tr>")
+  gl <- if (!is.null(relevant$groups)) unlist(strsplit(relevant$groups, ", ", fixed = TRUE)) else character()
+  gl <- gl[nzchar(gl)]
+  grp_line <- if (length(gl) > 0) {
+    tab <- sort(table(gl), decreasing = TRUE)
+    paste0("Treffer je Gruppe: ", paste(sprintf("%s (%d)", names(tab), as.integer(tab)), collapse = ", "))
+  } else {
+    ""
+  }
+
+  css <- paste(
+    "body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:1.5rem;color:#222}",
+    "h1{font-size:1.4rem}.muted{color:#666;font-size:14px}",
+    "table.dataTable td{vertical-align:top;font-size:13px}",
+    "tfoot input{width:100%;box-sizing:border-box;font-weight:normal}",
+    sep = "\n"
+  )
+
+  head_part <- c(
+    "<!doctype html>",
+    "<html lang=\"de\"><head><meta charset=\"utf-8\">",
+    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+    sprintf("<title>Vergabe-Report %s</title>", toupper(portal)),
+    "<link rel=\"stylesheet\" href=\"https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css\">",
+    sprintf("<style>%s</style></head><body>", css),
+    sprintf("<h1>Vergabe-Report (%s)</h1>", toupper(portal)),
+    sprintf("<p class=\"muted\">Stand: %s &middot; Gesamt: %d &middot; relevant: %d &middot; neu: %d</p>",
+            format(date, "%Y-%m-%d"), nrow(tenders), nrow(relevant), nrow(new_relevant))
+  )
+  if (nzchar(grp_line)) {
+    head_part <- c(head_part, sprintf("<p class=\"muted\">%s</p>", esc(grp_line)))
+  }
+
+  if (nrow(relevant) == 0L) {
+    return(c(head_part, "<p>Keine relevanten Vergaben gefunden.</p>", "</body></html>"))
+  }
+
+  head_cells <- paste0("<th>", esc(headers), "</th>", collapse = "")
+  body_rows <- vapply(seq_len(nrow(relevant)), function(i) {
+    vals <- vapply(data_cols, function(cn) esc(relevant[[cn]][i]), character(1))
+    neu <- if (isTRUE(relevant$is_new[i])) "ja" else "nein"
+    u <- if (!is.null(relevant$project_url)) relevant$project_url[i] else NA_character_
+    link <- if (!is.na(u) && nzchar(u)) sprintf("<a href=\"%s\" target=\"_blank\">Details</a>", esc(u)) else ""
+    paste0("<tr>", paste0("<td>", c(vals, neu, link), "</td>", collapse = ""), "</tr>")
   }, character(1))
 
-  paste0("<table><thead><tr>", head_cells, "</tr></thead><tbody>",
-         paste(rows, collapse = ""), "</tbody></table>")
+  table_html <- paste0(
+    "<p class=\"muted\">Tabelle: oben global suchen, Spalten per Klick sortieren, unten je Spalte filtern.</p>",
+    "<table id=\"tenders\" class=\"display\" style=\"width:100%\">",
+    "<thead><tr>", head_cells, "</tr></thead>",
+    "<tfoot><tr>", head_cells, "</tr></tfoot>",
+    "<tbody>", paste(body_rows, collapse = ""), "</tbody></table>"
+  )
+
+  score_idx <- which(headers == "score")
+  opts_line <- if (length(score_idx) > 0) {
+    sprintf("    pageLength: 25, scrollX: true, order: [[%d, 'desc']],", score_idx[1] - 1L)
+  } else {
+    "    pageLength: 25, scrollX: true,"
+  }
+
+  scripts <- c(
+    "<script src=\"https://code.jquery.com/jquery-3.7.1.min.js\"></script>",
+    "<script src=\"https://cdn.datatables.net/2.1.8/js/dataTables.min.js\"></script>",
+    "<script>",
+    "$(function () {",
+    "  $('#tenders tfoot th').each(function () { var t = $(this).text(); $(this).html('<input type=\"text\" placeholder=\"' + t + '\" />'); });",
+    "  var table = new DataTable('#tenders', {",
+    opts_line,
+    "    initComplete: function () {",
+    "      this.api().columns().every(function () {",
+    "        var that = this;",
+    "        $('input', this.footer()).on('keyup change clear', function () {",
+    "          if (that.search() !== this.value) { that.search(this.value).draw(); }",
+    "        });",
+    "      });",
+    "    }",
+    "  });",
+    "});",
+    "</script>"
+  )
+
+  c(head_part, table_html, scripts, "</body></html>")
 }

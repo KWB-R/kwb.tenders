@@ -60,7 +60,7 @@ The workflow `.github/workflows/check-tenders.yaml` runs `check_tenders()` on a
 schedule (weekdays 05:00 UTC by default) and publishes the report to the
 **`gh-pages`** branch under `reports/`:
 
-- Overview: <https://kwb-r.github.io/kwb.tenders/reports/latest.html>
+- Overview (sortable / filterable table): <https://kwb-r.github.io/kwb.tenders/reports/latest.html>
 - Excel: `https://kwb-r.github.io/kwb.tenders/reports/vmp-bb_<date>.xlsx`
 
 The public tender search needs **no login**, so no repository secrets are
