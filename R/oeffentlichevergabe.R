@@ -47,6 +47,22 @@
   out
 }
 
+#' First tenderPeriod endDate anywhere under an OCDS node (tender / lots / lotDetails)
+#' @noRd
+.oeffentlichevergabe_deadline <- function(x, depth = 0L) {
+  if (depth > 5L || !is.list(x)) return("")
+  tp <- x[["tenderPeriod"]]
+  if (!is.null(tp) && !is.null(tp[["endDate"]])) {
+    d <- .oeffentlichevergabe_chr(tp[["endDate"]])
+    if (nzchar(d)) return(substr(d, 1, 10))
+  }
+  for (el in x) {
+    d <- .oeffentlichevergabe_deadline(el, depth + 1L)
+    if (nzchar(d)) return(d)
+  }
+  ""
+}
+
 #' Parse one OCDS release into a standard tender row
 #' @noRd
 oeffentlichevergabe_parse_release <- function(rel) {
@@ -66,14 +82,8 @@ oeffentlichevergabe_parse_release <- function(rel) {
     if (!is.null(a)) { ort <- .oeffentlichevergabe_chr(a[["locality"]]); if (!nzchar(ort)) ort <- .oeffentlichevergabe_chr(a[["region"]]); if (nzchar(ort)) break }
   }
 
-  # Deadline: tender-level, else first lot that carries one.
-  deadline <- .oeffentlichevergabe_chr(.oeffentlichevergabe_pluck(ten, "tenderPeriod", "endDate"))
-  if (!nzchar(deadline) && length(ten[["lots"]])) {
-    for (lo in ten[["lots"]]) {
-      dd <- .oeffentlichevergabe_chr(.oeffentlichevergabe_pluck(lo, "tenderPeriod", "endDate"))
-      if (nzchar(dd)) { deadline <- dd; break }
-    }
-  }
+  # Deadline: first tenderPeriod endDate anywhere (tender level or any lot).
+  deadline <- .oeffentlichevergabe_deadline(ten)
 
   # CPV: tender classification + item/lot-item classifications (scheme CPV only).
   cpv <- character()

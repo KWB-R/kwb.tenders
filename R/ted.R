@@ -54,8 +54,14 @@ ted_default_terms <- function() {
 ted_parse_notice <- function(nt) {
   cpv <- unlist(nt[["classification-cpv"]], use.names = FALSE)
   cpv <- unique(cpv[!is.na(cpv) & nzchar(cpv)])
-  dl <- unlist(nt[["deadline-receipt-tender-date-lot"]], use.names = FALSE)
-  dl <- dl[!is.na(dl) & nzchar(dl)]
+  pick_first <- function(field) {
+    v <- unlist(nt[[field]], use.names = FALSE)
+    v <- v[!is.na(v) & nzchar(v)]
+    if (length(v)) v[1] else ""
+  }
+  dl <- pick_first("deadline-receipt-tender-date-lot")
+  if (!nzchar(dl)) dl <- pick_first("deadline-receipt-request-date-lot")
+  if (!nzchar(dl)) dl <- pick_first("deadline-date-lot")
   ntype <- tolower(.ted_text(nt[["notice-type"]]))
   typ <- if (grepl("pin|prior|planning", ntype)) "Geplante Ausschreibung" else "Ausschreibung"
   data.frame(
@@ -63,7 +69,7 @@ ted_parse_notice <- function(nt) {
     Beschreibung = trimws(paste(.ted_text(nt[["description-proc"]]),
                                 .ted_text(nt[["description-lot"]]))),
     Vergabestelle = .ted_text(nt[["buyer-name"]]),
-    Frist = if (length(dl)) dl[1] else "",
+    Frist = substr(dl, 1, 10),
     Veroeffentlicht = substr(.ted_text(nt[["publication-date"]]), 1, 10),
     cpv = paste(cpv, collapse = ", "),
     Aktion = .ted_link(nt),
@@ -110,6 +116,7 @@ ted_tenders <- function(keywords = tender_keywords(), cpv_map = tender_cpv_map()
   }
   fields <- list("publication-number", "notice-title", "description-proc", "description-lot",
                  "buyer-name", "classification-cpv", "deadline-receipt-tender-date-lot",
+                 "deadline-receipt-request-date-lot", "deadline-date-lot",
                  "publication-date", "notice-type")
   if (verbose) message("TED: query = ", query)
 

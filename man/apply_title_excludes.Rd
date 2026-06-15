@@ -30,9 +30,11 @@ Drops tenders that are not a fit for a research institute, two ways:
 \item \strong{title} contains a building/maintenance term (see
 \code{\link[=tender_excludes]{tender_excludes()}}) and no strong water keyword rescues it (so a
 "Grundwasser..." title is kept);
-\item \strong{CPV} shows a construction-works code (\code{45...}) without an
-engineering-services code (\code{71...}) -- a Bauauftrag; this is hard, so
-even "Neubau Klaeranlage" is dropped while "Ingenieurleistungen ..." stays.
+\item \strong{CPV} shows a works / maintenance / cleaning code (\code{45...}
+Bau, \code{50...} Reparatur/Wartung, \code{9046/9047/9061/9064/9091...}
+Reinigung) without an engineering-services code (\code{71...}); hard veto,
+so even "Neubau Klaeranlage" or "Reinigung Faulbehaelter" is dropped while
+"Ingenieurleistungen ..." stays.
 }
 Sets \code{is_relevant = FALSE} and records the reason in an \code{excluded} column.
 Matching folds umlauts / is case-insensitive.
