@@ -74,6 +74,8 @@ and a portal that fails is skipped (the others still produce the report).</p>
 <span>  ted <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  vmp_bb_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  vmp_bb_notice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nrw_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nrw_notice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  since_days <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>  cosinex_contracting_rules <span class="op">=</span> <span class="st">"VOL"</span>,</span>
 <span>  keywords <span class="op">=</span> <span class="fu"><a href="tender_keywords.html">tender_keywords</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -96,6 +98,11 @@ and a portal that fails is skipped (the others still produce the report).</p>
 <dt id="arg-vmp-bb-login-vmp-bb-notice">vmp_bb_login, vmp_bb_notice<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-login-vmp-bb-notice"></a></dt>
 <dd><p>Log in / read notice PDFs for VMP-BB
 (default <code>FALSE</code>; need <code>VMP_BB_*</code> secrets).</p></dd>
+
+
+<dt id="arg-nrw-login-nrw-notice">nrw_login, nrw_notice<a class="anchor" aria-label="anchor" href="#arg-nrw-login-nrw-notice"></a></dt>
+<dd><p>Log in / read notice PDFs for Vergabemarktplatz NRW
+(default <code>FALSE</code>; need an NRW account + <code>VMP_NRW_*</code> secrets).</p></dd>
 
 
 <dt id="arg-since-days">since_days<a class="anchor" aria-label="anchor" href="#arg-since-days"></a></dt>

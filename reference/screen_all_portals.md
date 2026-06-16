@@ -33,6 +33,8 @@ screen_all_portals(
   ted = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
+  nrw_login = FALSE,
+  nrw_notice = FALSE,
   since_days = 30,
   cosinex_contracting_rules = "VOL",
   keywords = tender_keywords(),
@@ -54,6 +56,11 @@ screen_all_portals(
 
   Log in / read notice PDFs for VMP-BB (default `FALSE`; need `VMP_BB_*`
   secrets).
+
+- nrw_login, nrw_notice:
+
+  Log in / read notice PDFs for Vergabemarktplatz NRW (default `FALSE`;
+  need an NRW account + `VMP_NRW_*` secrets).
 
 - since_days:
 
