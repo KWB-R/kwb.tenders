@@ -1,16 +1,22 @@
 # Screen all configured portals into one combined report
 
 Convenience entry point (used by the scheduled GitHub Action): wires the
-built-in connectors – Vergabemarktplatz Brandenburg
+built-in connectors – the cosinex marketplaces Vergabemarktplatz
+Brandenburg
 ([`vmp_bb_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.md)),
+Vergabemarktplatz NRW
+([`vmp_nrw_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_nrw_tenders.md))
+and DTVP
+([`dtvp_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dtvp_tenders.md)),
 the federal Datenservice
 ([`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md))
 and TED
 ([`ted_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/ted_tenders.md))
 – and runs them through
 [`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md).
-Only VMP-BB can use a login; the API portals are login-free, and a
-portal that fails is skipped (the others still produce the report).
+The searches are login-free (only VMP-BB optionally logs in for the
+notice layer), and a portal that fails is skipped (the others still
+produce the report).
 
 ## Usage
 
@@ -18,12 +24,14 @@ portal that fails is skipped (the others still produce the report).
 screen_all_portals(
   dir = "reports",
   vmp_bb = TRUE,
+  nrw = TRUE,
+  dtvp = TRUE,
   oeffentlichevergabe = TRUE,
   ted = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   since_days = 30,
-  vmp_bb_contracting_rules = "VOL",
+  cosinex_contracting_rules = "VOL",
   keywords = tender_keywords(),
   verbose = TRUE
 )
@@ -35,7 +43,7 @@ screen_all_portals(
 
   Output directory (default `"reports"`).
 
-- vmp_bb, oeffentlichevergabe, ted:
+- vmp_bb, nrw, dtvp, oeffentlichevergabe, ted:
 
   Enable each source (all `TRUE`).
 
@@ -51,13 +59,14 @@ screen_all_portals(
   days and a final filter trims all sources (incl. VMP-BB) to the same
   window.
 
-- vmp_bb_contracting_rules:
+- cosinex_contracting_rules:
 
-  VMP-BB procurement regulations (Vergabeart), default `"VOL"` (VgV /
-  VOL/A / UVgO; excludes VOB/Bau). See
+  Procurement regulations (Vergabeart) for the cosinex portals
+  (Brandenburg/NRW/DTVP), default `"VOL"` (VgV / VOL/A / UVgO; excludes
+  VOB/Bau). See
   [`vmp_bb_scrape_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_scrape_tenders.md)
   for other values. The API portals have no such filter (construction is
-  excluded there via the CPV-45 veto).
+  excluded via the CPV-45 veto).
 
 - keywords:
 

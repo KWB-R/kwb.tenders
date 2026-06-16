@@ -1,25 +1,28 @@
-# Scrape + score Vergabemarktplatz Brandenburg (portal connector)
+# Scrape + score a cosinex Vergabemarktplatz instance (generic connector)
 
-The VMP-BB connector for
-[`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md)
-/
-[`screen_all_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_all_portals.md):
-a thin wrapper around
-[`cosinex_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/cosinex_tenders.md)
-pinned to Vergabemarktplatz Brandenburg. It opens a chromote session,
-optionally logs in, scrapes tenders, scores them
+Shared engine behind
+[`vmp_bb_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.md),
+[`vmp_nrw_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_nrw_tenders.md)
+and
+[`dtvp_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dtvp_tenders.md):
+opens a chromote session, optionally logs in, scrapes the
+extended-search results, scores them
 ([`score_relevance()`](https://kwb-r.github.io/kwb.tenders/reference/score_relevance.md)),
-enriches via the detail and (optional) notice layers, applies the title
-exclusions
+enriches via the detail (and optional notice) layers, applies the
+title/CPV exclusions
 ([`apply_title_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.md))
-and tags `Plattform = "Vergabemarktplatz Brandenburg"`. Returns the
-scored tibble (it writes no report); the detail/notice screening caches
-are read/written under `cache_dir`.
+and tags `Plattform = plattform`. The detail and notice caches are
+namespaced by `slug`, so several portals can share one `cache_dir`
+without clobbering each other.
 
 ## Usage
 
 ``` r
-vmp_bb_tenders(
+cosinex_tenders(
+  base_url,
+  plattform,
+  slug,
+  mount = "VMPCenter",
   keywords = tender_keywords(),
   login = FALSE,
   max_pages = Inf,
@@ -30,8 +33,8 @@ vmp_bb_tenders(
   max_detail = Inf,
   screen_notice = FALSE,
   max_notice = Inf,
-  username = Sys.getenv("VMP_BB_USERNAME"),
-  password = Sys.getenv("VMP_BB_PASSWORD"),
+  username = "",
+  password = "",
   cache_dir = "reports",
   relevant_only = FALSE,
   headless = TRUE
@@ -39,6 +42,23 @@ vmp_bb_tenders(
 ```
 
 ## Arguments
+
+- base_url:
+
+  Portal host, e.g. `"https://www.evergabe.nrw.de"`.
+
+- plattform:
+
+  Display name written to the `Plattform` column.
+
+- slug:
+
+  Short id used for the per-portal cache files (e.g. `"vmp_nrw"`).
+
+- mount:
+
+  cosinex mount segment: `"VMPCenter"` (Land marketplaces) or `"Center"`
+  (DTVP).
 
 - keywords:
 
@@ -55,8 +75,11 @@ vmp_bb_tenders(
 
 - since_days:
 
-  If set, stop scraping pages older than this many days (results are
-  newest-first); `NULL` (default) scrapes up to `max_pages`.
+  If set, stop paging once a result page is entirely older than this
+  many days (the search is sorted newest-first). Bounds the scrape for
+  large portals/award histories; `NULL` scrapes up to `max_pages`. The
+  precise date trim happens later in
+  [`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md).
 
 - publication_types, contracting_rules:
 
@@ -109,6 +132,7 @@ A scored tibble with a `Plattform` column.
 
 ``` r
 if (FALSE) { # \dontrun{
-vmp_bb_tenders(max_pages = 2)
+cosinex_tenders("https://www.evergabe.nrw.de", "Vergabemarktplatz NRW",
+                slug = "vmp_nrw", max_pages = 2)
 } # }
 ```

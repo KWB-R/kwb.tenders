@@ -9,10 +9,15 @@
   (single-portal report)
 - [`combine_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/combine_tenders.md)
   : Combine scored tender tibbles from several portal connectors
+- [`cosinex_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/cosinex_tenders.md)
+  : Scrape + score a cosinex Vergabemarktplatz instance (generic
+  connector)
 - [`cpv_labels()`](https://kwb-r.github.io/kwb.tenders/reference/cpv_labels.md)
   : CPV code -\> German label lookup
 - [`cpv_summary()`](https://kwb-r.github.io/kwb.tenders/reference/cpv_summary.md)
   : Summarise all CPV codes found across the tenders
+- [`dtvp_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dtvp_tenders.md)
+  : Deutsches Vergabeportal (DTVP) connector (cosinex)
 - [`enrich_with_details()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_details.md)
   : Enrich tenders with a detail-page relevance layer (rendered text +
   CPV codes)
@@ -58,5 +63,7 @@
   : Start a chromote browser session
 - [`vmp_bb_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.md)
   : Scrape + score Vergabemarktplatz Brandenburg (portal connector)
+- [`vmp_nrw_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_nrw_tenders.md)
+  : Vergabemarktplatz NRW connector (cosinex)
 - [`write_tender_report()`](https://kwb-r.github.io/kwb.tenders/reference/write_tender_report.md)
   : Write a tender overview report (Excel + Markdown + HTML)

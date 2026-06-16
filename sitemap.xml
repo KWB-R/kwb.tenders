@@ -10,8 +10,10 @@
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/check_tenders.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/combine_tenders.html</loc></url>
+<url><loc>https://kwb-r.github.io/kwb.tenders/reference/cosinex_tenders.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/cpv_labels.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/cpv_summary.html</loc></url>
+<url><loc>https://kwb-r.github.io/kwb.tenders/reference/dtvp_tenders.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/enrich_with_details.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/enrich_with_notice.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/index.html</loc></url>
@@ -33,6 +35,7 @@
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_scrape_tenders.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_session.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.html</loc></url>
+<url><loc>https://kwb-r.github.io/kwb.tenders/reference/vmp_nrw_tenders.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.tenders/reference/write_tender_report.html</loc></url>
 </urlset>
 

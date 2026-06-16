@@ -11,7 +11,9 @@ vmp_bb_scrape_tenders(
   session,
   publication_types = c("ExAnte", "Tender"),
   contracting_rules = "VOL",
-  max_pages = Inf
+  max_pages = Inf,
+  search_url = VMP_BB_SEARCH_URL,
+  stop_before = NULL
 )
 ```
 
@@ -36,6 +38,17 @@ vmp_bb_scrape_tenders(
 - max_pages:
 
   Maximum number of result pages to scrape (default `Inf`).
+
+- search_url:
+
+  Extended-search URL (default the Brandenburg one; other cosinex
+  portals pass their own via `cosinex_urls()`).
+
+- stop_before:
+
+  Optional `Date`: stop paging once a result page is entirely older than
+  this (results are sorted newest-first). Bounds the scrape for large
+  portals/award histories; `NULL` (default) scrapes up to `max_pages`.
 
 ## Value
 

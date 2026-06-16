@@ -11,7 +11,8 @@ so logging in is optional.
 vmp_bb_login(
   session,
   username = Sys.getenv("VMP_BB_USERNAME"),
-  password = Sys.getenv("VMP_BB_PASSWORD")
+  password = Sys.getenv("VMP_BB_PASSWORD"),
+  auth_url = VMP_BB_AUTH_URL
 )
 ```
 
@@ -25,6 +26,11 @@ vmp_bb_login(
 - username, password:
 
   Credentials (default env vars `VMP_BB_USERNAME` / `VMP_BB_PASSWORD`).
+
+- auth_url:
+
+  Login (Keycloak SSO) URL (default the Brandenburg one; other cosinex
+  portals pass their own via `cosinex_urls()`).
 
 ## Value
 
