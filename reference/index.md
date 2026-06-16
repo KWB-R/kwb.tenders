@@ -18,6 +18,8 @@
   : CPV code -\> German label lookup
 - [`cpv_summary()`](https://kwb-r.github.io/kwb.tenders/reference/cpv_summary.md)
   : Summarise all CPV codes found across the tenders
+- [`dedupe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dedupe_tenders.md)
+  : Merge duplicate tenders that appear on several portals
 - [`dtvp_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dtvp_tenders.md)
   : Deutsches Vergabeportal (DTVP) connector (cosinex)
 - [`enrich_with_details()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_details.md)

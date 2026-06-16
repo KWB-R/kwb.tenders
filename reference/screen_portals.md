@@ -18,6 +18,7 @@ screen_portals(
   keywords = tender_keywords(),
   keep_types = c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag"),
   since_days = NULL,
+  dedupe = TRUE,
   verbose = TRUE
 )
 ```
@@ -53,6 +54,12 @@ screen_portals(
   If set, keep only notices whose `Veroeffentlicht` (publication date)
   is within the last `since_days` days; `NULL` (default) applies no date
   filter. Used to unify the look-back window across portals.
+
+- dedupe:
+
+  Merge cross-portal duplicates with
+  [`dedupe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dedupe_tenders.md)
+  before writing (default `TRUE`).
 
 - verbose:
 
