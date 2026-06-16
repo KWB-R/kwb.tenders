@@ -8,6 +8,8 @@ Vergabemarktplatz NRW
 ([`vmp_nrw_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_nrw_tenders.md))
 and DTVP
 ([`dtvp_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/dtvp_tenders.md)),
+Vergabeplattform Berlin
+([`berlin_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/berlin_tenders.md)),
 the federal Datenservice
 ([`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md))
 and TED
@@ -26,6 +28,7 @@ screen_all_portals(
   vmp_bb = TRUE,
   nrw = TRUE,
   dtvp = TRUE,
+  berlin = TRUE,
   oeffentlichevergabe = TRUE,
   ted = TRUE,
   vmp_bb_login = FALSE,
@@ -43,7 +46,7 @@ screen_all_portals(
 
   Output directory (default `"reports"`).
 
-- vmp_bb, nrw, dtvp, oeffentlichevergabe, ted:
+- vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted:
 
   Enable each source (all `TRUE`).
 
