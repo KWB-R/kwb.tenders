@@ -9,7 +9,7 @@ screen_portals(
   dir = "reports",
   portal = "tenders",
   keywords = tender_keywords(),
-  keep_types = c("Ausschreibung", "Geplante Ausschreibung"),
+  keep_types = c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag"),
   verbose = TRUE
 )
 }
@@ -24,8 +24,9 @@ screen_portals(
 
 \item{keywords}{Passed to connectors that take it (currently informational).}
 
-\item{keep_types}{Keep only these \code{Veroeffentlichungstyp} values (default the
-biddable ones -> drops "Vergebener Auftrag"/awards). \code{NULL} keeps all.}
+\item{keep_types}{Keep only these \code{Veroeffentlichungstyp} values (default:
+Ausschreibung, Geplante Ausschreibung and Vergebener Auftrag -> own section
+each). \code{NULL} keeps all types.}
 
 \item{verbose}{Print progress (default \code{TRUE}).}
 }

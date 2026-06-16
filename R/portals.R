@@ -55,8 +55,9 @@ combine_tenders <- function(tenders_list) {
 #' @param dir Output directory (default `"reports"`).
 #' @param portal File-name id for the combined report (default `"tenders"`).
 #' @param keywords Passed to connectors that take it (currently informational).
-#' @param keep_types Keep only these `Veroeffentlichungstyp` values (default the
-#'   biddable ones -> drops "Vergebener Auftrag"/awards). `NULL` keeps all.
+#' @param keep_types Keep only these `Veroeffentlichungstyp` values (default:
+#'   Ausschreibung, Geplante Ausschreibung and Vergebener Auftrag -> own section
+#'   each). `NULL` keeps all types.
 #' @param verbose Print progress (default `TRUE`).
 #' @return Invisibly, the combined scored tibble.
 #' @export
@@ -69,7 +70,8 @@ combine_tenders <- function(tenders_list) {
 #' }
 screen_portals <- function(sources, dir = "reports", portal = "tenders",
                            keywords = tender_keywords(),
-                           keep_types = c("Ausschreibung", "Geplante Ausschreibung"),
+                           keep_types = c("Ausschreibung", "Geplante Ausschreibung",
+                                          "Vergebener Auftrag"),
                            verbose = TRUE) {
   results <- lapply(names(sources), function(nm) {
     if (verbose) message("== Source: ", nm, " ==")
@@ -88,12 +90,13 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
     message("No tenders from any source.")
     return(invisible(combined))
   }
-  # Keep only biddable notice types (drop awards / "Vergebener Auftrag").
+  # Keep only the configured notice types (default keeps all three -> own report
+  # section each; pass a narrower keep_types to e.g. drop awards).
   if (length(keep_types) && !is.null(combined$Veroeffentlichungstyp)) {
     typ <- combined$Veroeffentlichungstyp
     keep <- is.na(typ) | !nzchar(typ) | typ %in% keep_types
     if (verbose && any(!keep)) {
-      message(sprintf("Keeping biddable types only: dropped %d notice(s) (e.g. Vergebener Auftrag).",
+      message(sprintf("Filtering notice types: dropped %d notice(s) not in keep_types.",
                       sum(!keep)))
     }
     combined <- combined[keep, , drop = FALSE]
@@ -107,7 +110,7 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' Screen all configured portals into one combined report
 #'
 #' Convenience entry point (used by the scheduled GitHub Action): wires the
-#' built-in connectors -- Vergabe Brandenburg ([vmp_bb_tenders()]), the federal
+#' built-in connectors -- Vergabemarktplatz Brandenburg ([vmp_bb_tenders()]), the federal
 #' Datenservice ([oeffentlichevergabe_tenders()]) and TED ([ted_tenders()]) --
 #' and runs them through [screen_portals()]. Only VMP-BB can use a login; the API
 #' portals are login-free, and a portal that fails is skipped (the others still
@@ -134,9 +137,10 @@ screen_all_portals <- function(dir = "reports",
                                keywords = tender_keywords(), verbose = TRUE) {
   sources <- list()
   if (isTRUE(vmp_bb)) {
-    sources[["Vergabe Brandenburg"]] <- function() {
+    sources[["Vergabemarktplatz Brandenburg"]] <- function() {
       vmp_bb_tenders(keywords = keywords, login = vmp_bb_login,
-                     screen_notice = vmp_bb_notice, cache_dir = dir, relevant_only = TRUE)
+                     screen_notice = vmp_bb_notice, cache_dir = dir, relevant_only = TRUE,
+                     publication_types = c("ExAnte", "Tender", "ExPost"))
     }
   }
   if (isTRUE(oeffentlichevergabe)) {

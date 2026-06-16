@@ -38,7 +38,7 @@ Invisibly, the combined scored tibble.
 }
 \description{
 Convenience entry point (used by the scheduled GitHub Action): wires the
-built-in connectors -- Vergabe Brandenburg (\code{\link[=vmp_bb_tenders]{vmp_bb_tenders()}}), the federal
+built-in connectors -- Vergabemarktplatz Brandenburg (\code{\link[=vmp_bb_tenders]{vmp_bb_tenders()}}), the federal
 Datenservice (\code{\link[=oeffentlichevergabe_tenders]{oeffentlichevergabe_tenders()}}) and TED (\code{\link[=ted_tenders]{ted_tenders()}}) --
 and runs them through \code{\link[=screen_portals]{screen_portals()}}. Only VMP-BB can use a login; the API
 portals are login-free, and a portal that fails is skipped (the others still

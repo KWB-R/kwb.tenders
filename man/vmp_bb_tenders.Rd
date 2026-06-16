@@ -59,7 +59,7 @@ The VMP-BB connector for \code{\link[=screen_portals]{screen_portals()}} / \code
 chromote session, optionally logs in, scrapes tenders, scores them
 (\code{\link[=score_relevance]{score_relevance()}}), enriches via the detail and (optional) notice layers,
 applies the title exclusions (\code{\link[=apply_title_excludes]{apply_title_excludes()}}) and tags
-\code{Plattform = "Vergabe Brandenburg"}. Returns the scored tibble (it writes no
+\code{Plattform = "Vergabemarktplatz Brandenburg"}. Returns the scored tibble (it writes no
 report); the detail/notice screening caches are read/written under \code{cache_dir}.
 }
 \examples{

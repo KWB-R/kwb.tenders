@@ -6,7 +6,7 @@
 #' chromote session, optionally logs in, scrapes tenders, scores them
 #' ([score_relevance()]), enriches via the detail and (optional) notice layers,
 #' applies the title exclusions ([apply_title_excludes()]) and tags
-#' `Plattform = "Vergabe Brandenburg"`. Returns the scored tibble (it writes no
+#' `Plattform = "Vergabemarktplatz Brandenburg"`. Returns the scored tibble (it writes no
 #' report); the detail/notice screening caches are read/written under `cache_dir`.
 #'
 #' @param keywords Keyword list for relevance scoring (default [tender_keywords()]).
@@ -62,6 +62,14 @@ vmp_bb_tenders <- function(keywords = tender_keywords(),
   # headers are e.g. "Veroeffentlicht" / "Angebots- / Teilnahmefrist").
   names(tenders)[grepl("frist", names(tenders), ignore.case = TRUE)] <- "Frist"
   names(tenders)[grepl("ffentlich", names(tenders), ignore.case = TRUE)] <- "Veroeffentlicht"
+  # Classify by the portal's Verfahrensart ("Typ"), more reliable than the search
+  # type: "Beabsichtigte ..." = planned, "Vergeben ..." = awarded.
+  if (!is.null(tenders$Typ)) {
+    tenders$Veroeffentlichungstyp[grepl("beabsichtigt", tenders$Typ, ignore.case = TRUE)] <-
+      "Geplante Ausschreibung"
+    tenders$Veroeffentlichungstyp[grepl("vergeben", tenders$Typ, ignore.case = TRUE)] <-
+      "Vergebener Auftrag"
+  }
   scored <- score_relevance(tenders, keywords = keywords)
 
   dir.create(cache_dir, showWarnings = FALSE, recursive = TRUE)
@@ -79,7 +87,7 @@ vmp_bb_tenders <- function(keywords = tender_keywords(),
   }
 
   scored <- apply_title_excludes(scored, keywords = keywords) # drop pure building/maintenance titles
-  scored$Plattform <- "Vergabe Brandenburg"
+  scored$Plattform <- "Vergabemarktplatz Brandenburg"
   if (isTRUE(relevant_only)) scored <- scored[scored$is_relevant %in% TRUE, , drop = FALSE]
   scored
 }

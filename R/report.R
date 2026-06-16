@@ -156,7 +156,7 @@ tender_markdown_table <- function(df) {
             "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups", "excluded",
             "Plattform", "Beschreibung", "ocid", "publication_number", "Veroeffentlicht",
-            "Frist", "Veroeffentlichungstyp")
+            "Frist", "Veroeffentlichungstyp", "Typ")
   base_cols <- setdiff(names(df), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   cols <- c(if ("Plattform" %in% names(df)) "Plattform", base_cols,
@@ -207,7 +207,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
             "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups", "excluded",
             "Plattform", "Beschreibung", "ocid", "publication_number", "Veroeffentlicht",
-            "Frist", "Veroeffentlichungstyp")
+            "Frist", "Veroeffentlichungstyp", "Typ")
   base_cols <- setdiff(names(relevant), meta)
   if (length(base_cols) > 5L) base_cols <- base_cols[seq_len(5L)]
   data_cols <- c(if ("Plattform" %in% names(relevant)) "Plattform", base_cols,
