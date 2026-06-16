@@ -11,8 +11,8 @@ screen_all_portals(
   ted = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
-  oeffentlichevergabe_days = 8,
-  ted_since_days = 90,
+  since_days = 30,
+  vmp_bb_contracting_rules = "VOL",
   keywords = tender_keywords(),
   verbose = TRUE
 )
@@ -25,9 +25,14 @@ screen_all_portals(
 \item{vmp_bb_login, vmp_bb_notice}{Log in / read notice PDFs for VMP-BB
 (default \code{FALSE}; need \verb{VMP_BB_*} secrets).}
 
-\item{oeffentlichevergabe_days}{Days of OCDS notices to fetch (default \code{8}).}
+\item{since_days}{Unified look-back window in days, applied to every portal by
+publication date (default \code{30}): the API connectors fetch this many days and a
+final filter trims all sources (incl. VMP-BB) to the same window.}
 
-\item{ted_since_days}{TED look-back window in days (default \code{90}).}
+\item{vmp_bb_contracting_rules}{VMP-BB procurement regulations (Vergabeart),
+default \code{"VOL"} (VgV / VOL/A / UVgO; excludes VOB/Bau). See
+\code{\link[=vmp_bb_scrape_tenders]{vmp_bb_scrape_tenders()}} for other values. The API portals have no such
+filter (construction is excluded there via the CPV-45 veto).}
 
 \item{keywords}{Keyword groups (default \code{\link[=tender_keywords]{tender_keywords()}}).}
 

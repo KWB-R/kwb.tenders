@@ -42,6 +42,18 @@ combine_tenders <- function(tenders_list) {
   out
 }
 
+#' Parse a publication-date column (ISO `YYYY-MM-DD` or German `DD.MM.YYYY`)
+#' @noRd
+.parse_pub_date <- function(x) {
+  x <- trimws(as.character(x))
+  d <- rep(as.Date(NA), length(x))
+  iso <- !is.na(x) & grepl("^[0-9]{4}-[0-9]{2}-[0-9]{2}", x)
+  if (any(iso)) d[iso] <- as.Date(substr(x[iso], 1, 10))
+  ger <- is.na(d) & !is.na(x) & grepl("^[0-9]{2}[.][0-9]{2}[.][0-9]{4}", x)
+  if (any(ger)) d[ger] <- as.Date(substr(x[ger], 1, 10), format = "%d.%m.%Y")
+  d
+}
+
 #' Run several portal connectors, combine and write one report
 #'
 #' Calls each source connector (a function returning a scored tender tibble),
@@ -58,6 +70,9 @@ combine_tenders <- function(tenders_list) {
 #' @param keep_types Keep only these `Veroeffentlichungstyp` values (default:
 #'   Ausschreibung, Geplante Ausschreibung and Vergebener Auftrag -> own section
 #'   each). `NULL` keeps all types.
+#' @param since_days If set, keep only notices whose `Veroeffentlicht` (publication
+#'   date) is within the last `since_days` days; `NULL` (default) applies no date
+#'   filter. Used to unify the look-back window across portals.
 #' @param verbose Print progress (default `TRUE`).
 #' @return Invisibly, the combined scored tibble.
 #' @export
@@ -72,6 +87,7 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
                            keywords = tender_keywords(),
                            keep_types = c("Ausschreibung", "Geplante Ausschreibung",
                                           "Vergebener Auftrag"),
+                           since_days = NULL,
                            verbose = TRUE) {
   results <- lapply(names(sources), function(nm) {
     if (verbose) message("== Source: ", nm, " ==")
@@ -101,6 +117,19 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
     }
     combined <- combined[keep, , drop = FALSE]
   }
+  # Unify the date window across portals: keep only notices published within the
+  # last `since_days` days (by Veroeffentlicht). Rows with an unparseable/absent
+  # date are kept (better to show than to silently drop).
+  if (!is.null(since_days) && !is.null(combined$Veroeffentlicht)) {
+    cutoff <- Sys.Date() - as.integer(since_days)
+    pub <- .parse_pub_date(combined$Veroeffentlicht)
+    keep <- is.na(pub) | pub >= cutoff
+    if (verbose && any(!keep)) {
+      message(sprintf("Date window: dropped %d notice(s) published before %s.",
+                      sum(!keep), format(cutoff)))
+    }
+    combined <- combined[keep, , drop = FALSE]
+  }
   res <- write_tender_report(combined, dir = dir, portal = portal)
   message(sprintf("Done: %d tenders, %d relevant, %d new across %d source(s). Report: %s",
                   res$n_total, res$n_relevant, res$n_new, ok, res$xlsx))
@@ -120,8 +149,13 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' @param vmp_bb,oeffentlichevergabe,ted Enable each source (all `TRUE`).
 #' @param vmp_bb_login,vmp_bb_notice Log in / read notice PDFs for VMP-BB
 #'   (default `FALSE`; need `VMP_BB_*` secrets).
-#' @param oeffentlichevergabe_days Days of OCDS notices to fetch (default `8`).
-#' @param ted_since_days TED look-back window in days (default `90`).
+#' @param since_days Unified look-back window in days, applied to every portal by
+#'   publication date (default `30`): the API connectors fetch this many days and a
+#'   final filter trims all sources (incl. VMP-BB) to the same window.
+#' @param vmp_bb_contracting_rules VMP-BB procurement regulations (Vergabeart),
+#'   default `"VOL"` (VgV / VOL/A / UVgO; excludes VOB/Bau). See
+#'   [vmp_bb_scrape_tenders()] for other values. The API portals have no such
+#'   filter (construction is excluded there via the CPV-45 veto).
 #' @param keywords Keyword groups (default [tender_keywords()]).
 #' @param verbose Print progress (default `TRUE`).
 #' @return Invisibly, the combined scored tibble.
@@ -133,26 +167,28 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 screen_all_portals <- function(dir = "reports",
                                vmp_bb = TRUE, oeffentlichevergabe = TRUE, ted = TRUE,
                                vmp_bb_login = FALSE, vmp_bb_notice = FALSE,
-                               oeffentlichevergabe_days = 8, ted_since_days = 90,
+                               since_days = 30, vmp_bb_contracting_rules = "VOL",
                                keywords = tender_keywords(), verbose = TRUE) {
   sources <- list()
   if (isTRUE(vmp_bb)) {
     sources[["Vergabemarktplatz Brandenburg"]] <- function() {
       vmp_bb_tenders(keywords = keywords, login = vmp_bb_login,
                      screen_notice = vmp_bb_notice, cache_dir = dir, relevant_only = TRUE,
-                     publication_types = c("ExAnte", "Tender", "ExPost"))
+                     publication_types = c("ExAnte", "Tender", "ExPost"),
+                     contracting_rules = vmp_bb_contracting_rules)
     }
   }
   if (isTRUE(oeffentlichevergabe)) {
     sources[["Oeffentliche Vergabe (Bund)"]] <- function() {
-      oeffentlichevergabe_tenders(keywords = keywords, days = oeffentlichevergabe_days,
+      oeffentlichevergabe_tenders(keywords = keywords, days = since_days,
                                   verbose = verbose)
     }
   }
   if (isTRUE(ted)) {
     sources[["TED (EU)"]] <- function() {
-      ted_tenders(keywords = keywords, since_days = ted_since_days, verbose = verbose)
+      ted_tenders(keywords = keywords, since_days = since_days, verbose = verbose)
     }
   }
-  screen_portals(sources, dir = dir, portal = "tenders", keywords = keywords, verbose = verbose)
+  screen_portals(sources, dir = dir, portal = "tenders", keywords = keywords,
+                 since_days = since_days, verbose = verbose)
 }

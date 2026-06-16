@@ -138,7 +138,7 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
     rep("Ausschreibung", nrow(relevant))
   }
   typ[is.na(typ) | !nzchar(typ)] <- "Ausschreibung" # no blank-heading section
-  ord <- c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag")
+  ord <- c("Geplante Ausschreibung", "Ausschreibung", "Vergebener Auftrag")
   present <- c(intersect(ord, unique(typ)), setdiff(unique(typ), ord))
   for (tp in present) {
     sub <- relevant[typ == tp, , drop = FALSE]
@@ -273,7 +273,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     rep("Ausschreibung", nrow(relevant))
   }
   typ[is.na(typ) | !nzchar(typ)] <- "Ausschreibung" # no blank-heading section
-  ord <- c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag")
+  ord <- c("Geplante Ausschreibung", "Ausschreibung", "Vergebener Auftrag")
   present <- c(intersect(ord, unique(typ)), setdiff(unique(typ), ord))
   body_parts <- "<p class=\"muted\">Tabellen: oben global suchen, Spalten per Klick sortieren, unten je Spalte filtern.</p>"
   k <- 0L

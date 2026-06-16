@@ -10,6 +10,7 @@ screen_portals(
   portal = "tenders",
   keywords = tender_keywords(),
   keep_types = c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag"),
+  since_days = NULL,
   verbose = TRUE
 )
 }
@@ -27,6 +28,10 @@ screen_portals(
 \item{keep_types}{Keep only these \code{Veroeffentlichungstyp} values (default:
 Ausschreibung, Geplante Ausschreibung and Vergebener Auftrag -> own section
 each). \code{NULL} keeps all types.}
+
+\item{since_days}{If set, keep only notices whose \code{Veroeffentlicht} (publication
+date) is within the last \code{since_days} days; \code{NULL} (default) applies no date
+filter. Used to unify the look-back window across portals.}
 
 \item{verbose}{Print progress (default \code{TRUE}).}
 }
