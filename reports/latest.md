@@ -1,32 +1,22 @@
 # Vergabe-Report (TENDERS)
 
-Stand: 2026-06-16 07:16 CEST
+Stand: 2026-06-16 08:25 CEST
 
-Gesamt: 417 Ausschreibungen, davon 105 relevant, 5 neu.
+Gesamt: 105 Ausschreibungen, davon 105 relevant, 0 neu.
 
 Treffer je Gruppe: Regenwasser & Gewässer (35), Grundwasser (33), Wasseraufbereitung & -wiederverwendung (32), Smart City & Infrastruktur (18), Wasser & Risiko (12), Energie & Ressourcen (8)
-
-## Neu seit letztem Lauf (5)
-
-| Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Vergabe Brandenburg | Projektmanagement für Leistungen zur Umsetzung des Maßnahmenplans des Landesniedrigwasserkonzeptes 2.0 | VgV Ausschreibung |  |  | 09.06.2026 | 07.08.2026 | Wasseraufbereitung & -wiederverwendung, Smart City & Infrastruktur, Regenwasser & Gewässer, Grundwasser | cpv | Beratung in den Bereichen Wasserversorgung und Abfälle; Behandlung von Oberflächengewässern | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268655) |
-| Vergabe Brandenburg | Stadt Cottbus OV 123-2026 Beprobung und analytische Sanierungsbegleitung ehem. Potsdamer Chemiehandel Cottbus | VgV Ausschreibung |  |  | 04.06.2026 | 06.07.2026 | Grundwasser | cpv | Bodenuntersuchungen | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268416) |
-| Oeffentliche Vergabe (Bund) | Rahmenvereinbarung Betriebsweginstandhaltung im Bereich des Außenbezirks Nürnberg 2026 - 2029 |  | Wasserstraßen- und Schifffahrtsamt Donau MDK | Regensburg | 2026-06-14 |  | Grundwasser | detail |  | 1 |  | [Details](https://www.evergabe-online.de/tenderdetails.html?id=868125) |
-| Oeffentliche Vergabe (Bund) | Los 5 - Fenster und Türen für Betriebsgebäude Neubau Kläranlage St. Gangloff |  | Gemeinde St. Gangloff über VG Hermsdorf | Hermsdorf | 2026-06-14 |  | Wasseraufbereitung & -wiederverwendung | title |  | 1 |  | [Details](https://www.evergabe-online.de/tenderdetails.html?id=867767) |
-| Oeffentliche Vergabe (Bund) | Machbarkeitsstudie: Rahmenbedingungen für den Schutz des Welterbes vor den Folgen des Klimawandels verbessern |  | Bundesministerium für Umwelt, Klimaschutz, Naturschutz und nukleare Sicherheit | Bonn | 2026-06-14 |  | Wasser & Risiko | detail |  | 1 |  | [Details](https://www.evergabe-online.de/tenderdocuments.html?id=867843) |
 
 ## Ausschreibung (103)
 
 | Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Vergabe Brandenburg | Klärschlammentsorgung aus der Kläranlage Milmersdorf | UVgO Beabsichtigte Ausschreibung |  |  | 10.06.2026 | nv | Energie & Ressourcen, Wasseraufbereitung & -wiederverwendung | title+detail+notice |  | 4 | Klärschlamm, Kläranlage | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268754) |
+| Vergabe Brandenburg | Grundwassermonitoring 2026 - Probenahme und Analytik | UVgO Beabsichtigte Ausschreibung |  |  | 10.06.2026 | nv | Grundwasser, Regenwasser & Gewässer, Wasser & Risiko | title+detail+cpv+notice | Dienstleistungen im Umweltschutz | 4 | Grundwasser, Monitoring, Probenahme | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268751) |
+| Vergabe Brandenburg | Projektmanagement für Leistungen zur Umsetzung des Maßnahmenplans des Landesniedrigwasserkonzeptes 2.0 | VgV Ausschreibung |  |  | 09.06.2026 | 07.08.2026 | Wasseraufbereitung & -wiederverwendung, Smart City & Infrastruktur, Regenwasser & Gewässer, Grundwasser | cpv | Beratung in den Bereichen Wasserversorgung und Abfälle; Behandlung von Oberflächengewässern | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268655) |
+| Vergabe Brandenburg | Stadt Cottbus OV 123-2026 Beprobung und analytische Sanierungsbegleitung ehem. Potsdamer Chemiehandel Cottbus | VgV Ausschreibung |  |  | 04.06.2026 | 06.07.2026 | Grundwasser | cpv | Bodenuntersuchungen | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268416) |
+| Vergabe Brandenburg | Prüfung der ortsveränderlichen elektrischen Betriebsmittel in den Verwaltungsobjekten der Kreisverwaltung Barnim 2026 | UVgO Ausschreibung |  |  | 02.06.2026 | 24.06.2026 | Wasser & Risiko | cpv |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268215) |
+| Vergabe Brandenburg | Renaturierung Cantdorfer Wiesenteich: Deklarationsanalytik und abfallrechtliche Begleitung | VgV Ausschreibung |  |  | 31.05.2026 | 06.07.2026 | Wasser & Risiko | cpv |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268168) |
+| Vergabe Brandenburg | Gesamtbeschaffung eines PDMS Patientendatenmanagementsystemsund eines Anästhesieplanungs- / -dokumentationssystems | UVgO TNW |  |  | 22.04.2024 | nv | Smart City & Infrastruktur | detail |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=220660) |
 | Oeffentliche Vergabe (Bund) | Projektmanagement für Leistungen zur Umsetzung des Maßnahmenplans des Landesniedrigwasserkonzeptes 2.0 |  | Ministerium für Land- und Ernährungswirtschaft, Umwelt und Verbraucherschutz des Landes Brandenburg | Potsdam | 2026-06-07 |  | Wasseraufbereitung & -wiederverwendung, Smart City & Infrastruktur, Regenwasser & Gewässer, Grundwasser | cpv | Beratung in den Bereichen Wasserversorgung und Abfälle; Behandlung von Oberflächengewässern | 4 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPSatellite/notice/CXP9YY8HSMP/documents) |
 | Oeffentliche Vergabe (Bund) | EU-WRRL Grundwassermonitoring Landesmessnetz B Herbst 2026 - Frühjahr 2027 |  | Landesamt für Umwelt | Potsdam OT Groß Glienicke | 2026-06-11 |  | Grundwasser, Regenwasser & Gewässer, Wasser & Risiko | title+detail+cpv | Dienstleistungen im Umweltschutz | 3 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPSatellite/notice/CXP9YY4HSK4/documents) |
 | Oeffentliche Vergabe (Bund) | EU-WRRL - N2-Argon-Analytik an Grundwasserproben im Land Brandenburg im Herbst 2026 und Frühjahr 2027 |  | Landesamt für Umwelt | Potsdam OT Groß Glienicke | 2026-06-11 |  | Grundwasser, Regenwasser & Gewässer, Wasser & Risiko | title+detail+cpv | Dienstleistungen im Umweltschutz; Dienstleistungen im Zusammenhang mit Wasserverschmutzung | 3 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPSatellite/notice/CXP9YY4HKWV/documents) |
@@ -124,127 +114,10 @@ Treffer je Gruppe: Regenwasser & Gewässer (35), Grundwasser (33), Wasseraufbere
 | TED (EU) | Klärwerk I Sindelfingen - Lieferung von Eisen-III-Chloridsulfatlösung |  | Stadt Sindelfingen, Zentrale Vergabestelle |  | 2026-05-06 | 2026-06-18 | Wasseraufbereitung & -wiederverwendung | title+detail |  | 1 |  | [Details](https://ted.europa.eu/de/notice/-/detail/311415-2026) |
 | TED (EU) | Lieferung von Polymere |  | Stadt Paderborn |  | 2026-05-11 | 2026-06-16 | Wasseraufbereitung & -wiederverwendung | detail |  | 1 |  | [Details](https://ted.europa.eu/de/notice/-/detail/320348-2026) |
 
-## Geplante Ausschreibung (9)
+## Geplante Ausschreibung (2)
 
 | Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |
 | Oeffentliche Vergabe (Bund) | Leitsystem der Ver- und Entsorgung |  | Procurement, Claim and Mobility | Frankfurt am Main | 2026-06-10 |  | Regenwasser & Gewässer, Wasseraufbereitung & -wiederverwendung | detail |  | 2 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/ab7b8e3a-58a5-4065-b6b9-fa10528d6067) |
 | Oeffentliche Vergabe (Bund) | Lieferung von Eisen-II-Sulfat für den Zeitraum 01.01.27 bis 31.12.2028 |  | Stadt Sankt Augustin | Sankt Augustin | 2026-06-09 |  | Wasseraufbereitung & -wiederverwendung | detail |  | 1 |  | [Details](https://oeffentlichevergabe.de/ui/de/notices/2f40a9ba-5b62-46d9-a1f5-dd6fac8ad51a) |
-
-## NA (105)
-
-| Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |
 
