@@ -7,10 +7,9 @@
 
 # kwb.tenders
 
-Logs into public procurement portals (starting with
-Vergabemarktplatz Brandenburg), scrapes published tenders, scores them
-for relevance to KWB research topics (e.g. groundwater) and renders an
-overview report.
+Screens several public procurement portals for tenders relevant to KWB research
+topics (e.g. groundwater), scores them and renders one combined overview report.
+See [Covered portals](#covered-portals) below.
 
 ## Installation
 
@@ -54,14 +53,34 @@ Ressourcen, Regenwasser & Gewässer, Smart City & Infrastruktur, Wasseraufbereit
 Keywords live in `inst/extdata/keywords_<group>.yml` (one file per group, fully
 configurable). See `vignette("tutorial")` for details.
 
+## Covered portals
+
+`screen_all_portals()` queries six sources and writes one combined report:
+
+| Portal | Connector | Access |
+|---|---|---|
+| Vergabemarktplatz Brandenburg | `vmp_bb_tenders()` | cosinex; login-free (optional login) |
+| Vergabemarktplatz NRW | `vmp_nrw_tenders()` | cosinex; login-free (optional login) |
+| Deutsches Vergabeportal (DTVP) | `dtvp_tenders()` | cosinex; login-free |
+| Vergabeplattform Berlin | `berlin_tenders()` | berlin.de / iTWO; HTTP, login-free |
+| Datenservice Öffentlicher Einkauf (Bund + Länder + Kommunen) | `oeffentlichevergabe_tenders()` | OCDS API, login-free |
+| TED (EU) | `ted_tenders()` | TED v3 API, login-free |
+
+**e-Vergabe des Bundes (evergabe-online.de)** needs no separate connector: its
+announcements are published into the *Datenservice Öffentlicher Einkauf*
+(`oeffentlichevergabe.de`) and — for EU-wide procedures — into TED, both already
+covered above. Verified on a sample: federal buyers (incl. the operator,
+*Beschaffungsamt des BMI*) and notices linking to evergabe-online.de show up in
+the oeffentlichevergabe feed.
+
 ## Automated checks (GitHub Actions)
 
-The workflow `.github/workflows/check-tenders.yaml` runs `check_tenders()` on a
-schedule (weekdays 05:00 UTC by default) and publishes the report to the
+The workflow `.github/workflows/check-tenders.yaml` runs `screen_all_portals()`
+on a schedule (weekdays 05:00 UTC by default) and publishes the report to the
 **`gh-pages`** branch under `reports/`:
 
 - Overview (sortable / filterable table): <https://kwb-r.github.io/kwb.tenders/reports/latest.html>
-- Excel: `https://kwb-r.github.io/kwb.tenders/reports/vmp-bb_<date>.xlsx`
+- Excel: `https://kwb-r.github.io/kwb.tenders/reports/tenders_<date>.xlsx`
 
 The public tender search needs **no login**, so no repository secrets are
 required. Publishing to `gh-pages` keeps the report out of the `main` history and
