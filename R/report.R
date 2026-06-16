@@ -44,6 +44,12 @@ write_tender_report <- function(tenders, dir = "reports",
     tenders$matched_cpv <- matched_cpv_names(tenders$cpv)
   }
 
+  # Normalise date columns to ISO YYYY-MM-DD so the report shows one consistent
+  # format across portals (and sorts correctly in the DataTable).
+  for (.col in c("Veroeffentlicht", "Frist")) {
+    if (!is.null(tenders[[.col]])) tenders[[.col]] <- .format_iso_date(tenders[[.col]])
+  }
+
   relevant <- tenders[tenders$is_relevant %in% TRUE &
                         !is.na(tenders$groups) & nzchar(as.character(tenders$groups)), , drop = FALSE]
   new_relevant <- relevant[relevant$is_new %in% TRUE, , drop = FALSE]
@@ -91,6 +97,17 @@ write_tender_report <- function(tenders, dir = "reports",
   ))
 }
 
+#' "Treffer je Gruppe: ..." line for a set of tenders ("" if none); each group a
+#' tender matched is counted (a tender can match several), descending by count.
+#' @noRd
+group_breakdown <- function(df) {
+  gl <- if (!is.null(df$groups)) unlist(strsplit(as.character(df$groups), ", ", fixed = TRUE)) else character()
+  gl <- gl[nzchar(gl)]
+  if (!length(gl)) return("")
+  tab <- sort(table(gl), decreasing = TRUE)
+  paste0("Treffer je Gruppe: ", paste(sprintf("%s (%d)", names(tab), as.integer(tab)), collapse = ", "))
+}
+
 #' Build the per-platform breakdown and search-window header lines (plain text)
 #'
 #' Lists every screened portal with its relevant-hit count (so a portal screened
@@ -135,18 +152,9 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
     ""
   )
 
-  # Per-group breakdown of the relevant tenders.
-  gl <- if (!is.null(relevant$groups)) {
-    unlist(strsplit(relevant$groups, ", ", fixed = TRUE))
-  } else {
-    character()
-  }
-  gl <- gl[nzchar(gl)]
-  if (length(gl) > 0) {
-    tab <- sort(table(gl), decreasing = TRUE)
-    brk <- paste(sprintf("%s (%d)", names(tab), as.integer(tab)), collapse = ", ")
-    lines <- c(lines, sprintf("Treffer je Gruppe: %s", brk), "")
-  }
+  # Per-group breakdown of the relevant tenders (overall).
+  gb <- group_breakdown(relevant)
+  if (nzchar(gb)) lines <- c(lines, gb, "")
 
   ml <- report_meta_lines(tenders, relevant)
   if (length(ml) > 0) lines <- c(lines, ml, "")
@@ -175,8 +183,10 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
   for (tp in present) {
     sub <- relevant[typ == tp, , drop = FALSE]
     if (nrow(sub) == 0L) next
-    lines <- c(lines, sprintf("## %s (%d)", tp, nrow(sub)), "",
-               tender_markdown_table(sub), "")
+    gb <- group_breakdown(sub)
+    lines <- c(lines, sprintf("## %s (%d)", tp, nrow(sub)), "")
+    if (nzchar(gb)) lines <- c(lines, gb, "")
+    lines <- c(lines, tender_markdown_table(sub), "")
   }
   lines
 }
@@ -248,14 +258,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   data_cols <- data_cols[data_cols %in% names(relevant)]
   headers <- c(data_cols, "Neu", "Link")
 
-  gl <- if (!is.null(relevant$groups)) unlist(strsplit(relevant$groups, ", ", fixed = TRUE)) else character()
-  gl <- gl[nzchar(gl)]
-  grp_line <- if (length(gl) > 0) {
-    tab <- sort(table(gl), decreasing = TRUE)
-    paste0("Treffer je Gruppe: ", paste(sprintf("%s (%d)", names(tab), as.integer(tab)), collapse = ", "))
-  } else {
-    ""
-  }
+  grp_line <- group_breakdown(relevant)
 
   css <- paste(
     "body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:1.5rem;color:#222}",
@@ -316,7 +319,9 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     sub <- relevant[typ == tp, , drop = FALSE]
     if (nrow(sub) == 0L) next
     k <- k + 1L
+    gb <- group_breakdown(sub)
     body_parts <- c(body_parts, sprintf("<h2>%s (%d)</h2>", esc(tp), nrow(sub)),
+                    if (nzchar(gb)) sprintf("<p class=\"muted\">%s</p>", esc(gb)),
                     one_table(sub, paste0("tenders-", k)))
   }
 

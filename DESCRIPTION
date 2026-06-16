@@ -27,6 +27,7 @@ Imports:
     stringr,
     tibble,
     utils,
+    xml2,
     yaml
 Suggests:
     covr,
