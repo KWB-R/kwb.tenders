@@ -30,6 +30,7 @@ vmp_bb_tenders(
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
   cache_dir = "reports",
+  relevant_only = FALSE,
   headless = TRUE
 )
 ```
@@ -80,6 +81,13 @@ vmp_bb_tenders(
 - cache_dir:
 
   Directory for the detail/notice caches (default `"reports"`).
+
+- relevant_only:
+
+  Return only relevant tenders (default `FALSE`; the combined
+  multi-portal run in
+  [`screen_all_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_all_portals.md)
+  sets this `TRUE`).
 
 - headless:
 
