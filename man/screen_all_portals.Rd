@@ -7,12 +7,14 @@
 screen_all_portals(
   dir = "reports",
   vmp_bb = TRUE,
+  nrw = TRUE,
+  dtvp = TRUE,
   oeffentlichevergabe = TRUE,
   ted = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   since_days = 30,
-  vmp_bb_contracting_rules = "VOL",
+  cosinex_contracting_rules = "VOL",
   keywords = tender_keywords(),
   verbose = TRUE
 )
@@ -20,7 +22,7 @@ screen_all_portals(
 \arguments{
 \item{dir}{Output directory (default \code{"reports"}).}
 
-\item{vmp_bb, oeffentlichevergabe, ted}{Enable each source (all \code{TRUE}).}
+\item{vmp_bb, nrw, dtvp, oeffentlichevergabe, ted}{Enable each source (all \code{TRUE}).}
 
 \item{vmp_bb_login, vmp_bb_notice}{Log in / read notice PDFs for VMP-BB
 (default \code{FALSE}; need \verb{VMP_BB_*} secrets).}
@@ -29,10 +31,10 @@ screen_all_portals(
 publication date (default \code{30}): the API connectors fetch this many days and a
 final filter trims all sources (incl. VMP-BB) to the same window.}
 
-\item{vmp_bb_contracting_rules}{VMP-BB procurement regulations (Vergabeart),
-default \code{"VOL"} (VgV / VOL/A / UVgO; excludes VOB/Bau). See
-\code{\link[=vmp_bb_scrape_tenders]{vmp_bb_scrape_tenders()}} for other values. The API portals have no such
-filter (construction is excluded there via the CPV-45 veto).}
+\item{cosinex_contracting_rules}{Procurement regulations (Vergabeart) for the
+cosinex portals (Brandenburg/NRW/DTVP), default \code{"VOL"} (VgV / VOL/A / UVgO;
+excludes VOB/Bau). See \code{\link[=vmp_bb_scrape_tenders]{vmp_bb_scrape_tenders()}} for other values. The API
+portals have no such filter (construction is excluded via the CPV-45 veto).}
 
 \item{keywords}{Keyword groups (default \code{\link[=tender_keywords]{tender_keywords()}}).}
 
@@ -43,11 +45,12 @@ Invisibly, the combined scored tibble.
 }
 \description{
 Convenience entry point (used by the scheduled GitHub Action): wires the
-built-in connectors -- Vergabemarktplatz Brandenburg (\code{\link[=vmp_bb_tenders]{vmp_bb_tenders()}}), the federal
-Datenservice (\code{\link[=oeffentlichevergabe_tenders]{oeffentlichevergabe_tenders()}}) and TED (\code{\link[=ted_tenders]{ted_tenders()}}) --
-and runs them through \code{\link[=screen_portals]{screen_portals()}}. Only VMP-BB can use a login; the API
-portals are login-free, and a portal that fails is skipped (the others still
-produce the report).
+built-in connectors -- the cosinex marketplaces Vergabemarktplatz Brandenburg
+(\code{\link[=vmp_bb_tenders]{vmp_bb_tenders()}}), Vergabemarktplatz NRW (\code{\link[=vmp_nrw_tenders]{vmp_nrw_tenders()}}) and DTVP
+(\code{\link[=dtvp_tenders]{dtvp_tenders()}}), the federal Datenservice (\code{\link[=oeffentlichevergabe_tenders]{oeffentlichevergabe_tenders()}})
+and TED (\code{\link[=ted_tenders]{ted_tenders()}}) -- and runs them through \code{\link[=screen_portals]{screen_portals()}}. The
+searches are login-free (only VMP-BB optionally logs in for the notice layer),
+and a portal that fails is skipped (the others still produce the report).
 }
 \examples{
 \dontrun{

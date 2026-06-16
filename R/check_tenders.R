@@ -2,8 +2,9 @@
 
 #' Scrape + score Vergabemarktplatz Brandenburg (portal connector)
 #'
-#' The VMP-BB connector for [screen_portals()] / [screen_all_portals()]: opens a
-#' chromote session, optionally logs in, scrapes tenders, scores them
+#' The VMP-BB connector for [screen_portals()] / [screen_all_portals()]: a thin
+#' wrapper around [cosinex_tenders()] pinned to Vergabemarktplatz Brandenburg. It
+#' opens a chromote session, optionally logs in, scrapes tenders, scores them
 #' ([score_relevance()]), enriches via the detail and (optional) notice layers,
 #' applies the title exclusions ([apply_title_excludes()]) and tags
 #' `Plattform = "Vergabemarktplatz Brandenburg"`. Returns the scored tibble (it writes no
@@ -12,6 +13,8 @@
 #' @param keywords Keyword list for relevance scoring (default [tender_keywords()]).
 #' @param login Log in before scraping (default `FALSE`; the search is public).
 #' @param max_pages Maximum number of result pages to scrape (default `Inf`).
+#' @param since_days If set, stop scraping pages older than this many days
+#'   (results are newest-first); `NULL` (default) scrapes up to `max_pages`.
 #' @param publication_types,contracting_rules Search filter passed to
 #'   [vmp_bb_scrape_tenders()].
 #' @param screen_details Detail-page layer (default `TRUE`; see
@@ -35,6 +38,7 @@
 vmp_bb_tenders <- function(keywords = tender_keywords(),
                            login = FALSE,
                            max_pages = Inf,
+                           since_days = NULL,
                            publication_types = c("ExAnte", "Tender"),
                            contracting_rules = "VOL",
                            screen_details = TRUE,
@@ -46,50 +50,16 @@ vmp_bb_tenders <- function(keywords = tender_keywords(),
                            cache_dir = "reports",
                            relevant_only = FALSE,
                            headless = TRUE) {
-  if (isTRUE(screen_notice)) login <- TRUE # notice PDFs need a logged-in session
-
-  session <- vmp_bb_session(headless = headless)
-  on.exit(try(session$close(), silent = TRUE), add = TRUE)
-  if (isTRUE(login)) vmp_bb_login(session, username = username, password = password)
-
-  tenders <- vmp_bb_scrape_tenders(
-    session,
-    publication_types = publication_types,
-    contracting_rules = contracting_rules,
-    max_pages = max_pages
+  cosinex_tenders(
+    base_url = "https://vergabemarktplatz.brandenburg.de",
+    plattform = "Vergabemarktplatz Brandenburg", slug = "vmp_bb", mount = "VMPCenter",
+    keywords = keywords, login = login, max_pages = max_pages, since_days = since_days,
+    publication_types = publication_types, contracting_rules = contracting_rules,
+    screen_details = screen_details, max_detail = max_detail,
+    screen_notice = screen_notice, max_notice = max_notice,
+    username = username, password = password, cache_dir = cache_dir,
+    relevant_only = relevant_only, headless = headless
   )
-  # Canonical date column names, shared with the API connectors (the portal
-  # headers are e.g. "Veroeffentlicht" / "Angebots- / Teilnahmefrist").
-  names(tenders)[grepl("frist", names(tenders), ignore.case = TRUE)] <- "Frist"
-  names(tenders)[grepl("ffentlich", names(tenders), ignore.case = TRUE)] <- "Veroeffentlicht"
-  # Classify by the portal's Verfahrensart ("Typ"), more reliable than the search
-  # type: "Beabsichtigte ..." = planned, "Vergeben ..." = awarded.
-  if (!is.null(tenders$Typ)) {
-    tenders$Veroeffentlichungstyp[grepl("beabsichtigt", tenders$Typ, ignore.case = TRUE)] <-
-      "Geplante Ausschreibung"
-    tenders$Veroeffentlichungstyp[grepl("vergeben", tenders$Typ, ignore.case = TRUE)] <-
-      "Vergebener Auftrag"
-  }
-  scored <- score_relevance(tenders, keywords = keywords)
-
-  dir.create(cache_dir, showWarnings = FALSE, recursive = TRUE)
-  if (isTRUE(screen_details)) {
-    f <- file.path(cache_dir, "detail_cache.rds")
-    scored <- enrich_with_details(session, scored, keywords = keywords,
-                                  max_detail = max_detail, cache = read_detail_cache(f))
-    write_detail_cache(attr(scored, "detail_cache"), f)
-  }
-  if (isTRUE(screen_notice)) {
-    f <- file.path(cache_dir, "notice_cache.rds")
-    scored <- enrich_with_notice(session, scored, keywords = keywords,
-                                 max_notice = max_notice, cache = read_notice_cache(f))
-    write_notice_cache(attr(scored, "notice_cache"), f)
-  }
-
-  scored <- apply_title_excludes(scored, keywords = keywords) # drop pure building/maintenance titles
-  scored$Plattform <- "Vergabemarktplatz Brandenburg"
-  if (isTRUE(relevant_only)) scored <- scored[scored$is_relevant %in% TRUE, , drop = FALSE]
-  scored
 }
 
 #' Check Vergabemarktplatz Brandenburg for relevant tenders (single-portal report)

@@ -3,6 +3,23 @@
 VMP_BB_AUTH_URL <- "https://vergabemarktplatz.brandenburg.de//VMPCenter/company/auth.do?method=show"
 VMP_BB_SEARCH_URL <- "https://vergabemarktplatz.brandenburg.de/VMPCenter/common/project/search.do?method=showExtendedSearch"
 
+#' Build the cosinex VMP endpoint URLs for a portal
+#'
+#' All cosinex "Vergabemarktplatz" instances share the same paths and differ only
+#' in host and mount segment ("VMPCenter" for the Land marketplaces such as
+#' Brandenburg/NRW, "Center" for DTVP). Used by [cosinex_tenders()].
+#' @param base_url Portal host (e.g. `"https://www.evergabe.nrw.de"`).
+#' @param mount Mount segment (`"VMPCenter"` or `"Center"`).
+#' @return A list with `auth` and `search` URLs.
+#' @noRd
+cosinex_urls <- function(base_url, mount = "VMPCenter") {
+  base <- sub("/+$", "", base_url)
+  list(
+    auth   = sprintf("%s/%s/company/auth.do?method=show", base, mount),
+    search = sprintf("%s/%s/common/project/search.do?method=showExtendedSearch", base, mount)
+  )
+}
+
 #' Start a chromote browser session
 #'
 #' Creates a headless Chrome session via `chromote`. The portal performs
@@ -33,6 +50,8 @@ vmp_bb_session <- function(headless = TRUE) {
 #' @param session A session from [vmp_bb_session()].
 #' @param username,password Credentials (default env vars `VMP_BB_USERNAME` /
 #'   `VMP_BB_PASSWORD`).
+#' @param auth_url Login (Keycloak SSO) URL (default the Brandenburg one; other
+#'   cosinex portals pass their own via `cosinex_urls()`).
 #' @return The `session`, invisibly. Errors if the login is rejected.
 #' @export
 #' @examples
@@ -42,13 +61,14 @@ vmp_bb_session <- function(headless = TRUE) {
 #' }
 vmp_bb_login <- function(session,
                          username = Sys.getenv("VMP_BB_USERNAME"),
-                         password = Sys.getenv("VMP_BB_PASSWORD")) {
+                         password = Sys.getenv("VMP_BB_PASSWORD"),
+                         auth_url = VMP_BB_AUTH_URL) {
   if (!nzchar(username) || !nzchar(password)) {
     stop("Missing credentials. Set 'VMP_BB_USERNAME' and 'VMP_BB_PASSWORD' ",
          "(e.g. in your .Renviron).", call. = FALSE)
   }
 
-  cdp_navigate(session, VMP_BB_AUTH_URL, wait = 5)
+  cdp_navigate(session, auth_url, wait = 5)
   if (!cdp_wait_for(session, "#username", timeout = 20)) {
     stop("Login page did not load (no '#username' field).", call. = FALSE)
   }
@@ -97,6 +117,11 @@ vmp_bb_filter_hash <- function(publication_types, contracting_rules, page = 1) {
 #' @param contracting_rules Procurement regulations to include. Default `"VOL"`
 #'   (VgV / VOL/A / UVgO). Others: `"VOB"`, `"VSVGV"`, `"SEKTVO"`, `"OTHER"`.
 #' @param max_pages Maximum number of result pages to scrape (default `Inf`).
+#' @param search_url Extended-search URL (default the Brandenburg one; other
+#'   cosinex portals pass their own via `cosinex_urls()`).
+#' @param stop_before Optional `Date`: stop paging once a result page is entirely
+#'   older than this (results are sorted newest-first). Bounds the scrape for
+#'   large portals/award histories; `NULL` (default) scrapes up to `max_pages`.
 #' @return A tibble with one row per tender (all pages combined). The `Aktion`
 #'   column holds the project detail URL; the `Veroeffentlichungstyp` column
 #'   labels each row ("Ausschreibung" / "Geplante Ausschreibung").
@@ -109,7 +134,9 @@ vmp_bb_filter_hash <- function(publication_types, contracting_rules, page = 1) {
 vmp_bb_scrape_tenders <- function(session,
                                   publication_types = c("ExAnte", "Tender"),
                                   contracting_rules = "VOL",
-                                  max_pages = Inf) {
+                                  max_pages = Inf,
+                                  search_url = VMP_BB_SEARCH_URL,
+                                  stop_before = NULL) {
   labels <- c(ExAnte = "Geplante Ausschreibung",
               Tender = "Ausschreibung",
               ExPost = "Vergebener Auftrag")
@@ -118,7 +145,7 @@ vmp_bb_scrape_tenders <- function(session,
   out <- list()
   for (pt in publication_types) {
     hash <- vmp_bb_filter_hash(pt, contracting_rules, page = 1)
-    cdp_navigate(session, paste0(VMP_BB_SEARCH_URL, "#", hash), wait = 7)
+    cdp_navigate(session, paste0(search_url, "#", hash), wait = 7)
     if (!cdp_wait_for(session, ".browsePagesText", timeout = 25)) {
       warning(sprintf("Results did not load for publication type '%s'.", pt), call. = FALSE)
       next
@@ -137,6 +164,19 @@ vmp_bb_scrape_tenders <- function(session,
     for (p in seq_len(n_pages)) {
       message(sprintf("  [%s] page %02d/%02d", label, p, n_pages))
       tbls[[p]] <- scrape_current_table(session)
+      # Sorted newest-first: once a whole page is older than stop_before, the
+      # rest is out of the date window -> stop paging (bounds award histories).
+      if (!is.null(stop_before)) {
+        vcol <- grep("ffentlich", names(tbls[[p]]), ignore.case = TRUE, value = TRUE)
+        if (length(vcol)) {
+          d <- .parse_pub_date(tbls[[p]][[vcol[1]]])
+          if (length(d) && all(!is.na(d)) && all(d < stop_before)) {
+            message(sprintf("  [%s] page %02d older than %s -> stop.", label, p,
+                            format(stop_before)))
+            break
+          }
+        }
+      }
       if (p < n_pages && !next_page(session, p)) break
     }
     df <- dplyr::bind_rows(tbls)

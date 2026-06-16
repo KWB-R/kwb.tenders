@@ -8,7 +8,9 @@ vmp_bb_scrape_tenders(
   session,
   publication_types = c("ExAnte", "Tender"),
   contracting_rules = "VOL",
-  max_pages = Inf
+  max_pages = Inf,
+  search_url = VMP_BB_SEARCH_URL,
+  stop_before = NULL
 )
 }
 \arguments{
@@ -22,6 +24,13 @@ Further option: \code{"ExPost"} (Vergebener Auftrag).}
 (VgV / VOL/A / UVgO). Others: \code{"VOB"}, \code{"VSVGV"}, \code{"SEKTVO"}, \code{"OTHER"}.}
 
 \item{max_pages}{Maximum number of result pages to scrape (default \code{Inf}).}
+
+\item{search_url}{Extended-search URL (default the Brandenburg one; other
+cosinex portals pass their own via \code{cosinex_urls()}).}
+
+\item{stop_before}{Optional \code{Date}: stop paging once a result page is entirely
+older than this (results are sorted newest-first). Bounds the scrape for
+large portals/award histories; \code{NULL} (default) scrapes up to \code{max_pages}.}
 }
 \value{
 A tibble with one row per tender (all pages combined). The \code{Aktion}

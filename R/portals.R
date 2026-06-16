@@ -139,23 +139,24 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' Screen all configured portals into one combined report
 #'
 #' Convenience entry point (used by the scheduled GitHub Action): wires the
-#' built-in connectors -- Vergabemarktplatz Brandenburg ([vmp_bb_tenders()]), the federal
-#' Datenservice ([oeffentlichevergabe_tenders()]) and TED ([ted_tenders()]) --
-#' and runs them through [screen_portals()]. Only VMP-BB can use a login; the API
-#' portals are login-free, and a portal that fails is skipped (the others still
-#' produce the report).
+#' built-in connectors -- the cosinex marketplaces Vergabemarktplatz Brandenburg
+#' ([vmp_bb_tenders()]), Vergabemarktplatz NRW ([vmp_nrw_tenders()]) and DTVP
+#' ([dtvp_tenders()]), the federal Datenservice ([oeffentlichevergabe_tenders()])
+#' and TED ([ted_tenders()]) -- and runs them through [screen_portals()]. The
+#' searches are login-free (only VMP-BB optionally logs in for the notice layer),
+#' and a portal that fails is skipped (the others still produce the report).
 #'
 #' @param dir Output directory (default `"reports"`).
-#' @param vmp_bb,oeffentlichevergabe,ted Enable each source (all `TRUE`).
+#' @param vmp_bb,nrw,dtvp,oeffentlichevergabe,ted Enable each source (all `TRUE`).
 #' @param vmp_bb_login,vmp_bb_notice Log in / read notice PDFs for VMP-BB
 #'   (default `FALSE`; need `VMP_BB_*` secrets).
 #' @param since_days Unified look-back window in days, applied to every portal by
 #'   publication date (default `30`): the API connectors fetch this many days and a
 #'   final filter trims all sources (incl. VMP-BB) to the same window.
-#' @param vmp_bb_contracting_rules VMP-BB procurement regulations (Vergabeart),
-#'   default `"VOL"` (VgV / VOL/A / UVgO; excludes VOB/Bau). See
-#'   [vmp_bb_scrape_tenders()] for other values. The API portals have no such
-#'   filter (construction is excluded there via the CPV-45 veto).
+#' @param cosinex_contracting_rules Procurement regulations (Vergabeart) for the
+#'   cosinex portals (Brandenburg/NRW/DTVP), default `"VOL"` (VgV / VOL/A / UVgO;
+#'   excludes VOB/Bau). See [vmp_bb_scrape_tenders()] for other values. The API
+#'   portals have no such filter (construction is excluded via the CPV-45 veto).
 #' @param keywords Keyword groups (default [tender_keywords()]).
 #' @param verbose Print progress (default `TRUE`).
 #' @return Invisibly, the combined scored tibble.
@@ -165,17 +166,33 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' screen_all_portals(vmp_bb_login = TRUE, vmp_bb_notice = TRUE)
 #' }
 screen_all_portals <- function(dir = "reports",
-                               vmp_bb = TRUE, oeffentlichevergabe = TRUE, ted = TRUE,
+                               vmp_bb = TRUE, nrw = TRUE, dtvp = TRUE,
+                               oeffentlichevergabe = TRUE, ted = TRUE,
                                vmp_bb_login = FALSE, vmp_bb_notice = FALSE,
-                               since_days = 30, vmp_bb_contracting_rules = "VOL",
+                               since_days = 30, cosinex_contracting_rules = "VOL",
                                keywords = tender_keywords(), verbose = TRUE) {
   sources <- list()
+  cosinex_pt <- c("ExAnte", "Tender", "ExPost") # planned + active + awarded
   if (isTRUE(vmp_bb)) {
     sources[["Vergabemarktplatz Brandenburg"]] <- function() {
       vmp_bb_tenders(keywords = keywords, login = vmp_bb_login,
                      screen_notice = vmp_bb_notice, cache_dir = dir, relevant_only = TRUE,
-                     publication_types = c("ExAnte", "Tender", "ExPost"),
-                     contracting_rules = vmp_bb_contracting_rules)
+                     since_days = since_days, publication_types = cosinex_pt,
+                     contracting_rules = cosinex_contracting_rules)
+    }
+  }
+  if (isTRUE(nrw)) {
+    sources[["Vergabemarktplatz NRW"]] <- function() {
+      vmp_nrw_tenders(keywords = keywords, cache_dir = dir, relevant_only = TRUE,
+                      since_days = since_days, publication_types = cosinex_pt,
+                      contracting_rules = cosinex_contracting_rules)
+    }
+  }
+  if (isTRUE(dtvp)) {
+    sources[["Deutsches Vergabeportal (DTVP)"]] <- function() {
+      dtvp_tenders(keywords = keywords, cache_dir = dir, relevant_only = TRUE,
+                   since_days = since_days, publication_types = cosinex_pt,
+                   contracting_rules = cosinex_contracting_rules)
     }
   }
   if (isTRUE(oeffentlichevergabe)) {

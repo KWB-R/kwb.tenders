@@ -91,6 +91,35 @@ write_tender_report <- function(tenders, dir = "reports",
   ))
 }
 
+#' Build the per-platform breakdown and search-window header lines (plain text)
+#'
+#' Lists every screened portal with its relevant-hit count (so a portal screened
+#' with zero hits is still visible) and the publication-date span actually
+#' covered. Shared by both renderers.
+#' @noRd
+report_meta_lines <- function(tenders, relevant) {
+  out <- character()
+  plats <- unique(c(as.character(tenders$Plattform), as.character(relevant$Plattform)))
+  plats <- plats[!is.na(plats) & nzchar(plats)]
+  if (length(plats) > 0) {
+    relp <- as.character(relevant$Plattform)
+    cnt <- vapply(plats, function(p) sum(relp == p, na.rm = TRUE), integer(1))
+    o <- order(cnt, decreasing = TRUE)
+    out <- c(out, sprintf("Treffer je Plattform: %s",
+                          paste(sprintf("%s (%d)", plats[o], cnt[o]), collapse = ", ")))
+  }
+  if (!is.null(tenders$Veroeffentlicht)) {
+    vd <- .parse_pub_date(tenders$Veroeffentlicht)
+    vd <- vd[!is.na(vd)]
+    if (length(vd) > 0) {
+      out <- c(out, sprintf("Suchzeitraum: %s bis %s (%d Tage)",
+                            format(min(vd)), format(max(vd)),
+                            as.integer(max(vd) - min(vd)) + 1L))
+    }
+  }
+  out
+}
+
 #' Render the Markdown summary for a report
 #' @noRd
 render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date) {
@@ -118,6 +147,9 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
     brk <- paste(sprintf("%s (%d)", names(tab), as.integer(tab)), collapse = ", ")
     lines <- c(lines, sprintf("Treffer je Gruppe: %s", brk), "")
   }
+
+  ml <- report_meta_lines(tenders, relevant)
+  if (length(ml) > 0) lines <- c(lines, ml, "")
 
   if (nrow(new_relevant) > 0) {
     lines <- c(
@@ -246,6 +278,9 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   )
   if (nzchar(grp_line)) {
     head_part <- c(head_part, sprintf("<p class=\"muted\">%s</p>", esc(grp_line)))
+  }
+  for (ln in report_meta_lines(tenders, relevant)) {
+    head_part <- c(head_part, sprintf("<p class=\"muted\">%s</p>", esc(ln)))
   }
 
   if (nrow(relevant) == 0L) {

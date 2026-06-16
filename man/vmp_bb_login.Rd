@@ -7,7 +7,8 @@
 vmp_bb_login(
   session,
   username = Sys.getenv("VMP_BB_USERNAME"),
-  password = Sys.getenv("VMP_BB_PASSWORD")
+  password = Sys.getenv("VMP_BB_PASSWORD"),
+  auth_url = VMP_BB_AUTH_URL
 )
 }
 \arguments{
@@ -15,6 +16,9 @@ vmp_bb_login(
 
 \item{username, password}{Credentials (default env vars \code{VMP_BB_USERNAME} /
 \code{VMP_BB_PASSWORD}).}
+
+\item{auth_url}{Login (Keycloak SSO) URL (default the Brandenburg one; other
+cosinex portals pass their own via \code{cosinex_urls()}).}
 }
 \value{
 The \code{session}, invisibly. Errors if the login is rejected.
