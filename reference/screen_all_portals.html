@@ -65,8 +65,8 @@ produce the report).</p>
 <span>  ted <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  vmp_bb_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  vmp_bb_notice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  oeffentlichevergabe_days <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  ted_since_days <span class="op">=</span> <span class="fl">90</span>,</span>
+<span>  since_days <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  vmp_bb_contracting_rules <span class="op">=</span> <span class="st">"VOL"</span>,</span>
 <span>  keywords <span class="op">=</span> <span class="fu"><a href="tender_keywords.html">tender_keywords</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -89,12 +89,17 @@ produce the report).</p>
 (default <code>FALSE</code>; need <code>VMP_BB_*</code> secrets).</p></dd>
 
 
-<dt id="arg-oeffentlichevergabe-days">oeffentlichevergabe_days<a class="anchor" aria-label="anchor" href="#arg-oeffentlichevergabe-days"></a></dt>
-<dd><p>Days of OCDS notices to fetch (default <code>8</code>).</p></dd>
+<dt id="arg-since-days">since_days<a class="anchor" aria-label="anchor" href="#arg-since-days"></a></dt>
+<dd><p>Unified look-back window in days, applied to every portal by
+publication date (default <code>30</code>): the API connectors fetch this many days and a
+final filter trims all sources (incl. VMP-BB) to the same window.</p></dd>
 
 
-<dt id="arg-ted-since-days">ted_since_days<a class="anchor" aria-label="anchor" href="#arg-ted-since-days"></a></dt>
-<dd><p>TED look-back window in days (default <code>90</code>).</p></dd>
+<dt id="arg-vmp-bb-contracting-rules">vmp_bb_contracting_rules<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-contracting-rules"></a></dt>
+<dd><p>VMP-BB procurement regulations (Vergabeart),
+default <code>"VOL"</code> (VgV / VOL/A / UVgO; excludes VOB/Bau). See
+<code><a href="vmp_bb_scrape_tenders.html">vmp_bb_scrape_tenders()</a></code> for other values. The API portals have no such
+filter (construction is excluded there via the CPV-45 veto).</p></dd>
 
 
 <dt id="arg-keywords">keywords<a class="anchor" aria-label="anchor" href="#arg-keywords"></a></dt>

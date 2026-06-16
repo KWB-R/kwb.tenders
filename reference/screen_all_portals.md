@@ -22,8 +22,8 @@ screen_all_portals(
   ted = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
-  oeffentlichevergabe_days = 8,
-  ted_since_days = 90,
+  since_days = 30,
+  vmp_bb_contracting_rules = "VOL",
   keywords = tender_keywords(),
   verbose = TRUE
 )
@@ -44,13 +44,20 @@ screen_all_portals(
   Log in / read notice PDFs for VMP-BB (default `FALSE`; need `VMP_BB_*`
   secrets).
 
-- oeffentlichevergabe_days:
+- since_days:
 
-  Days of OCDS notices to fetch (default `8`).
+  Unified look-back window in days, applied to every portal by
+  publication date (default `30`): the API connectors fetch this many
+  days and a final filter trims all sources (incl. VMP-BB) to the same
+  window.
 
-- ted_since_days:
+- vmp_bb_contracting_rules:
 
-  TED look-back window in days (default `90`).
+  VMP-BB procurement regulations (Vergabeart), default `"VOL"` (VgV /
+  VOL/A / UVgO; excludes VOB/Bau). See
+  [`vmp_bb_scrape_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_scrape_tenders.md)
+  for other values. The API portals have no such filter (construction is
+  excluded there via the CPV-45 veto).
 
 - keywords:
 

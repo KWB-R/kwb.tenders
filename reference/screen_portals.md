@@ -17,6 +17,7 @@ screen_portals(
   portal = "tenders",
   keywords = tender_keywords(),
   keep_types = c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag"),
+  since_days = NULL,
   verbose = TRUE
 )
 ```
@@ -46,6 +47,12 @@ screen_portals(
   Keep only these `Veroeffentlichungstyp` values (default:
   Ausschreibung, Geplante Ausschreibung and Vergebener Auftrag -\> own
   section each). `NULL` keeps all types.
+
+- since_days:
+
+  If set, keep only notices whose `Veroeffentlicht` (publication date)
+  is within the last `since_days` days; `NULL` (default) applies no date
+  filter. Used to unify the look-back window across portals.
 
 - verbose:
 
