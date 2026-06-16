@@ -14,6 +14,14 @@ on:
         description: "VMP-BB: also read Bekanntmachung PDFs (forces login; default ON). Needs VMP_BB_* secrets."
         type: boolean
         default: true
+      nrw_login:
+        description: "NRW: log in before scraping (default OFF). Needs an NRW account + VMP_NRW_* secrets."
+        type: boolean
+        default: false
+      nrw_notice:
+        description: "NRW: also read Bekanntmachung PDFs (forces login; default OFF). Needs VMP_NRW_* secrets."
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -25,6 +33,8 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       VMP_BB_USERNAME: ${{ secrets.VMP_BB_USERNAME }}
       VMP_BB_PASSWORD: ${{ secrets.VMP_BB_PASSWORD }}
+      VMP_NRW_USERNAME: ${{ secrets.VMP_NRW_USERNAME }}
+      VMP_NRW_PASSWORD: ${{ secrets.VMP_NRW_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -65,13 +75,13 @@ jobs:
           else
             echo "No previous state found (first run)."
           fi
-          if [ -f ../gh-pages/reports/detail_cache.rds ]; then
-            cp ../gh-pages/reports/detail_cache.rds reports/
-            echo "Restored detail-screening cache (only new tenders get deep-screened)."
+          if ls ../gh-pages/reports/detail_cache*.rds >/dev/null 2>&1; then
+            cp ../gh-pages/reports/detail_cache*.rds reports/
+            echo "Restored detail-screening cache(s) (only new tenders get deep-screened)."
           fi
-          if [ -f ../gh-pages/reports/notice_cache.rds ]; then
-            cp ../gh-pages/reports/notice_cache.rds reports/
-            echo "Restored notice-screening cache."
+          if ls ../gh-pages/reports/notice_cache*.rds >/dev/null 2>&1; then
+            cp ../gh-pages/reports/notice_cache*.rds reports/
+            echo "Restored notice-screening cache(s)."
           fi
 
       - name: Check tenders
@@ -81,7 +91,7 @@ jobs:
         # it must NOT be set on Windows. Hence it is applied only here, not in
         # vmp_bb_session()'s defaults.
         run: >
-          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::screen_all_portals(vmp_bb_login = ${{ github.event.inputs.login != 'false' && 'TRUE' || 'FALSE' }}, vmp_bb_notice = ${{ github.event.inputs.notice != 'false' && 'TRUE' || 'FALSE' }})'
+          Rscript -e 'chromote::set_chrome_args(c("--no-sandbox", "--disable-dev-shm-usage")); kwb.tenders::screen_all_portals(vmp_bb_login = ${{ github.event.inputs.login != 'false' && 'TRUE' || 'FALSE' }}, vmp_bb_notice = ${{ github.event.inputs.notice != 'false' && 'TRUE' || 'FALSE' }}, nrw_login = ${{ github.event.inputs.nrw_login == 'true' && 'TRUE' || 'FALSE' }}, nrw_notice = ${{ github.event.inputs.nrw_notice == 'true' && 'TRUE' || 'FALSE' }})'
 
       - name: Publish report to gh-pages
         run: |

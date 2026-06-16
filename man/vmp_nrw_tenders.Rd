@@ -4,21 +4,31 @@
 \alias{vmp_nrw_tenders}
 \title{Vergabemarktplatz NRW connector (cosinex)}
 \usage{
-vmp_nrw_tenders(keywords = tender_keywords(), ...)
+vmp_nrw_tenders(
+  keywords = tender_keywords(),
+  username = Sys.getenv("VMP_NRW_USERNAME"),
+  password = Sys.getenv("VMP_NRW_PASSWORD"),
+  ...
+)
 }
 \arguments{
 \item{keywords}{Keyword groups (default \code{\link[=tender_keywords]{tender_keywords()}}).}
 
+\item{username, password}{NRW credentials for the optional login (default env
+vars \code{VMP_NRW_USERNAME} / \code{VMP_NRW_PASSWORD}).}
+
 \item{...}{Further arguments passed to \code{\link[=cosinex_tenders]{cosinex_tenders()}} (e.g. \code{login},
-\code{publication_types}, \code{contracting_rules}, \code{since_days}, \code{max_pages},
-\code{cache_dir}, \code{relevant_only}).}
+\code{screen_notice}, \code{publication_types}, \code{contracting_rules}, \code{since_days},
+\code{max_pages}, \code{cache_dir}, \code{relevant_only}).}
 }
 \value{
 A scored tibble with \code{Plattform = "Vergabemarktplatz NRW"}.
 }
 \description{
 Thin wrapper around \code{\link[=cosinex_tenders]{cosinex_tenders()}} for Vergabemarktplatz NRW
-(\code{evergabe.nrw.de}). The published search is login-free.
+(\code{evergabe.nrw.de}). The published search is login-free; an optional login
+(\code{login = TRUE}, or \code{screen_notice = TRUE} for the Bekanntmachung-PDF layer)
+uses the same cosinex Keycloak flow as Brandenburg and needs an NRW account.
 }
 \examples{
 \dontrun{

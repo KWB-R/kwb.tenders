@@ -103,22 +103,30 @@ cosinex_tenders <- function(base_url, plattform, slug, mount = "VMPCenter",
 #' Vergabemarktplatz NRW connector (cosinex)
 #'
 #' Thin wrapper around [cosinex_tenders()] for Vergabemarktplatz NRW
-#' (`evergabe.nrw.de`). The published search is login-free.
+#' (`evergabe.nrw.de`). The published search is login-free; an optional login
+#' (`login = TRUE`, or `screen_notice = TRUE` for the Bekanntmachung-PDF layer)
+#' uses the same cosinex Keycloak flow as Brandenburg and needs an NRW account.
 #'
 #' @param keywords Keyword groups (default [tender_keywords()]).
+#' @param username,password NRW credentials for the optional login (default env
+#'   vars `VMP_NRW_USERNAME` / `VMP_NRW_PASSWORD`).
 #' @param ... Further arguments passed to [cosinex_tenders()] (e.g. `login`,
-#'   `publication_types`, `contracting_rules`, `since_days`, `max_pages`,
-#'   `cache_dir`, `relevant_only`).
+#'   `screen_notice`, `publication_types`, `contracting_rules`, `since_days`,
+#'   `max_pages`, `cache_dir`, `relevant_only`).
 #' @return A scored tibble with `Plattform = "Vergabemarktplatz NRW"`.
 #' @export
 #' @examples
 #' \dontrun{
 #' vmp_nrw_tenders(max_pages = 2)
 #' }
-vmp_nrw_tenders <- function(keywords = tender_keywords(), ...) {
+vmp_nrw_tenders <- function(keywords = tender_keywords(),
+                            username = Sys.getenv("VMP_NRW_USERNAME"),
+                            password = Sys.getenv("VMP_NRW_PASSWORD"),
+                            ...) {
   cosinex_tenders(base_url = "https://www.evergabe.nrw.de",
                   plattform = "Vergabemarktplatz NRW", slug = "vmp_nrw",
-                  mount = "VMPCenter", keywords = keywords, ...)
+                  mount = "VMPCenter", keywords = keywords,
+                  username = username, password = password, ...)
 }
 
 #' Deutsches Vergabeportal (DTVP) connector (cosinex)

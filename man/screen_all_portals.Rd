@@ -14,6 +14,8 @@ screen_all_portals(
   ted = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
+  nrw_login = FALSE,
+  nrw_notice = FALSE,
   since_days = 30,
   cosinex_contracting_rules = "VOL",
   keywords = tender_keywords(),
@@ -27,6 +29,9 @@ screen_all_portals(
 
 \item{vmp_bb_login, vmp_bb_notice}{Log in / read notice PDFs for VMP-BB
 (default \code{FALSE}; need \verb{VMP_BB_*} secrets).}
+
+\item{nrw_login, nrw_notice}{Log in / read notice PDFs for Vergabemarktplatz NRW
+(default \code{FALSE}; need an NRW account + \verb{VMP_NRW_*} secrets).}
 
 \item{since_days}{Unified look-back window in days, applied to every portal by
 publication date (default \code{30}): the API connectors fetch this many days and a

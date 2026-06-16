@@ -64,8 +64,8 @@ vmp_bb_login <- function(session,
                          password = Sys.getenv("VMP_BB_PASSWORD"),
                          auth_url = VMP_BB_AUTH_URL) {
   if (!nzchar(username) || !nzchar(password)) {
-    stop("Missing credentials. Set 'VMP_BB_USERNAME' and 'VMP_BB_PASSWORD' ",
-         "(e.g. in your .Renviron).", call. = FALSE)
+    stop("Missing credentials: provide username/password ",
+         "(e.g. via VMP_BB_* / VMP_NRW_* env vars in your .Renviron).", call. = FALSE)
   }
 
   cdp_navigate(session, auth_url, wait = 5)

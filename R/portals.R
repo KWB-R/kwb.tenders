@@ -165,6 +165,8 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' @param vmp_bb,nrw,dtvp,berlin,oeffentlichevergabe,ted Enable each source (all `TRUE`).
 #' @param vmp_bb_login,vmp_bb_notice Log in / read notice PDFs for VMP-BB
 #'   (default `FALSE`; need `VMP_BB_*` secrets).
+#' @param nrw_login,nrw_notice Log in / read notice PDFs for Vergabemarktplatz NRW
+#'   (default `FALSE`; need an NRW account + `VMP_NRW_*` secrets).
 #' @param since_days Unified look-back window in days, applied to every portal by
 #'   publication date (default `30`): the API connectors fetch this many days and a
 #'   final filter trims all sources (incl. VMP-BB) to the same window.
@@ -184,6 +186,7 @@ screen_all_portals <- function(dir = "reports",
                                vmp_bb = TRUE, nrw = TRUE, dtvp = TRUE, berlin = TRUE,
                                oeffentlichevergabe = TRUE, ted = TRUE,
                                vmp_bb_login = FALSE, vmp_bb_notice = FALSE,
+                               nrw_login = FALSE, nrw_notice = FALSE,
                                since_days = 30, cosinex_contracting_rules = "VOL",
                                keywords = tender_keywords(), verbose = TRUE) {
   sources <- list()
@@ -198,9 +201,9 @@ screen_all_portals <- function(dir = "reports",
   }
   if (isTRUE(nrw)) {
     sources[["Vergabemarktplatz NRW"]] <- function() {
-      vmp_nrw_tenders(keywords = keywords, cache_dir = dir, relevant_only = TRUE,
-                      since_days = since_days, publication_types = cosinex_pt,
-                      contracting_rules = cosinex_contracting_rules)
+      vmp_nrw_tenders(keywords = keywords, login = nrw_login, screen_notice = nrw_notice,
+                      cache_dir = dir, relevant_only = TRUE, since_days = since_days,
+                      publication_types = cosinex_pt, contracting_rules = cosinex_contracting_rules)
     }
   }
   if (isTRUE(dtvp)) {
