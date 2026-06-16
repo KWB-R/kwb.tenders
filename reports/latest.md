@@ -1,12 +1,12 @@
 # Vergabe-Report (TENDERS)
 
-Stand: 2026-06-16 08:25 CEST
+Stand: 2026-06-16 08:54 CEST
 
-Gesamt: 105 Ausschreibungen, davon 105 relevant, 0 neu.
+Gesamt: 106 Ausschreibungen, davon 106 relevant, 0 neu.
 
-Treffer je Gruppe: Regenwasser & Gewässer (35), Grundwasser (33), Wasseraufbereitung & -wiederverwendung (32), Smart City & Infrastruktur (18), Wasser & Risiko (12), Energie & Ressourcen (8)
+Treffer je Gruppe: Regenwasser & Gewässer (35), Grundwasser (33), Wasseraufbereitung & -wiederverwendung (32), Smart City & Infrastruktur (18), Wasser & Risiko (13), Energie & Ressourcen (8)
 
-## Ausschreibung (103)
+## Ausschreibung (104)
 
 | Plattform | Kurzbezeichnung | Typ | Vergabestelle | Erfuellungsort | Veroeffentlicht | Frist | groups | match_source | matched_cpv | score | matched_keywords | Link |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -15,6 +15,7 @@ Treffer je Gruppe: Regenwasser & Gewässer (35), Grundwasser (33), Wasseraufbere
 | Vergabe Brandenburg | Projektmanagement für Leistungen zur Umsetzung des Maßnahmenplans des Landesniedrigwasserkonzeptes 2.0 | VgV Ausschreibung |  |  | 09.06.2026 | 07.08.2026 | Wasseraufbereitung & -wiederverwendung, Smart City & Infrastruktur, Regenwasser & Gewässer, Grundwasser | cpv | Beratung in den Bereichen Wasserversorgung und Abfälle; Behandlung von Oberflächengewässern | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268655) |
 | Vergabe Brandenburg | Stadt Cottbus OV 123-2026 Beprobung und analytische Sanierungsbegleitung ehem. Potsdamer Chemiehandel Cottbus | VgV Ausschreibung |  |  | 04.06.2026 | 06.07.2026 | Grundwasser | cpv | Bodenuntersuchungen | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268416) |
 | Vergabe Brandenburg | Prüfung der ortsveränderlichen elektrischen Betriebsmittel in den Verwaltungsobjekten der Kreisverwaltung Barnim 2026 | UVgO Ausschreibung |  |  | 02.06.2026 | 24.06.2026 | Wasser & Risiko | cpv |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268215) |
+| Vergabe Brandenburg | Renaturierung Cantdorfer Wiesenteich: Deklarationsanalytik und abfallrechtliche Begleitung | VgV Ausschreibung |  |  | 31.05.2026 | 06.07.2026 | Wasser & Risiko | cpv |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268168) |
 | Vergabe Brandenburg | Renaturierung Cantdorfer Wiesenteich: Deklarationsanalytik und abfallrechtliche Begleitung | VgV Ausschreibung |  |  | 31.05.2026 | 06.07.2026 | Wasser & Risiko | cpv |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=268168) |
 | Vergabe Brandenburg | Gesamtbeschaffung eines PDMS Patientendatenmanagementsystemsund eines Anästhesieplanungs- / -dokumentationssystems | UVgO TNW |  |  | 22.04.2024 | nv | Smart City & Infrastruktur | detail |  | 0 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPCenter/secured/company/projectForwarding.do?pid=220660) |
 | Oeffentliche Vergabe (Bund) | Projektmanagement für Leistungen zur Umsetzung des Maßnahmenplans des Landesniedrigwasserkonzeptes 2.0 |  | Ministerium für Land- und Ernährungswirtschaft, Umwelt und Verbraucherschutz des Landes Brandenburg | Potsdam | 2026-06-07 |  | Wasseraufbereitung & -wiederverwendung, Smart City & Infrastruktur, Regenwasser & Gewässer, Grundwasser | cpv | Beratung in den Bereichen Wasserversorgung und Abfälle; Behandlung von Oberflächengewässern | 4 |  | [Details](https://vergabemarktplatz.brandenburg.de/VMPSatellite/notice/CXP9YY8HSMP/documents) |
