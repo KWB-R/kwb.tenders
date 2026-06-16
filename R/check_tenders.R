@@ -23,6 +23,8 @@
 #' @param username,password Credentials when `login = TRUE` (default env vars
 #'   `VMP_BB_USERNAME` / `VMP_BB_PASSWORD`).
 #' @param cache_dir Directory for the detail/notice caches (default `"reports"`).
+#' @param relevant_only Return only relevant tenders (default `FALSE`; the combined
+#'   multi-portal run in [screen_all_portals()] sets this `TRUE`).
 #' @param headless Run chromote headless (default `TRUE`).
 #' @return A scored tibble with a `Plattform` column.
 #' @export
@@ -42,6 +44,7 @@ vmp_bb_tenders <- function(keywords = tender_keywords(),
                            username = Sys.getenv("VMP_BB_USERNAME"),
                            password = Sys.getenv("VMP_BB_PASSWORD"),
                            cache_dir = "reports",
+                           relevant_only = FALSE,
                            headless = TRUE) {
   if (isTRUE(screen_notice)) login <- TRUE # notice PDFs need a logged-in session
 
@@ -77,6 +80,7 @@ vmp_bb_tenders <- function(keywords = tender_keywords(),
 
   scored <- apply_title_excludes(scored, keywords = keywords) # drop pure building/maintenance titles
   scored$Plattform <- "Vergabe Brandenburg"
+  if (isTRUE(relevant_only)) scored <- scored[scored$is_relevant %in% TRUE, , drop = FALSE]
   scored
 }
 

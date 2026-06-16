@@ -136,7 +136,7 @@ screen_all_portals <- function(dir = "reports",
   if (isTRUE(vmp_bb)) {
     sources[["Vergabe Brandenburg"]] <- function() {
       vmp_bb_tenders(keywords = keywords, login = vmp_bb_login,
-                     screen_notice = vmp_bb_notice, cache_dir = dir)
+                     screen_notice = vmp_bb_notice, cache_dir = dir, relevant_only = TRUE)
     }
   }
   if (isTRUE(oeffentlichevergabe)) {

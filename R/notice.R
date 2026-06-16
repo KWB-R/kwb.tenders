@@ -194,7 +194,7 @@ enrich_with_notice <- function(session, tenders, keywords = tender_keywords(),
       if (nzchar(ng[i])) "notice"
     ), collapse = "+")
   }, character(1))
-  tenders$is_relevant <- nzchar(tenders$groups)
+  tenders$is_relevant <- !is.na(tenders$groups) & nzchar(tenders$groups)
 
   screened <- have | fetched
   upd <- data.frame(tender_id = ids[screened], notice_groups = tenders$notice_groups[screened],

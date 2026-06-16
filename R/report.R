@@ -44,7 +44,8 @@ write_tender_report <- function(tenders, dir = "reports",
     tenders$matched_cpv <- matched_cpv_names(tenders$cpv)
   }
 
-  relevant <- tenders[tenders$is_relevant %in% TRUE, , drop = FALSE]
+  relevant <- tenders[tenders$is_relevant %in% TRUE &
+                        !is.na(tenders$groups) & nzchar(as.character(tenders$groups)), , drop = FALSE]
   new_relevant <- relevant[relevant$is_new %in% TRUE, , drop = FALSE]
 
   # Excel workbook ----------------------------------------------------------
@@ -136,6 +137,7 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
   } else {
     rep("Ausschreibung", nrow(relevant))
   }
+  typ[is.na(typ) | !nzchar(typ)] <- "Ausschreibung" # no blank-heading section
   ord <- c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag")
   present <- c(intersect(ord, unique(typ)), setdiff(unique(typ), ord))
   for (tp in present) {
@@ -270,6 +272,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   } else {
     rep("Ausschreibung", nrow(relevant))
   }
+  typ[is.na(typ) | !nzchar(typ)] <- "Ausschreibung" # no blank-heading section
   ord <- c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag")
   present <- c(intersect(ord, unique(typ)), setdiff(unique(typ), ord))
   body_parts <- "<p class=\"muted\">Tabellen: oben global suchen, Spalten per Klick sortieren, unten je Spalte filtern.</p>"

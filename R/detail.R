@@ -323,7 +323,7 @@ enrich_with_details <- function(session, tenders, keywords = tender_keywords(),
       if (nzchar(tenders$cpv_groups[i])) "cpv"
     ), collapse = "+")
   }, character(1))
-  tenders$is_relevant <- nzchar(tenders$groups)
+  tenders$is_relevant <- !is.na(tenders$groups) & nzchar(tenders$groups)
 
   # Updated cache: current tenders that were cached before OR freshly screened
   # (prunes entries for tenders that dropped out of the listing).

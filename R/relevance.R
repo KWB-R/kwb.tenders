@@ -146,7 +146,7 @@ score_relevance <- function(tenders, keywords = tender_keywords()) {
     paste(unique(terms_per_row[[i]]), collapse = ", ")
   }, character(1))
   tenders$score <- as.integer(score)
-  tenders$is_relevant <- nzchar(tenders$groups)
+  tenders$is_relevant <- !is.na(tenders$groups) & nzchar(tenders$groups)
 
   tenders[order(-tenders$score), , drop = FALSE]
 }
@@ -224,7 +224,7 @@ score_layered <- function(df, title_cols, text_cols = character(), cpv_col = NUL
     if (nzchar(text_hits[i])) "detail",
     if (nzchar(cpv_hits[i])) "cpv"
   ), collapse = "+"), character(1)) else character(0)
-  df$is_relevant <- nzchar(df$groups)
+  df$is_relevant <- !is.na(df$groups) & nzchar(df$groups)
   df$score <- if (n) vapply(strsplit(df$groups, ", ", fixed = TRUE),
                             function(g) sum(nzchar(g)), integer(1)) else integer(0)
   out <- df[order(-df$score), , drop = FALSE]

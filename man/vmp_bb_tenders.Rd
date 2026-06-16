@@ -17,6 +17,7 @@ vmp_bb_tenders(
   username = Sys.getenv("VMP_BB_USERNAME"),
   password = Sys.getenv("VMP_BB_PASSWORD"),
   cache_dir = "reports",
+  relevant_only = FALSE,
   headless = TRUE
 )
 }
@@ -44,6 +45,9 @@ see \code{\link[=enrich_with_notice]{enrich_with_notice()}}).}
 \code{VMP_BB_USERNAME} / \code{VMP_BB_PASSWORD}).}
 
 \item{cache_dir}{Directory for the detail/notice caches (default \code{"reports"}).}
+
+\item{relevant_only}{Return only relevant tenders (default \code{FALSE}; the combined
+multi-portal run in \code{\link[=screen_all_portals]{screen_all_portals()}} sets this \code{TRUE}).}
 
 \item{headless}{Run chromote headless (default \code{TRUE}).}
 }
