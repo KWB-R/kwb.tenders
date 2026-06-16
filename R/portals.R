@@ -68,6 +68,68 @@ combine_tenders <- function(tenders_list) {
   out
 }
 
+#' Normalise a tender title for cross-portal matching (translit + alnum only)
+#' @noRd
+.norm_title <- function(x) {
+  x <- tolower(as.character(x))
+  ae <- intToUtf8(0x00e4); oe <- intToUtf8(0x00f6); ue <- intToUtf8(0x00fc); ss <- intToUtf8(0x00df)
+  x <- gsub(ae, "ae", x, fixed = TRUE); x <- gsub(oe, "oe", x, fixed = TRUE)
+  x <- gsub(ue, "ue", x, fixed = TRUE); x <- gsub(ss, "ss", x, fixed = TRUE)
+  x <- gsub("^\\s*[0-9]{8}-?[0-9]?\\s*", "", x) # strip a leading CPV code
+  x <- gsub("[^a-z0-9]+", " ", x)
+  trimws(x)
+}
+
+#' Merge duplicate tenders that appear on several portals
+#'
+#' The same tender is often syndicated across sources (a federal tender in the
+#' Datenservice *and* in TED, a Land tender on its cosinex marketplace *and* the
+#' Datenservice, ...). Rows whose normalised title matches are collapsed to one,
+#' keeping the highest-priority platform's record (Datenservice > TED > cosinex >
+#' Berlin) and listing every source in `Plattform`; the relevance `groups` are
+#' unioned. Only titles with >= 20 normalised characters are matched, so short
+#' generic titles are never merged.
+#'
+#' @param tenders A combined scored tibble (see [combine_tenders()]).
+#' @param verbose Print how many rows were merged (default `TRUE`).
+#' @return `tenders` with cross-portal duplicates merged (fewer or equal rows).
+#' @export
+#' @examples
+#' a <- data.frame(Kurzbezeichnung = "Erneuerung Schaltanlage Wasserwerk Lodmannshagen",
+#'                 Plattform = "TED (EU)", groups = "Grundwasser", stringsAsFactors = FALSE)
+#' b <- data.frame(Kurzbezeichnung = "Erneuerung Schaltanlage Wasserwerk Lodmannshagen",
+#'                 Plattform = "Oeffentliche Vergabe (Bund)", groups = "Grundwasser",
+#'                 stringsAsFactors = FALSE)
+#' dedupe_tenders(combine_tenders(list(a, b)))
+dedupe_tenders <- function(tenders, verbose = TRUE) {
+  n <- nrow(tenders)
+  if (n < 2L || is.null(tenders$Kurzbezeichnung)) return(tenders)
+  key <- .norm_title(tenders$Kurzbezeichnung)
+  short <- nchar(key) < 20L
+  key[short] <- paste0("uniq-", which(short)) # too short/generic -> never merge
+  plat <- if (!is.null(tenders$Plattform)) as.character(tenders$Plattform) else rep("", n)
+  grp <- if (!is.null(tenders$groups)) as.character(tenders$groups) else rep("", n)
+  prio <- c("Oeffentliche Vergabe (Bund)" = 1, "TED (EU)" = 2,
+            "Vergabemarktplatz Brandenburg" = 3, "Vergabemarktplatz NRW" = 4,
+            "Deutsches Vergabeportal (DTVP)" = 5, "Vergabeplattform Berlin" = 6)
+  rank <- unname(ifelse(is.na(prio[plat]), 99L, prio[plat]))
+  drop <- logical(n)
+  for (k in unique(key[duplicated(key)])) {
+    idx <- which(key == k)
+    ord <- idx[order(rank[idx])]
+    rep_i <- ord[1]
+    drop[setdiff(idx, rep_i)] <- TRUE
+    tenders$Plattform[rep_i] <- paste(unique(plat[ord][nzchar(plat[ord])]), collapse = ", ")
+    allg <- unique(unlist(strsplit(grp[idx], ", ", fixed = TRUE)))
+    allg <- allg[nzchar(allg)]
+    if (length(allg)) tenders$groups[rep_i] <- paste(allg, collapse = ", ")
+  }
+  if (verbose && any(drop)) {
+    message(sprintf("Dedup: merged %d cross-portal duplicate(s).", sum(drop)))
+  }
+  tenders[!drop, , drop = FALSE]
+}
+
 #' Run several portal connectors, combine and write one report
 #'
 #' Calls each source connector (a function returning a scored tender tibble),
@@ -87,6 +149,8 @@ combine_tenders <- function(tenders_list) {
 #' @param since_days If set, keep only notices whose `Veroeffentlicht` (publication
 #'   date) is within the last `since_days` days; `NULL` (default) applies no date
 #'   filter. Used to unify the look-back window across portals.
+#' @param dedupe Merge cross-portal duplicates with [dedupe_tenders()] before
+#'   writing (default `TRUE`).
 #' @param verbose Print progress (default `TRUE`).
 #' @return Invisibly, the combined scored tibble.
 #' @export
@@ -102,6 +166,7 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
                            keep_types = c("Ausschreibung", "Geplante Ausschreibung",
                                           "Vergebener Auftrag"),
                            since_days = NULL,
+                           dedupe = TRUE,
                            verbose = TRUE) {
   results <- lapply(names(sources), function(nm) {
     if (verbose) message("== Source: ", nm, " ==")
@@ -120,6 +185,7 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
     message("No tenders from any source.")
     return(invisible(combined))
   }
+  if (isTRUE(dedupe)) combined <- dedupe_tenders(combined, verbose = verbose)
   # Keep only the configured notice types (default keeps all three -> own report
   # section each; pass a narrower keep_types to e.g. drop awards).
   if (length(keep_types) && !is.null(combined$Veroeffentlichungstyp)) {

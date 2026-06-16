@@ -11,6 +11,7 @@ screen_portals(
   keywords = tender_keywords(),
   keep_types = c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag"),
   since_days = NULL,
+  dedupe = TRUE,
   verbose = TRUE
 )
 }
@@ -32,6 +33,9 @@ each). \code{NULL} keeps all types.}
 \item{since_days}{If set, keep only notices whose \code{Veroeffentlicht} (publication
 date) is within the last \code{since_days} days; \code{NULL} (default) applies no date
 filter. Used to unify the look-back window across portals.}
+
+\item{dedupe}{Merge cross-portal duplicates with \code{\link[=dedupe_tenders]{dedupe_tenders()}} before
+writing (default \code{TRUE}).}
 
 \item{verbose}{Print progress (default \code{TRUE}).}
 }

@@ -116,10 +116,11 @@ group_breakdown <- function(df) {
 #' @noRd
 report_meta_lines <- function(tenders, relevant) {
   out <- character()
-  plats <- unique(c(as.character(tenders$Plattform), as.character(relevant$Plattform)))
+  splat <- function(v) unlist(strsplit(as.character(v), ", ", fixed = TRUE)) # merged rows list several
+  plats <- unique(c(splat(tenders$Plattform), splat(relevant$Plattform)))
   plats <- plats[!is.na(plats) & nzchar(plats)]
   if (length(plats) > 0) {
-    relp <- as.character(relevant$Plattform)
+    relp <- splat(relevant$Plattform)
     cnt <- vapply(plats, function(p) sum(relp == p, na.rm = TRUE), integer(1))
     o <- order(cnt, decreasing = TRUE)
     out <- c(out, sprintf("Treffer je Plattform: %s",

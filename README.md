@@ -76,7 +76,7 @@ the oeffentlichevergabe feed.
 ## Automated checks (GitHub Actions)
 
 The workflow `.github/workflows/check-tenders.yaml` runs `screen_all_portals()`
-on a schedule (weekdays 05:00 UTC by default) and publishes the report to the
+on a schedule (weekdays 03:00 UTC by default) and publishes the report to the
 **`gh-pages`** branch under `reports/`:
 
 - Overview (sortable / filterable table): <https://kwb-r.github.io/kwb.tenders/reports/latest.html>
