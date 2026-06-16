@@ -1,7 +1,7 @@
 # Screen all configured portals into one combined report
 
 Convenience entry point (used by the scheduled GitHub Action): wires the
-built-in connectors – Vergabe Brandenburg
+built-in connectors – Vergabemarktplatz Brandenburg
 ([`vmp_bb_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/vmp_bb_tenders.md)),
 the federal Datenservice
 ([`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md))

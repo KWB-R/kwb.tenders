@@ -10,9 +10,9 @@ them
 enriches via the detail and (optional) notice layers, applies the title
 exclusions
 ([`apply_title_excludes()`](https://kwb-r.github.io/kwb.tenders/reference/apply_title_excludes.md))
-and tags `Plattform = "Vergabe Brandenburg"`. Returns the scored tibble
-(it writes no report); the detail/notice screening caches are
-read/written under `cache_dir`.
+and tags `Plattform = "Vergabemarktplatz Brandenburg"`. Returns the
+scored tibble (it writes no report); the detail/notice screening caches
+are read/written under `cache_dir`.
 
 ## Usage
 

@@ -16,7 +16,7 @@ screen_portals(
   dir = "reports",
   portal = "tenders",
   keywords = tender_keywords(),
-  keep_types = c("Ausschreibung", "Geplante Ausschreibung"),
+  keep_types = c("Ausschreibung", "Geplante Ausschreibung", "Vergebener Auftrag"),
   verbose = TRUE
 )
 ```
@@ -43,8 +43,9 @@ screen_portals(
 
 - keep_types:
 
-  Keep only these `Veroeffentlichungstyp` values (default the biddable
-  ones -\> drops "Vergebener Auftrag"/awards). `NULL` keeps all.
+  Keep only these `Veroeffentlichungstyp` values (default:
+  Ausschreibung, Geplante Ausschreibung and Vergebener Auftrag -\> own
+  section each). `NULL` keeps all types.
 
 - verbose:
 
