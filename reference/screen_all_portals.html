@@ -76,6 +76,7 @@ and a portal that fails is skipped (the others still produce the report).</p>
 <span>  oeffentlichevergabe <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ted <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  servicebund <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  evergabe_online <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  vmp_bb_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  vmp_bb_notice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nrw_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -98,6 +99,12 @@ and a portal that fails is skipped (the others still produce the report).</p>
 <dt id="arg-vmp-bb-nrw-dtvp-berlin-oeffentlichevergabe-ted-servicebund">vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted, servicebund<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-nrw-dtvp-berlin-oeffentlichevergabe-ted-servicebund"></a></dt>
 <dd><p>Enable each
 source (all <code>TRUE</code>).</p></dd>
+
+
+<dt id="arg-evergabe-online">evergabe_online<a class="anchor" aria-label="anchor" href="#arg-evergabe-online"></a></dt>
+<dd><p>Enable the evergabe-online.de connector (default
+<code>TRUE</code>; login-free Wicket scrape, <code><a href="evergabe_online_tenders.html">evergabe_online_tenders()</a></code>). Adds
+below-threshold federal/Land/Kommunal notices not in the Datenservice.</p></dd>
 
 
 <dt id="arg-vmp-bb-login-vmp-bb-notice">vmp_bb_login, vmp_bb_notice<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-login-vmp-bb-notice"></a></dt>

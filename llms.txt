@@ -53,6 +53,9 @@ remotes::install_github("KWB-R/kwb.tenders")
   CPV codes)
 - [`enrich_with_notice()`](https://kwb-r.github.io/kwb.tenders/reference/enrich_with_notice.md)
   : Enrich tenders with a notice-PDF (Bekanntmachung) relevance layer
+- [`evergabe_online_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/evergabe_online_tenders.md)
+  : e-Vergabe des Bundes (evergabe-online.de) connector (HTTP,
+  login-free)
 - [`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md)
   : Screen the Datenservice Oeffentlicher Einkauf
   (oeffentlichevergabe.de)

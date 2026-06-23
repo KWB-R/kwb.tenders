@@ -34,6 +34,7 @@ screen_all_portals(
   oeffentlichevergabe = TRUE,
   ted = TRUE,
   servicebund = TRUE,
+  evergabe_online = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   nrw_login = FALSE,
@@ -54,6 +55,14 @@ screen_all_portals(
 - vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted, servicebund:
 
   Enable each source (all `TRUE`).
+
+- evergabe_online:
+
+  Enable the evergabe-online.de connector (default `TRUE`; login-free
+  Wicket scrape,
+  [`evergabe_online_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/evergabe_online_tenders.md)).
+  Adds below-threshold federal/Land/Kommunal notices not in the
+  Datenservice.
 
 - vmp_bb_login, vmp_bb_notice:
 
