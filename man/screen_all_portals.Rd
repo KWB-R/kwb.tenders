@@ -12,6 +12,7 @@ screen_all_portals(
   berlin = TRUE,
   oeffentlichevergabe = TRUE,
   ted = TRUE,
+  servicebund = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   nrw_login = FALSE,
@@ -25,7 +26,8 @@ screen_all_portals(
 \arguments{
 \item{dir}{Output directory (default \code{"reports"}).}
 
-\item{vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted}{Enable each source (all \code{TRUE}).}
+\item{vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted, servicebund}{Enable each
+source (all \code{TRUE}).}
 
 \item{vmp_bb_login, vmp_bb_notice}{Log in / read notice PDFs for VMP-BB
 (default \code{FALSE}; need \verb{VMP_BB_*} secrets).}
@@ -54,8 +56,9 @@ Convenience entry point (used by the scheduled GitHub Action): wires the
 built-in connectors -- the cosinex marketplaces Vergabemarktplatz Brandenburg
 (\code{\link[=vmp_bb_tenders]{vmp_bb_tenders()}}), Vergabemarktplatz NRW (\code{\link[=vmp_nrw_tenders]{vmp_nrw_tenders()}}) and DTVP
 (\code{\link[=dtvp_tenders]{dtvp_tenders()}}), Vergabeplattform Berlin (\code{\link[=berlin_tenders]{berlin_tenders()}}), the federal
-Datenservice (\code{\link[=oeffentlichevergabe_tenders]{oeffentlichevergabe_tenders()}}) and TED (\code{\link[=ted_tenders]{ted_tenders()}}) --
-and runs them through \code{\link[=screen_portals]{screen_portals()}}. The
+Datenservice (\code{\link[=oeffentlichevergabe_tenders]{oeffentlichevergabe_tenders()}}), TED (\code{\link[=ted_tenders]{ted_tenders()}}) and the
+service portal (\code{\link[=servicebund_tenders]{servicebund_tenders()}}) -- and runs them through
+\code{\link[=screen_portals]{screen_portals()}}. The
 searches are login-free (only VMP-BB optionally logs in for the notice layer),
 and a portal that fails is skipped (the others still produce the report).
 }

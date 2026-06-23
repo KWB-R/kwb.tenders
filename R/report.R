@@ -192,10 +192,67 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
   lines
 }
 
+#' Short platform label for compact link / cross-tab display
+#' @noRd
+.platform_short <- function(p) {
+  m <- c("Oeffentliche Vergabe (Bund)" = "Bund", "TED (EU)" = "TED",
+         "Vergabemarktplatz Brandenburg" = "BB", "Vergabemarktplatz NRW" = "NRW",
+         "Deutsches Vergabeportal (DTVP)" = "DTVP", "Vergabeplattform Berlin" = "Berlin",
+         "Serviceportal des Bundes (service.bund.de)" = "service.bund")
+  out <- unname(m[as.character(p)])
+  ifelse(is.na(out), as.character(p), out)
+}
+
+#' Per-portal (label, url) links for one tender row; for a deduped tender on
+#' several portals returns one pair per portal, else a single "Details" link.
+#' @noRd
+.portal_link_pairs <- function(plattform, portal_links, project_url) {
+  multi <- length(plattform) == 1L && !is.na(plattform) && grepl(", ", plattform, fixed = TRUE)
+  if (multi && length(portal_links) == 1L && !is.na(portal_links) && nzchar(portal_links)) {
+    labs <- .platform_short(strsplit(plattform, ", ", fixed = TRUE)[[1]])
+    urls <- strsplit(portal_links, " | ", fixed = TRUE)[[1]]
+    nn <- min(length(labs), length(urls))
+    keep <- which(nzchar(urls[seq_len(nn)]))
+    if (length(keep)) return(list(label = labs[keep], url = urls[keep]))
+  }
+  if (length(project_url) == 1L && !is.na(project_url) && nzchar(project_url)) {
+    return(list(label = "Details", url = project_url))
+  }
+  list(label = character(), url = character())
+}
+
+#' Cross-portal redundancy matrix as HTML (empty if no tender is multi-listed)
+#' @noRd
+redundancy_matrix_html <- function(relevant, esc) {
+  if (is.null(relevant$Plattform) || !nrow(relevant)) return(character())
+  sets <- lapply(strsplit(as.character(relevant$Plattform), ", ", fixed = TRUE), unique)
+  nmulti <- sum(vapply(sets, length, integer(1)) >= 2L)
+  if (nmulti == 0L) return(character()) # nothing redundant -> no table
+  plats <- sort(unique(unlist(sets)))
+  M <- matrix(0L, length(plats), length(plats), dimnames = list(plats, plats))
+  for (s in sets) for (a in s) for (b in s) M[a, b] <- M[a, b] + 1L
+  short <- .platform_short(plats)
+  th <- paste0("<th></th>", paste0("<th>", esc(short), "</th>", collapse = ""))
+  rows <- vapply(seq_along(plats), function(i) {
+    cells <- vapply(seq_along(plats), function(j) {
+      v <- M[i, j]
+      sprintf("<td%s>%s</td>", if (i != j && v > 0L) " class=\"hot\"" else "",
+              if (v > 0L) v else "")
+    }, character(1))
+    paste0("<tr><th>", esc(short[i]), "</th>", paste(cells, collapse = ""), "</tr>")
+  }, character(1))
+  c("<h2>Plattform-&Uuml;berschneidungen</h2>",
+    sprintf(paste0("<p class=\"muted\">%d von %d relevanten Vergaben sind auf &ge;2 Portalen ",
+                   "gelistet. Diagonale = gesamt je Portal, au&szlig;erhalb = gemeinsam.</p>"),
+            nmulti, nrow(relevant)),
+    "<table class=\"xtab\"><thead><tr>", th, "</tr></thead><tbody>",
+    rows, "</tbody></table>")
+}
+
 #' Build a Markdown table from a sensible subset of tender columns
 #' @noRd
 tender_markdown_table <- function(df) {
-  meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
+  meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url", "portal_links",
             "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups", "excluded",
             "Plattform", "Beschreibung", "ocid", "publication_number", "Veroeffentlicht",
@@ -222,8 +279,12 @@ tender_markdown_table <- function(df) {
   rows <- vapply(seq_len(nrow(df)), function(i) {
     vals <- vapply(cols, function(cn) esc(df[[cn]][i]), character(1))
     if (has_link) {
-      u <- df$project_url[i]
-      vals <- c(vals, if (!is.na(u) && nzchar(u)) sprintf("[Details](%s)", u) else "")
+      pr <- .portal_link_pairs(if (!is.null(df$Plattform)) df$Plattform[i] else NA,
+                               if (!is.null(df$portal_links)) df$portal_links[i] else NA,
+                               df$project_url[i])
+      vals <- c(vals, if (length(pr$url)) {
+        paste(sprintf("[%s](%s)", pr$label, pr$url), collapse = " / ")
+      } else "")
     }
     paste0("| ", paste(vals, collapse = " | "), " |")
   }, character(1))
@@ -246,7 +307,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     gsub(">", "&gt;", x, fixed = TRUE)
   }
 
-  meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url",
+  meta <- c("tender_id", "is_relevant", "is_new", "Aktion", "project_url", "portal_links",
             "groups", "match_source", "score", "matched_keywords", "matched_cpv",
             "detail_groups", "cpv", "cpv_groups", "notice_groups", "excluded",
             "Plattform", "Beschreibung", "ocid", "publication_number", "Veroeffentlicht",
@@ -266,6 +327,9 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     "h1{font-size:1.4rem}.muted{color:#666;font-size:14px}",
     "table.dataTable td{vertical-align:top;font-size:13px}",
     "tfoot input{width:100%;box-sizing:border-box;font-weight:normal}",
+    "table.xtab{border-collapse:collapse;font-size:13px;margin:.4rem 0 1rem}",
+    "table.xtab th,table.xtab td{border:1px solid #ddd;padding:3px 9px;text-align:center}",
+    "table.xtab td.hot{background:#fde9a9;font-weight:bold}",
     sep = "\n"
   )
 
@@ -286,6 +350,7 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
   for (ln in report_meta_lines(tenders, relevant)) {
     head_part <- c(head_part, sprintf("<p class=\"muted\">%s</p>", esc(ln)))
   }
+  head_part <- c(head_part, redundancy_matrix_html(relevant, esc))
 
   if (nrow(relevant) == 0L) {
     return(c(head_part, "<p>Keine relevanten Vergaben gefunden.</p>", "</body></html>"))
@@ -296,8 +361,11 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     body_rows <- vapply(seq_len(nrow(sub)), function(i) {
       vals <- vapply(data_cols, function(cn) esc(sub[[cn]][i]), character(1))
       neu <- if (isTRUE(sub$is_new[i])) "ja" else "nein"
-      u <- if (!is.null(sub$project_url)) sub$project_url[i] else NA_character_
-      link <- if (!is.na(u) && nzchar(u)) sprintf("<a href=\"%s\" target=\"_blank\">Details</a>", esc(u)) else ""
+      pr <- .portal_link_pairs(if (!is.null(sub$Plattform)) sub$Plattform[i] else NA,
+                               if (!is.null(sub$portal_links)) sub$portal_links[i] else NA,
+                               if (!is.null(sub$project_url)) sub$project_url[i] else NA)
+      link <- paste(sprintf("<a href=\"%s\" target=\"_blank\">%s</a>", esc(pr$url), esc(pr$label)),
+                    collapse = " ")
       paste0("<tr>", paste0("<td>", c(vals, neu, link), "</td>", collapse = ""), "</tr>")
     }, character(1))
     paste0("<table id=\"", id, "\" class=\"display tender-table\" style=\"width:100%\">",

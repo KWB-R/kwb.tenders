@@ -69,7 +69,8 @@ cosinex_tenders <- function(base_url, plattform, slug, mount = "VMPCenter",
   # Canonical date column names, shared with the API connectors (the portal
   # headers are e.g. "Veroeffentlicht" / "Angebots- / Teilnahmefrist").
   names(tenders)[grepl("frist", names(tenders), ignore.case = TRUE)] <- "Frist"
-  names(tenders)[grepl("ffentlich", names(tenders), ignore.case = TRUE)] <- "Veroeffentlicht"
+  names(tenders)[grepl("ffentlich", names(tenders), ignore.case = TRUE) &
+                   !grepl("typ", names(tenders), ignore.case = TRUE)] <- "Veroeffentlicht"
   # Classify by the portal's Verfahrensart ("Typ") where present: "Beabsichtigte
   # ..." = planned, "Vergeben ..." = awarded (refines the search-type label).
   if (!is.null(tenders$Typ)) {

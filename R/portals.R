@@ -109,9 +109,12 @@ dedupe_tenders <- function(tenders, verbose = TRUE) {
   key[short] <- paste0("uniq-", which(short)) # too short/generic -> never merge
   plat <- if (!is.null(tenders$Plattform)) as.character(tenders$Plattform) else rep("", n)
   grp <- if (!is.null(tenders$groups)) as.character(tenders$groups) else rep("", n)
+  akt <- if (!is.null(tenders$Aktion)) as.character(tenders$Aktion) else rep("", n)
+  tenders$portal_links <- akt # per-portal detail links (Plattform order); merged rows keep all
   prio <- c("Oeffentliche Vergabe (Bund)" = 1, "TED (EU)" = 2,
             "Vergabemarktplatz Brandenburg" = 3, "Vergabemarktplatz NRW" = 4,
-            "Deutsches Vergabeportal (DTVP)" = 5, "Vergabeplattform Berlin" = 6)
+            "Deutsches Vergabeportal (DTVP)" = 5, "Vergabeplattform Berlin" = 6,
+            "Serviceportal des Bundes (service.bund.de)" = 7)
   rank <- unname(ifelse(is.na(prio[plat]), 99L, prio[plat]))
   drop <- logical(n)
   for (k in unique(key[duplicated(key)])) {
@@ -119,7 +122,10 @@ dedupe_tenders <- function(tenders, verbose = TRUE) {
     ord <- idx[order(rank[idx])]
     rep_i <- ord[1]
     drop[setdiff(idx, rep_i)] <- TRUE
-    tenders$Plattform[rep_i] <- paste(unique(plat[ord][nzchar(plat[ord])]), collapse = ", ")
+    ups <- unique(plat[ord]); ups <- ups[nzchar(ups)]
+    tenders$Plattform[rep_i] <- paste(ups, collapse = ", ")
+    tenders$portal_links[rep_i] <- paste(
+      vapply(ups, function(pp) akt[ord[plat[ord] == pp][1]], character(1)), collapse = " | ")
     allg <- unique(unlist(strsplit(grp[idx], ", ", fixed = TRUE)))
     allg <- allg[nzchar(allg)]
     if (length(allg)) tenders$groups[rep_i] <- paste(allg, collapse = ", ")
@@ -222,13 +228,15 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' built-in connectors -- the cosinex marketplaces Vergabemarktplatz Brandenburg
 #' ([vmp_bb_tenders()]), Vergabemarktplatz NRW ([vmp_nrw_tenders()]) and DTVP
 #' ([dtvp_tenders()]), Vergabeplattform Berlin ([berlin_tenders()]), the federal
-#' Datenservice ([oeffentlichevergabe_tenders()]) and TED ([ted_tenders()]) --
-#' and runs them through [screen_portals()]. The
+#' Datenservice ([oeffentlichevergabe_tenders()]), TED ([ted_tenders()]) and the
+#' service portal ([servicebund_tenders()]) -- and runs them through
+#' [screen_portals()]. The
 #' searches are login-free (only VMP-BB optionally logs in for the notice layer),
 #' and a portal that fails is skipped (the others still produce the report).
 #'
 #' @param dir Output directory (default `"reports"`).
-#' @param vmp_bb,nrw,dtvp,berlin,oeffentlichevergabe,ted Enable each source (all `TRUE`).
+#' @param vmp_bb,nrw,dtvp,berlin,oeffentlichevergabe,ted,servicebund Enable each
+#'   source (all `TRUE`).
 #' @param vmp_bb_login,vmp_bb_notice Log in / read notice PDFs for VMP-BB
 #'   (default `FALSE`; need `VMP_BB_*` secrets).
 #' @param nrw_login,nrw_notice Log in / read notice PDFs for Vergabemarktplatz NRW
@@ -250,7 +258,7 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' }
 screen_all_portals <- function(dir = "reports",
                                vmp_bb = TRUE, nrw = TRUE, dtvp = TRUE, berlin = TRUE,
-                               oeffentlichevergabe = TRUE, ted = TRUE,
+                               oeffentlichevergabe = TRUE, ted = TRUE, servicebund = TRUE,
                                vmp_bb_login = FALSE, vmp_bb_notice = FALSE,
                                nrw_login = FALSE, nrw_notice = FALSE,
                                since_days = 30, cosinex_contracting_rules = "VOL",
@@ -294,6 +302,11 @@ screen_all_portals <- function(dir = "reports",
   if (isTRUE(ted)) {
     sources[["TED (EU)"]] <- function() {
       ted_tenders(keywords = keywords, since_days = since_days, verbose = verbose)
+    }
+  }
+  if (isTRUE(servicebund)) {
+    sources[["Serviceportal des Bundes (service.bund.de)"]] <- function() {
+      servicebund_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
     }
   }
   screen_portals(sources, dir = dir, portal = "tenders", keywords = keywords,

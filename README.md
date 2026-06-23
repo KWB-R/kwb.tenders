@@ -55,7 +55,7 @@ configurable). See `vignette("tutorial")` for details.
 
 ## Covered portals
 
-`screen_all_portals()` queries six sources and writes one combined report:
+`screen_all_portals()` queries seven sources and writes one combined report:
 
 | Portal | Connector | Access |
 |---|---|---|
@@ -65,6 +65,7 @@ configurable). See `vignette("tutorial")` for details.
 | Vergabeplattform Berlin | `berlin_tenders()` | berlin.de / iTWO; HTTP, login-free |
 | Datenservice Öffentlicher Einkauf (Bund + Länder + Kommunen) | `oeffentlichevergabe_tenders()` | OCDS API, login-free |
 | TED (EU) | `ted_tenders()` | TED v3 API, login-free |
+| Serviceportal des Bundes (service.bund.de) | `servicebund_tenders()` | RSS, login-free; Bund/Länder/Kommunen, adds notices not in the Datenservice |
 
 **e-Vergabe des Bundes (evergabe-online.de)** needs no separate connector: its
 announcements are published into the *Datenservice Öffentlicher Einkauf*
