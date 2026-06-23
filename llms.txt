@@ -71,6 +71,8 @@ remotes::install_github("KWB-R/kwb.tenders")
   : Screen all configured portals into one combined report
 - [`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md)
   : Run several portal connectors, combine and write one report
+- [`servicebund_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/servicebund_tenders.md)
+  : service.bund.de tender connector (HTTP, login-free)
 - [`ted_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/ted_tenders.md)
   : Screen TED (Tenders Electronic Daily) for relevant tenders
 - [`tender_cpv_map()`](https://kwb-r.github.io/kwb.tenders/reference/tender_cpv_map.md)

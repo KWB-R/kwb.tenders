@@ -3,15 +3,17 @@
 built-in connectors – the cosinex marketplaces Vergabemarktplatz Brandenburg
 (vmp_bb_tenders()), Vergabemarktplatz NRW (vmp_nrw_tenders()) and DTVP
 (dtvp_tenders()), Vergabeplattform Berlin (berlin_tenders()), the federal
-Datenservice (oeffentlichevergabe_tenders()) and TED (ted_tenders()) –
-and runs them through screen_portals(). The
+Datenservice (oeffentlichevergabe_tenders()), TED (ted_tenders()) and the
+service portal (servicebund_tenders()) – and runs them through
+screen_portals(). The
 searches are login-free (only VMP-BB optionally logs in for the notice layer),
 and a portal that fails is skipped (the others still produce the report)."><meta property="og:description" content="Convenience entry point (used by the scheduled GitHub Action): wires the
 built-in connectors – the cosinex marketplaces Vergabemarktplatz Brandenburg
 (vmp_bb_tenders()), Vergabemarktplatz NRW (vmp_nrw_tenders()) and DTVP
 (dtvp_tenders()), Vergabeplattform Berlin (berlin_tenders()), the federal
-Datenservice (oeffentlichevergabe_tenders()) and TED (ted_tenders()) –
-and runs them through screen_portals(). The
+Datenservice (oeffentlichevergabe_tenders()), TED (ted_tenders()) and the
+service portal (servicebund_tenders()) – and runs them through
+screen_portals(). The
 searches are login-free (only VMP-BB optionally logs in for the notice layer),
 and a portal that fails is skipped (the others still produce the report)."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -56,8 +58,9 @@ and a portal that fails is skipped (the others still produce the report)."></hea
 built-in connectors – the cosinex marketplaces Vergabemarktplatz Brandenburg
 (<code><a href="vmp_bb_tenders.html">vmp_bb_tenders()</a></code>), Vergabemarktplatz NRW (<code><a href="vmp_nrw_tenders.html">vmp_nrw_tenders()</a></code>) and DTVP
 (<code><a href="dtvp_tenders.html">dtvp_tenders()</a></code>), Vergabeplattform Berlin (<code><a href="berlin_tenders.html">berlin_tenders()</a></code>), the federal
-Datenservice (<code><a href="oeffentlichevergabe_tenders.html">oeffentlichevergabe_tenders()</a></code>) and TED (<code><a href="ted_tenders.html">ted_tenders()</a></code>) –
-and runs them through <code><a href="screen_portals.html">screen_portals()</a></code>. The
+Datenservice (<code><a href="oeffentlichevergabe_tenders.html">oeffentlichevergabe_tenders()</a></code>), TED (<code><a href="ted_tenders.html">ted_tenders()</a></code>) and the
+service portal (<code><a href="servicebund_tenders.html">servicebund_tenders()</a></code>) – and runs them through
+<code><a href="screen_portals.html">screen_portals()</a></code>. The
 searches are login-free (only VMP-BB optionally logs in for the notice layer),
 and a portal that fails is skipped (the others still produce the report).</p>
     </div>
@@ -72,6 +75,7 @@ and a portal that fails is skipped (the others still produce the report).</p>
 <span>  berlin <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  oeffentlichevergabe <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ted <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  servicebund <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  vmp_bb_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  vmp_bb_notice <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  nrw_login <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -91,8 +95,9 @@ and a portal that fails is skipped (the others still produce the report).</p>
 <dd><p>Output directory (default <code>"reports"</code>).</p></dd>
 
 
-<dt id="arg-vmp-bb-nrw-dtvp-berlin-oeffentlichevergabe-ted">vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-nrw-dtvp-berlin-oeffentlichevergabe-ted"></a></dt>
-<dd><p>Enable each source (all <code>TRUE</code>).</p></dd>
+<dt id="arg-vmp-bb-nrw-dtvp-berlin-oeffentlichevergabe-ted-servicebund">vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted, servicebund<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-nrw-dtvp-berlin-oeffentlichevergabe-ted-servicebund"></a></dt>
+<dd><p>Enable each
+source (all <code>TRUE</code>).</p></dd>
 
 
 <dt id="arg-vmp-bb-login-vmp-bb-notice">vmp_bb_login, vmp_bb_notice<a class="anchor" aria-label="anchor" href="#arg-vmp-bb-login-vmp-bb-notice"></a></dt>

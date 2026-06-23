@@ -42,6 +42,6 @@ dedupe_tenders(combine_tenders(list(a, b)))
 #> Dedup: merged 1 cross-portal duplicate(s).
 #>                                    Kurzbezeichnung
 #> 2 Erneuerung Schaltanlage Wasserwerk Lodmannshagen
-#>                               Plattform      groups
-#> 2 Oeffentliche Vergabe (Bund), TED (EU) Grundwasser
+#>                               Plattform      groups portal_links
+#> 2 Oeffentliche Vergabe (Bund), TED (EU) Grundwasser           | 
 ```

@@ -11,9 +11,11 @@ and DTVP
 Vergabeplattform Berlin
 ([`berlin_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/berlin_tenders.md)),
 the federal Datenservice
-([`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md))
-and TED
+([`oeffentlichevergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/oeffentlichevergabe_tenders.md)),
+TED
 ([`ted_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/ted_tenders.md))
+and the service portal
+([`servicebund_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/servicebund_tenders.md))
 – and runs them through
 [`screen_portals()`](https://kwb-r.github.io/kwb.tenders/reference/screen_portals.md).
 The searches are login-free (only VMP-BB optionally logs in for the
@@ -31,6 +33,7 @@ screen_all_portals(
   berlin = TRUE,
   oeffentlichevergabe = TRUE,
   ted = TRUE,
+  servicebund = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   nrw_login = FALSE,
@@ -48,7 +51,7 @@ screen_all_portals(
 
   Output directory (default `"reports"`).
 
-- vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted:
+- vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted, servicebund:
 
   Enable each source (all `TRUE`).
 
