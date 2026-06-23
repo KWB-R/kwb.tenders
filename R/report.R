@@ -199,7 +199,8 @@ render_tender_markdown <- function(tenders, relevant, new_relevant, portal, date
          "Vergabemarktplatz Brandenburg" = "BB", "Vergabemarktplatz NRW" = "NRW",
          "Deutsches Vergabeportal (DTVP)" = "DTVP", "Vergabeplattform Berlin" = "Berlin",
          "Serviceportal des Bundes (service.bund.de)" = "service.bund",
-         "e-Vergabe des Bundes (evergabe-online.de)" = "e-Vergabe")
+         "e-Vergabe des Bundes (evergabe-online.de)" = "e-Vergabe",
+         "Deutsche eVergabe (deutsche-evergabe.de)" = "Dt.eVergabe")
   out <- unname(m[as.character(p)])
   ifelse(is.na(out), as.character(p), out)
 }

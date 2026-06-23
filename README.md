@@ -55,18 +55,20 @@ configurable). See `vignette("tutorial")` for details.
 
 ## Covered portals
 
-`screen_all_portals()` queries eight sources and writes one combined report:
+`screen_all_portals()` queries nine sources by default and writes one combined
+report:
 
 | Portal | Connector | Access |
 |---|---|---|
+| Datenservice Öffentlicher Einkauf (Bund + Länder + Kommunen) | `oeffentlichevergabe_tenders()` | OCDS API, login-free |
+| Deutsche eVergabe (deutsche-evergabe.de) | `deutsche_evergabe_tenders()` | Healy Hudson; chromote render, login-free |
+| Deutsches Vergabeportal (DTVP) | `dtvp_tenders()` | cosinex; login-free |
+| e-Vergabe des Bundes (evergabe-online.de) | `evergabe_online_tenders()` | HTTP/Wicket, login-free; below-threshold federal/Land/Kommunal notices not in the Datenservice |
+| Serviceportal des Bundes (service.bund.de) | `servicebund_tenders()` | RSS, login-free; Bund/Länder/Kommunen, adds notices not in the Datenservice |
+| TED (EU) | `ted_tenders()` | TED v3 API, login-free |
 | Vergabemarktplatz Brandenburg | `vmp_bb_tenders()` | cosinex; login-free (optional login) |
 | Vergabemarktplatz NRW | `vmp_nrw_tenders()` | cosinex; login-free (optional login) |
-| Deutsches Vergabeportal (DTVP) | `dtvp_tenders()` | cosinex; login-free |
 | Vergabeplattform Berlin | `berlin_tenders()` | berlin.de / iTWO; HTTP, login-free |
-| Datenservice Öffentlicher Einkauf (Bund + Länder + Kommunen) | `oeffentlichevergabe_tenders()` | OCDS API, login-free |
-| TED (EU) | `ted_tenders()` | TED v3 API, login-free |
-| Serviceportal des Bundes (service.bund.de) | `servicebund_tenders()` | RSS, login-free; Bund/Länder/Kommunen, adds notices not in the Datenservice |
-| e-Vergabe des Bundes (evergabe-online.de) | `evergabe_online_tenders()` | HTTP/Wicket, login-free; below-threshold federal/Land/Kommunal notices not in the Datenservice |
 
 **e-Vergabe des Bundes (evergabe-online.de):** its *above-threshold* (EU) notices
 already flow into the *Datenservice* and TED (covered above), but its
@@ -76,6 +78,50 @@ of the latest hits), so the connector adds genuine coverage — federal water bo
 Wasserbau) plus Länder/Kommunal water and wastewater associations. Login-free, but
 driven by an Apache-Wicket scrape (full-text search batched over the KWB keywords,
 title-based scoring); set `screen_all_portals(evergabe_online = FALSE)` to skip it.
+
+**Deutsche eVergabe (deutsche-evergabe.de):** a Healy-Hudson portal whose public
+dashboard is a DevExpress grid with no API/RSS, so the connector renders it with
+**chromote** (already used by the cosinex connectors). It searches the grid per
+keyword (`searchByText`) across all three dashboard categories — current tenders,
+Vorinformationen (planned) and Zuschlagsbekanntmachungen (awarded) — and enriches
+relevant hits via the login-free per-tender detail endpoint (Vergabestelle /
+Publikationsdatum / Angebotsfrist / CPV). On by default; the three-category render
+roughly triples its runtime, so `screen_all_portals(deutsche_evergabe = FALSE)`
+skips it and `deutsche_evergabe_tenders(status = "aktuell")` limits it to current
+notices only.
+
+### Coverage by notice type
+
+Every connector tags each notice as one of three publication types; the report
+groups them into three sections (English column header / German report label):
+**Planned** (*Geplante Ausschreibung* / Vorinformation) → **Current**
+(*Ausschreibung*) → **Awarded** (*Vergebener Auftrag*).
+
+| Portal | Planned | Current | Awarded |
+|---|:--:|:--:|:--:|
+| Datenservice Öffentlicher Einkauf (Bund) | ✅ | ✅ | ✅ |
+| Deutsche eVergabe (deutsche-evergabe.de) | ✅ | ✅ | ✅ |
+| Deutsches Vergabeportal (DTVP) | ✅ | ✅ | ✅ |
+| e-Vergabe des Bundes (evergabe-online.de) | ✅ | ✅ | ❌ ² |
+| Serviceportal des Bundes (service.bund.de) | ✅ ¹ | ✅ | ✅ |
+| TED (EU) | ✅ | ✅ | ✅ |
+| Vergabemarktplatz Brandenburg | ✅ | ✅ | ✅ |
+| Vergabemarktplatz NRW | ✅ | ✅ | ✅ |
+| Vergabeplattform Berlin | ✅ | ✅ | ✅ |
+
+✅ = the connector emits that type when the source carries it. The cosinex portals
+(Brandenburg / NRW / DTVP) actively query all three (`publication_types =
+ExAnte/Tender/ExPost`); Datenservice, TED and Berlin map it from the source's own
+notice tags; deutsche-evergabe switches the dashboard category (current /
+Vorinformation / Zuschlag).
+
+¹ service.bund.de has no separate planned feed, but forward-looking notices
+("Beabsichtigte Vergabe …", "Vorinformation …", ex-ante "Transparenzbekanntmachung")
+arrive inside the Ausschreibungen feed and are re-tagged *geplant* by title.
+
+² evergabe-online.de's login-free simple search has no notice-type/status filter and
+no separate award listing, so awarded notices are not reachable there — federal
+awards still arrive via TED and the Datenservice.
 
 ## Automated checks (GitHub Actions)
 

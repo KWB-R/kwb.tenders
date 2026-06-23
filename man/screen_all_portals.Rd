@@ -14,6 +14,7 @@ screen_all_portals(
   ted = TRUE,
   servicebund = TRUE,
   evergabe_online = TRUE,
+  deutsche_evergabe = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   nrw_login = FALSE,
@@ -33,6 +34,10 @@ source (all \code{TRUE}).}
 \item{evergabe_online}{Enable the evergabe-online.de connector (default
 \code{TRUE}; login-free Wicket scrape, \code{\link[=evergabe_online_tenders]{evergabe_online_tenders()}}). Adds
 below-threshold federal/Land/Kommunal notices not in the Datenservice.}
+
+\item{deutsche_evergabe}{Enable the deutsche-evergabe.de connector (default
+\code{TRUE}; login-free chromote render, \code{\link[=deutsche_evergabe_tenders]{deutsche_evergabe_tenders()}}). Covers
+planned, current and awarded notices via the dashboard category switch.}
 
 \item{vmp_bb_login, vmp_bb_notice}{Log in / read notice PDFs for VMP-BB
 (default \code{FALSE}; need \verb{VMP_BB_*} secrets).}

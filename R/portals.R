@@ -115,7 +115,8 @@ dedupe_tenders <- function(tenders, verbose = TRUE) {
             "Vergabemarktplatz Brandenburg" = 3, "Vergabemarktplatz NRW" = 4,
             "Deutsches Vergabeportal (DTVP)" = 5, "Vergabeplattform Berlin" = 6,
             "Serviceportal des Bundes (service.bund.de)" = 7,
-            "e-Vergabe des Bundes (evergabe-online.de)" = 8)
+            "e-Vergabe des Bundes (evergabe-online.de)" = 8,
+            "Deutsche eVergabe (deutsche-evergabe.de)" = 9)
   rank <- unname(ifelse(is.na(prio[plat]), 99L, prio[plat]))
   drop <- logical(n)
   for (k in unique(key[duplicated(key)])) {
@@ -241,6 +242,9 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' @param evergabe_online Enable the evergabe-online.de connector (default
 #'   `TRUE`; login-free Wicket scrape, [evergabe_online_tenders()]). Adds
 #'   below-threshold federal/Land/Kommunal notices not in the Datenservice.
+#' @param deutsche_evergabe Enable the deutsche-evergabe.de connector (default
+#'   `TRUE`; login-free chromote render, [deutsche_evergabe_tenders()]). Covers
+#'   planned, current and awarded notices via the dashboard category switch.
 #' @param vmp_bb_login,vmp_bb_notice Log in / read notice PDFs for VMP-BB
 #'   (default `FALSE`; need `VMP_BB_*` secrets).
 #' @param nrw_login,nrw_notice Log in / read notice PDFs for Vergabemarktplatz NRW
@@ -263,13 +267,47 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 screen_all_portals <- function(dir = "reports",
                                vmp_bb = TRUE, nrw = TRUE, dtvp = TRUE, berlin = TRUE,
                                oeffentlichevergabe = TRUE, ted = TRUE, servicebund = TRUE,
-                               evergabe_online = TRUE,
+                               evergabe_online = TRUE, deutsche_evergabe = TRUE,
                                vmp_bb_login = FALSE, vmp_bb_notice = FALSE,
                                nrw_login = FALSE, nrw_notice = FALSE,
                                since_days = 30, cosinex_contracting_rules = "VOL",
                                keywords = tender_keywords(), verbose = TRUE) {
   sources <- list()
   cosinex_pt <- c("ExAnte", "Tender", "ExPost") # planned + active + awarded
+  # Connectors added in alphabetical order of the platform name (matches README).
+  if (isTRUE(deutsche_evergabe)) {
+    sources[["Deutsche eVergabe (deutsche-evergabe.de)"]] <- function() {
+      deutsche_evergabe_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
+    }
+  }
+  if (isTRUE(dtvp)) {
+    sources[["Deutsches Vergabeportal (DTVP)"]] <- function() {
+      dtvp_tenders(keywords = keywords, cache_dir = dir, relevant_only = TRUE,
+                   since_days = since_days, publication_types = cosinex_pt,
+                   contracting_rules = cosinex_contracting_rules)
+    }
+  }
+  if (isTRUE(evergabe_online)) {
+    sources[["e-Vergabe des Bundes (evergabe-online.de)"]] <- function() {
+      evergabe_online_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
+    }
+  }
+  if (isTRUE(oeffentlichevergabe)) {
+    sources[["Oeffentliche Vergabe (Bund)"]] <- function() {
+      oeffentlichevergabe_tenders(keywords = keywords, days = since_days,
+                                  verbose = verbose)
+    }
+  }
+  if (isTRUE(servicebund)) {
+    sources[["Serviceportal des Bundes (service.bund.de)"]] <- function() {
+      servicebund_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
+    }
+  }
+  if (isTRUE(ted)) {
+    sources[["TED (EU)"]] <- function() {
+      ted_tenders(keywords = keywords, since_days = since_days, verbose = verbose)
+    }
+  }
   if (isTRUE(vmp_bb)) {
     sources[["Vergabemarktplatz Brandenburg"]] <- function() {
       vmp_bb_tenders(keywords = keywords, login = vmp_bb_login,
@@ -285,38 +323,10 @@ screen_all_portals <- function(dir = "reports",
                       publication_types = cosinex_pt, contracting_rules = cosinex_contracting_rules)
     }
   }
-  if (isTRUE(dtvp)) {
-    sources[["Deutsches Vergabeportal (DTVP)"]] <- function() {
-      dtvp_tenders(keywords = keywords, cache_dir = dir, relevant_only = TRUE,
-                   since_days = since_days, publication_types = cosinex_pt,
-                   contracting_rules = cosinex_contracting_rules)
-    }
-  }
   if (isTRUE(berlin)) {
     sources[["Vergabeplattform Berlin"]] <- function() {
       berlin_tenders(keywords = keywords, since_days = since_days,
                      relevant_only = TRUE, verbose = verbose)
-    }
-  }
-  if (isTRUE(oeffentlichevergabe)) {
-    sources[["Oeffentliche Vergabe (Bund)"]] <- function() {
-      oeffentlichevergabe_tenders(keywords = keywords, days = since_days,
-                                  verbose = verbose)
-    }
-  }
-  if (isTRUE(ted)) {
-    sources[["TED (EU)"]] <- function() {
-      ted_tenders(keywords = keywords, since_days = since_days, verbose = verbose)
-    }
-  }
-  if (isTRUE(servicebund)) {
-    sources[["Serviceportal des Bundes (service.bund.de)"]] <- function() {
-      servicebund_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
-    }
-  }
-  if (isTRUE(evergabe_online)) {
-    sources[["e-Vergabe des Bundes (evergabe-online.de)"]] <- function() {
-      evergabe_online_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
     }
   }
   screen_portals(sources, dir = dir, portal = "tenders", keywords = keywords,

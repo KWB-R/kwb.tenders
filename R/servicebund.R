@@ -4,7 +4,9 @@
 # a sample showed ~half of its notices are not in the Datenservice (esp. below
 # threshold / municipal). Read login-free over HTTP via its public RSS feeds; no
 # CPV is provided, so scoring is title/text-based. Awarded contracts have their
-# own feed and are labelled "Vergebener Auftrag".
+# own feed and are labelled "Vergebener Auftrag"; forward-looking notices in the
+# Ausschreibungen feed (Beabsichtigte Vergabe / Vorinformation / ex-ante
+# Transparenzbekanntmachung) are re-tagged "Geplante Ausschreibung" by title.
 
 SERVICEBUND_FEEDS <- c(
   "Ausschreibung" = "https://www.service.bund.de/Content/Globals/Functions/RSSFeed/RSSGenerator_Ausschreibungen.xml",
@@ -78,7 +80,19 @@ servicebund_parse_feed <- function(xml, typ) {
       stringsAsFactors = FALSE
     )
   })
-  do.call(rbind, rows)
+  df <- do.call(rbind, rows)
+  # The "Ausschreibungen" feed also carries forward-looking notices (~15-20%):
+  # "Beabsichtigte Vergabe ...", "Vorinformation ...", ex-ante
+  # "Transparenzbekanntmachung ...". Re-tag those as planned (the title prefix is
+  # an unambiguous notice-type marker). Note: do NOT match "Planung"/"geplant" --
+  # "Planungsleistungen ..." are active tenders *for* planning work, not planned
+  # notices. The awarded feed is left untouched.
+  if (identical(typ, "Ausschreibung") && nrow(df)) {
+    planned <- grepl("beabsichtig|vorinformation|vorab.?information|transparenzbekanntmachung",
+                     df$Kurzbezeichnung, ignore.case = TRUE)
+    df$Veroeffentlichungstyp[planned] <- "Geplante Ausschreibung"
+  }
+  df
 }
 
 #' service.bund.de tender connector (HTTP, login-free)
