@@ -233,21 +233,32 @@ redundancy_matrix_html <- function(relevant, esc) {
   M <- matrix(0L, length(plats), length(plats), dimnames = list(plats, plats))
   for (s in sets) for (a in s) for (b in s) M[a, b] <- M[a, b] + 1L
   short <- .platform_short(plats)
-  th <- paste0("<th></th>", paste0("<th>", esc(short), "</th>", collapse = ""))
-  rows <- vapply(seq_along(plats), function(i) {
-    cells <- vapply(seq_along(plats), function(j) {
-      v <- M[i, j]
-      sprintf("<td%s>%s</td>", if (i != j && v > 0L) " class=\"hot\"" else "",
-              if (v > 0L) v else "")
+  render <- function(cellfn, caption) {
+    th <- paste0("<th></th>", paste0("<th>", esc(short), "</th>", collapse = ""))
+    rows <- vapply(seq_along(plats), function(i) {
+      cells <- vapply(seq_along(plats), function(j) cellfn(i, j), character(1))
+      paste0("<tr><th>", esc(short[i]), "</th>", paste(cells, collapse = ""), "</tr>")
     }, character(1))
-    paste0("<tr><th>", esc(short[i]), "</th>", paste(cells, collapse = ""), "</tr>")
-  }, character(1))
+    paste0("<table class=\"xtab\"><caption>", caption, "</caption><thead><tr>", th,
+           "</tr></thead><tbody>", paste(rows, collapse = ""), "</tbody></table>")
+  }
+  abs_cell <- function(i, j) {
+    v <- M[i, j]
+    sprintf("<td%s>%s</td>", if (i != j && v > 0L) " class=\"hot\"" else "", if (v > 0L) v else "")
+  }
+  pct_cell <- function(i, j) {
+    if (i == j) return("<td class=\"diag\">100%</td>") # self = trivially 100% (base n: see absolute table)
+    if (M[i, j] > 0L && M[i, i] > 0L) {
+      sprintf("<td class=\"hot\">%d%%</td>", as.integer(round(100 * M[i, j] / M[i, i])))
+    } else "<td></td>"
+  }
   c("<h2>Plattform-&Uuml;berschneidungen</h2>",
-    sprintf(paste0("<p class=\"muted\">%d von %d relevanten Vergaben sind auf &ge;2 Portalen ",
-                   "gelistet. Diagonale = gesamt je Portal, au&szlig;erhalb = gemeinsam.</p>"),
+    sprintf("<p class=\"muted\">%d von %d relevanten Vergaben sind auf &ge;2 Portalen gelistet.</p>",
             nmulti, nrow(relevant)),
-    "<table class=\"xtab\"><thead><tr>", th, "</tr></thead><tbody>",
-    rows, "</tbody></table>")
+    "<div class=\"xtab-wrap\">",
+    render(abs_cell, "Absolut: gemeinsam gelistete Vergaben (Diagonale = gesamt je Portal)"),
+    render(pct_cell, "Anteil: % des Zeilen-Portals, die auch auf dem Spalten-Portal liegen"),
+    "</div>")
 }
 
 #' Build a Markdown table from a sensible subset of tender columns
@@ -331,6 +342,9 @@ render_tender_html <- function(tenders, relevant, new_relevant, portal, date) {
     "table.xtab{border-collapse:collapse;font-size:13px;margin:.4rem 0 1rem}",
     "table.xtab th,table.xtab td{border:1px solid #ddd;padding:3px 9px;text-align:center}",
     "table.xtab td.hot{background:#fde9a9;font-weight:bold}",
+    "table.xtab td.diag{background:#eee;font-weight:bold}",
+    "table.xtab caption{caption-side:top;text-align:left;font-weight:bold;font-size:12px;padding:3px 0;color:#444}",
+    ".xtab-wrap{display:flex;gap:1.5rem;flex-wrap:wrap;align-items:flex-start}",
     sep = "\n"
   )
 
