@@ -35,6 +35,7 @@ screen_all_portals(
   ted = TRUE,
   servicebund = TRUE,
   evergabe_online = TRUE,
+  deutsche_evergabe = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   nrw_login = FALSE,
@@ -63,6 +64,14 @@ screen_all_portals(
   [`evergabe_online_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/evergabe_online_tenders.md)).
   Adds below-threshold federal/Land/Kommunal notices not in the
   Datenservice.
+
+- deutsche_evergabe:
+
+  Enable the deutsche-evergabe.de connector (default `TRUE`; login-free
+  chromote render,
+  [`deutsche_evergabe_tenders()`](https://kwb-r.github.io/kwb.tenders/reference/deutsche_evergabe_tenders.md)).
+  Covers planned, current and awarded notices via the dashboard category
+  switch.
 
 - vmp_bb_login, vmp_bb_notice:
 
