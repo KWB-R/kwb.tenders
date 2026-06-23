@@ -13,6 +13,7 @@ screen_all_portals(
   oeffentlichevergabe = TRUE,
   ted = TRUE,
   servicebund = TRUE,
+  evergabe_online = TRUE,
   vmp_bb_login = FALSE,
   vmp_bb_notice = FALSE,
   nrw_login = FALSE,
@@ -28,6 +29,10 @@ screen_all_portals(
 
 \item{vmp_bb, nrw, dtvp, berlin, oeffentlichevergabe, ted, servicebund}{Enable each
 source (all \code{TRUE}).}
+
+\item{evergabe_online}{Enable the evergabe-online.de connector (default
+\code{TRUE}; login-free Wicket scrape, \code{\link[=evergabe_online_tenders]{evergabe_online_tenders()}}). Adds
+below-threshold federal/Land/Kommunal notices not in the Datenservice.}
 
 \item{vmp_bb_login, vmp_bb_notice}{Log in / read notice PDFs for VMP-BB
 (default \code{FALSE}; need \verb{VMP_BB_*} secrets).}

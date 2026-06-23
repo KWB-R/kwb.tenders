@@ -114,7 +114,8 @@ dedupe_tenders <- function(tenders, verbose = TRUE) {
   prio <- c("Oeffentliche Vergabe (Bund)" = 1, "TED (EU)" = 2,
             "Vergabemarktplatz Brandenburg" = 3, "Vergabemarktplatz NRW" = 4,
             "Deutsches Vergabeportal (DTVP)" = 5, "Vergabeplattform Berlin" = 6,
-            "Serviceportal des Bundes (service.bund.de)" = 7)
+            "Serviceportal des Bundes (service.bund.de)" = 7,
+            "e-Vergabe des Bundes (evergabe-online.de)" = 8)
   rank <- unname(ifelse(is.na(prio[plat]), 99L, prio[plat]))
   drop <- logical(n)
   for (k in unique(key[duplicated(key)])) {
@@ -237,6 +238,9 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 #' @param dir Output directory (default `"reports"`).
 #' @param vmp_bb,nrw,dtvp,berlin,oeffentlichevergabe,ted,servicebund Enable each
 #'   source (all `TRUE`).
+#' @param evergabe_online Enable the evergabe-online.de connector (default
+#'   `TRUE`; login-free Wicket scrape, [evergabe_online_tenders()]). Adds
+#'   below-threshold federal/Land/Kommunal notices not in the Datenservice.
 #' @param vmp_bb_login,vmp_bb_notice Log in / read notice PDFs for VMP-BB
 #'   (default `FALSE`; need `VMP_BB_*` secrets).
 #' @param nrw_login,nrw_notice Log in / read notice PDFs for Vergabemarktplatz NRW
@@ -259,6 +263,7 @@ screen_portals <- function(sources, dir = "reports", portal = "tenders",
 screen_all_portals <- function(dir = "reports",
                                vmp_bb = TRUE, nrw = TRUE, dtvp = TRUE, berlin = TRUE,
                                oeffentlichevergabe = TRUE, ted = TRUE, servicebund = TRUE,
+                               evergabe_online = TRUE,
                                vmp_bb_login = FALSE, vmp_bb_notice = FALSE,
                                nrw_login = FALSE, nrw_notice = FALSE,
                                since_days = 30, cosinex_contracting_rules = "VOL",
@@ -307,6 +312,11 @@ screen_all_portals <- function(dir = "reports",
   if (isTRUE(servicebund)) {
     sources[["Serviceportal des Bundes (service.bund.de)"]] <- function() {
       servicebund_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
+    }
+  }
+  if (isTRUE(evergabe_online)) {
+    sources[["e-Vergabe des Bundes (evergabe-online.de)"]] <- function() {
+      evergabe_online_tenders(keywords = keywords, relevant_only = TRUE, verbose = verbose)
     }
   }
   screen_portals(sources, dir = dir, portal = "tenders", keywords = keywords,

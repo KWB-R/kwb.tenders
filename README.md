@@ -55,7 +55,7 @@ configurable). See `vignette("tutorial")` for details.
 
 ## Covered portals
 
-`screen_all_portals()` queries seven sources and writes one combined report:
+`screen_all_portals()` queries eight sources and writes one combined report:
 
 | Portal | Connector | Access |
 |---|---|---|
@@ -66,13 +66,16 @@ configurable). See `vignette("tutorial")` for details.
 | Datenservice Öffentlicher Einkauf (Bund + Länder + Kommunen) | `oeffentlichevergabe_tenders()` | OCDS API, login-free |
 | TED (EU) | `ted_tenders()` | TED v3 API, login-free |
 | Serviceportal des Bundes (service.bund.de) | `servicebund_tenders()` | RSS, login-free; Bund/Länder/Kommunen, adds notices not in the Datenservice |
+| e-Vergabe des Bundes (evergabe-online.de) | `evergabe_online_tenders()` | HTTP/Wicket, login-free; below-threshold federal/Land/Kommunal notices not in the Datenservice |
 
-**e-Vergabe des Bundes (evergabe-online.de)** needs no separate connector: its
-announcements are published into the *Datenservice Öffentlicher Einkauf*
-(`oeffentlichevergabe.de`) and — for EU-wide procedures — into TED, both already
-covered above. Verified on a sample: federal buyers (incl. the operator,
-*Beschaffungsamt des BMI*) and notices linking to evergabe-online.de show up in
-the oeffentlichevergabe feed.
+**e-Vergabe des Bundes (evergabe-online.de):** its *above-threshold* (EU) notices
+already flow into the *Datenservice* and TED (covered above), but its
+*below-threshold* national notices are **not** in the Datenservice (verified: 0/10
+of the latest hits), so the connector adds genuine coverage — federal water bodies
+(Wasserstraßen- und Schifffahrtsverwaltung, Umweltbundesamt, Bundesanstalt für
+Wasserbau) plus Länder/Kommunal water and wastewater associations. Login-free, but
+driven by an Apache-Wicket scrape (full-text search batched over the KWB keywords,
+title-based scoring); set `screen_all_portals(evergabe_online = FALSE)` to skip it.
 
 ## Automated checks (GitHub Actions)
 
